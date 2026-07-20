@@ -20,6 +20,7 @@ from analysis.complaints import analyze_complaints
 from analysis.correlations import analyze_correlations
 from analysis.delivery import analyze_deliveries
 from analysis.inventory import analyze_inventory
+from ai.report_generator import ConfigurationError, ReportGenerationError, generate_executive_report
 
 DATA_DIR = Path(__file__).parent / "data"
 
@@ -107,10 +108,18 @@ def main() -> None:
     for action in correlation_insights["priority_actions"]:
         print(f"    {action['priority']}. {action['title']} ({action['difficulty']}, {action['estimated_timeframe']})")
 
-    # TODO: Once implemented, pass delivery/complaint/inventory/correlation
-    # insights into ai.report_generator.OperationsReportGenerator to
-    # produce the final AI-generated executive report.
-    print("\nAI report generation not yet implemented.")
+    print("\nGenerating AI executive report...")
+    try:
+        report = generate_executive_report(
+            delivery_insights, complaint_insights, inventory_insights, correlation_insights,
+        )
+        print(f"  Report ID: {report['metadata']['report_id']}")
+        print(f"  Saved: {report['metadata']['saved_json_path']}")
+        print(f"  Saved: {report['metadata']['saved_markdown_path']}")
+    except ConfigurationError as exc:
+        print(f"  Skipped -- {exc}")
+    except ReportGenerationError as exc:
+        print(f"  Failed -- {exc}")
 
 
 if __name__ == "__main__":

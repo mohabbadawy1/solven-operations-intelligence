@@ -30,5 +30,5 @@ htmlcov/
 Thumbs.db
 
 # Generated reports (keep raw data, ignore generated output)
-reports/
+outputs/
 *.log
