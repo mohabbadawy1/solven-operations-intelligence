@@ -1,0 +1,301 @@
+warehouse,product,stock_level,monthly_sales,reorder_threshold,sku,supplier,lead_time_days,warehouse_capacity,inventory_value,days_of_inventory_remaining
+Cairo East,Standard Power Bank,490,356,94,SKU-00001,Upper Egypt Producers,12,45000,50553.3,41.3
+Cairo East,Smart Power Bank,34,37,13,SKU-00002,Cairo Wholesale Partners,6,45000,3785.56,27.6
+Cairo East,Heavy-Duty Coffee Maker,9,97,32,SKU-00003,Mediterranean Sourcing Ltd.,14,45000,1077.12,2.8
+Cairo East,Adjustable Webcam,239,316,107,SKU-00004,Red Sea Import Group,13,45000,3537.2,22.7
+Cairo East,Premium Printer,445,281,57,SKU-00005,Delta Industrial Supply,12,45000,25623.1,47.5
+Cairo East,Premium Keyboard,450,354,53,SKU-00006,Alexandria Trading House,11,45000,42138.0,38.1
+Cairo East,Wireless Router,38,38,11,SKU-00007,Sinai Logistics Supply,15,45000,4465.38,30.0
+Cairo East,Industrial Keyboard,319,278,60,SKU-00008,Red Sea Import Group,14,45000,38866.96,34.4
+Cairo East,Standard Monitor Stand,49,69,10,SKU-00009,Red Sea Import Group,14,45000,6436.64,21.3
+Cairo East,Heavy-Duty Speaker,244,175,58,SKU-00010,Upper Egypt Producers,13,45000,25097.84,41.8
+Cairo East,Stainless Steel Webcam,20,125,22,SKU-00011,Sinai Logistics Supply,16,45000,509.0,4.8
+Cairo East,Ergonomic Webcam,303,259,60,SKU-00012,Sinai Logistics Supply,14,45000,13707.72,35.1
+Cairo East,Compact Whiteboard,21,173,30,SKU-00013,Sinai Logistics Supply,17,45000,1953.0,3.6
+Cairo East,Ergonomic Printer,47,40,7,SKU-00014,Delta Industrial Supply,11,45000,4537.38,35.2
+Cairo East,Adjustable Paper Shredder,478,359,66,SKU-00015,Delta Industrial Supply,12,45000,2786.74,39.9
+Cairo East,Foldable Office Chair,40,139,46,SKU-00016,Upper Egypt Producers,12,45000,3076.4,8.6
+Cairo East,Smart Keyboard,154,271,68,SKU-00017,Upper Egypt Producers,12,45000,22614.9,17.0
+Cairo East,Adjustable Keyboard,23,231,58,SKU-00018,Alexandria Trading House,10,45000,312.11,3.0
+Cairo East,Wireless Filing Cabinet,148,89,18,SKU-00019,Mediterranean Sourcing Ltd.,11,45000,8649.12,49.9
+Cairo East,Heavy-Duty Paper Shredder,193,266,69,SKU-00020,Mediterranean Sourcing Ltd.,12,45000,17395.09,21.8
+Cairo East,Smart Desk Lamp,235,305,101,SKU-00021,Delta Industrial Supply,9,45000,33104.45,23.1
+Cairo East,Foldable Keyboard,32,285,85,SKU-00022,Alexandria Trading House,11,45000,506.56,3.4
+Cairo East,Standard Filing Cabinet,20,149,32,SKU-00023,Alexandria Trading House,9,45000,2525.2,4.0
+Cairo East,Industrial Paper Shredder,28,343,92,SKU-00024,Mediterranean Sourcing Ltd.,14,45000,1391.88,2.4
+Cairo East,Adjustable Power Bank,391,387,59,SKU-00025,Delta Industrial Supply,12,45000,18897.03,30.3
+Cairo East,Standard Printer,16,22,4,SKU-00026,Mediterranean Sourcing Ltd.,12,45000,711.04,21.8
+Cairo East,Smart Paper Shredder,27,370,58,SKU-00027,Red Sea Import Group,14,45000,3603.69,2.2
+Cairo East,Ergonomic Coffee Maker,329,286,99,SKU-00028,Mediterranean Sourcing Ltd.,14,45000,9550.87,34.5
+Cairo East,Rechargeable Backpack,213,262,87,SKU-00029,Delta Industrial Supply,10,45000,3312.15,24.4
+Cairo East,Wireless Whiteboard,230,369,89,SKU-00030,Sinai Logistics Supply,15,45000,27698.9,18.7
+Cairo East,Foldable Whiteboard,299,346,115,SKU-00031,Red Sea Import Group,16,45000,39333.45,25.9
+Cairo East,Standard Speaker,5,61,12,SKU-00032,Nile Manufacturing Co.,9,45000,211.35,2.5
+Cairo East,Premium Power Bank,195,213,74,SKU-00033,Cairo Wholesale Partners,7,45000,28491.45,27.5
+Cairo East,Stainless Steel Backpack,110,98,26,SKU-00034,Cairo Wholesale Partners,6,45000,15425.3,33.7
+Cairo East,Heavy-Duty Backpack,388,329,50,SKU-00035,Cairo Wholesale Partners,5,45000,8764.92,35.4
+Cairo East,Smart Filing Cabinet,391,361,69,SKU-00036,Mediterranean Sourcing Ltd.,12,45000,10775.96,32.5
+Cairo East,Ergonomic Office Chair,153,219,45,SKU-00037,Nile Manufacturing Co.,8,45000,9184.59,21.0
+Cairo East,Compact Backpack,16,160,54,SKU-00038,Red Sea Import Group,16,45000,1639.68,3.0
+Cairo East,Foldable Desk Lamp,26,31,9,SKU-00039,Delta Industrial Supply,9,45000,157.82,25.2
+Cairo East,Adjustable Whiteboard,114,173,33,SKU-00040,Red Sea Import Group,13,45000,10688.64,19.8
+Cairo East,Standard Desk Lamp,456,307,67,SKU-00041,Cairo Wholesale Partners,7,45000,58874.16,44.6
+Cairo East,Ergonomic Power Bank,256,222,50,SKU-00042,Red Sea Import Group,16,45000,19025.92,34.6
+Cairo East,Foldable Power Bank,62,82,17,SKU-00043,Red Sea Import Group,13,45000,1031.06,22.7
+Cairo East,Ergonomic Whiteboard,164,253,51,SKU-00044,Upper Egypt Producers,12,45000,5338.2,19.4
+Cairo East,Industrial Office Chair,49,210,63,SKU-00045,Sinai Logistics Supply,14,45000,4618.74,7.0
+Cairo East,Adjustable Coffee Maker,96,145,44,SKU-00046,Nile Manufacturing Co.,6,45000,9066.24,19.9
+Cairo East,Portable Air Purifier,12,120,41,SKU-00047,Red Sea Import Group,16,45000,313.2,3.0
+Cairo East,Smart Speaker,20,25,5,SKU-00048,Red Sea Import Group,16,45000,1912.0,24.0
+Cairo East,Wireless Office Chair,317,388,94,SKU-00049,Red Sea Import Group,13,45000,15720.03,24.5
+Cairo East,Multi-Purpose Printer,386,259,53,SKU-00050,Mediterranean Sourcing Ltd.,14,45000,7689.12,44.7
+Cairo East,Rechargeable Keyboard,29,24,6,SKU-00051,Mediterranean Sourcing Ltd.,12,45000,2480.66,36.2
+Cairo East,Wireless Monitor Stand,474,325,105,SKU-00052,Red Sea Import Group,15,45000,49395.54,43.8
+Cairo East,Industrial Storage Box,5,128,21,SKU-00053,Alexandria Trading House,9,45000,215.3,1.2
+Cairo East,Heavy-Duty Extension Cord,178,296,57,SKU-00054,Nile Manufacturing Co.,9,45000,20918.56,18.0
+Cairo East,Industrial Filing Cabinet,512,328,90,SKU-00055,Delta Industrial Supply,12,45000,7321.6,46.8
+Cairo East,Heavy-Duty Headset,192,284,90,SKU-00056,Sinai Logistics Supply,15,45000,8461.44,20.3
+Cairo East,Heavy-Duty Mouse,182,236,61,SKU-00057,Alexandria Trading House,11,45000,12652.64,23.1
+Cairo East,Portable Filing Cabinet,50,105,18,SKU-00058,Red Sea Import Group,14,45000,3751.0,14.3
+Cairo East,Multi-Purpose Desk Lamp,13,255,46,SKU-00059,Sinai Logistics Supply,15,45000,1230.06,1.5
+Cairo East,Eco Keyboard,14,193,37,SKU-00060,Sinai Logistics Supply,15,45000,705.74,2.2
+Cairo East,Compact Headset,17,295,45,SKU-00061,Nile Manufacturing Co.,6,45000,484.84,1.7
+Cairo East,Rechargeable Whiteboard,167,118,23,SKU-00062,Sinai Logistics Supply,16,45000,24271.78,42.5
+Cairo East,Industrial Router,240,262,57,SKU-00063,Delta Industrial Supply,10,45000,5224.8,27.5
+Cairo East,Heavy-Duty Water Bottle,204,199,54,SKU-00064,Delta Industrial Supply,9,45000,1189.32,30.8
+Cairo East,Smart Air Purifier,154,120,34,SKU-00065,Nile Manufacturing Co.,9,45000,12895.96,38.5
+Cairo East,Adjustable Air Purifier,306,176,54,SKU-00066,Mediterranean Sourcing Ltd.,11,45000,8317.08,52.2
+Cairo East,Rechargeable Router,21,33,8,SKU-00067,Alexandria Trading House,11,45000,2117.85,19.1
+Cairo East,Stainless Steel Desk Lamp,571,338,96,SKU-00068,Cairo Wholesale Partners,4,45000,57288.43,50.7
+Cairo East,Rechargeable Water Bottle,192,264,88,SKU-00069,Upper Egypt Producers,10,45000,14964.48,21.8
+Cairo East,Compact Extension Cord,26,26,8,SKU-00070,Delta Industrial Supply,10,45000,1400.1,30.0
+Cairo East,Wireless Power Bank,27,248,59,SKU-00071,Cairo Wholesale Partners,6,45000,2833.11,3.3
+Cairo East,Industrial Speaker,392,256,71,SKU-00072,Alexandria Trading House,8,45000,35621.04,45.9
+Cairo East,Portable Paper Shredder,88,303,94,SKU-00073,Sinai Logistics Supply,16,45000,3995.2,8.7
+Cairo East,Multi-Purpose Headset,364,383,75,SKU-00074,Alexandria Trading House,10,45000,7851.48,28.5
+Cairo East,Compact Water Bottle,461,292,59,SKU-00075,Upper Egypt Producers,11,45000,11146.98,47.4
+Cairo West,Standard Power Bank,32,330,53,SKU-00001,Upper Egypt Producers,13,60000,3301.44,2.9
+Cairo West,Smart Power Bank,38,354,69,SKU-00002,Cairo Wholesale Partners,5,60000,4230.92,3.2
+Cairo West,Heavy-Duty Coffee Maker,468,374,127,SKU-00003,Mediterranean Sourcing Ltd.,12,60000,56010.24,37.5
+Cairo West,Adjustable Webcam,440,376,130,SKU-00004,Red Sea Import Group,16,60000,6512.0,35.1
+Cairo West,Premium Printer,118,115,35,SKU-00005,Delta Industrial Supply,12,60000,6794.44,30.8
+Cairo West,Premium Keyboard,160,224,72,SKU-00006,Alexandria Trading House,10,60000,14982.4,21.4
+Cairo West,Wireless Router,144,240,40,SKU-00007,Sinai Logistics Supply,17,60000,16921.44,18.0
+Cairo West,Industrial Keyboard,311,240,48,SKU-00008,Red Sea Import Group,13,60000,37892.24,38.9
+Cairo West,Standard Monitor Stand,17,200,30,SKU-00009,Red Sea Import Group,15,60000,2233.12,2.5
+Cairo West,Heavy-Duty Speaker,109,99,24,SKU-00010,Upper Egypt Producers,12,60000,11211.74,33.0
+Cairo West,Stainless Steel Webcam,197,224,77,SKU-00011,Sinai Logistics Supply,14,60000,5013.65,26.4
+Cairo West,Ergonomic Webcam,97,81,28,SKU-00012,Sinai Logistics Supply,16,60000,4388.28,35.9
+Cairo West,Compact Whiteboard,75,347,96,SKU-00013,Sinai Logistics Supply,15,60000,6975.0,6.5
+Cairo West,Ergonomic Printer,191,160,42,SKU-00014,Delta Industrial Supply,11,60000,18439.14,35.8
+Cairo West,Adjustable Paper Shredder,330,242,75,SKU-00015,Delta Industrial Supply,10,60000,1923.9,40.9
+Cairo West,Foldable Office Chair,43,34,11,SKU-00016,Upper Egypt Producers,11,60000,3307.13,37.9
+Cairo West,Smart Keyboard,30,342,77,SKU-00017,Upper Egypt Producers,10,60000,4405.5,2.6
+Cairo West,Adjustable Keyboard,583,366,113,SKU-00018,Alexandria Trading House,8,60000,7911.31,47.8
+Cairo West,Wireless Filing Cabinet,618,351,109,SKU-00019,Mediterranean Sourcing Ltd.,14,60000,36115.92,52.8
+Cairo West,Heavy-Duty Paper Shredder,390,233,66,SKU-00020,Mediterranean Sourcing Ltd.,12,60000,35150.7,50.2
+Cairo West,Smart Desk Lamp,133,202,39,SKU-00021,Delta Industrial Supply,9,60000,18735.71,19.8
+Cairo West,Foldable Keyboard,31,27,8,SKU-00022,Alexandria Trading House,11,60000,490.73,34.4
+Cairo West,Standard Filing Cabinet,4,20,5,SKU-00023,Alexandria Trading House,9,60000,505.04,6.0
+Cairo West,Industrial Paper Shredder,550,394,129,SKU-00024,Mediterranean Sourcing Ltd.,11,60000,27340.5,41.9
+Cairo West,Adjustable Power Bank,105,121,31,SKU-00025,Delta Industrial Supply,12,60000,5074.65,26.0
+Cairo West,Standard Printer,181,225,64,SKU-00026,Mediterranean Sourcing Ltd.,11,60000,8043.64,24.1
+Cairo West,Smart Paper Shredder,31,27,8,SKU-00027,Red Sea Import Group,16,60000,4137.57,34.4
+Cairo West,Ergonomic Coffee Maker,302,260,85,SKU-00028,Mediterranean Sourcing Ltd.,13,60000,8767.06,34.8
+Cairo West,Rechargeable Backpack,315,218,63,SKU-00029,Delta Industrial Supply,10,60000,4898.25,43.3
+Cairo West,Wireless Whiteboard,6,124,22,SKU-00030,Sinai Logistics Supply,16,60000,722.58,1.5
+Cairo West,Foldable Whiteboard,36,28,10,SKU-00031,Red Sea Import Group,13,60000,4735.8,38.6
+Cairo West,Standard Speaker,122,119,35,SKU-00032,Nile Manufacturing Co.,6,60000,5156.94,30.8
+Cairo West,Premium Power Bank,275,164,53,SKU-00033,Cairo Wholesale Partners,6,60000,40180.25,50.3
+Cairo West,Stainless Steel Backpack,21,84,28,SKU-00034,Cairo Wholesale Partners,6,60000,2944.83,7.5
+Cairo West,Heavy-Duty Backpack,193,140,44,SKU-00035,Cairo Wholesale Partners,4,60000,4359.87,41.4
+Cairo West,Smart Filing Cabinet,352,212,44,SKU-00036,Mediterranean Sourcing Ltd.,14,60000,9701.12,49.8
+Cairo West,Ergonomic Office Chair,409,308,50,SKU-00037,Nile Manufacturing Co.,7,60000,24552.27,39.8
+Cairo West,Compact Backpack,150,116,40,SKU-00038,Red Sea Import Group,15,60000,15372.0,38.8
+Cairo West,Foldable Desk Lamp,162,114,40,SKU-00039,Delta Industrial Supply,9,60000,983.34,42.6
+Cairo West,Adjustable Whiteboard,41,241,71,SKU-00040,Red Sea Import Group,15,60000,3844.16,5.1
+Cairo West,Standard Desk Lamp,109,107,19,SKU-00041,Cairo Wholesale Partners,4,60000,14072.99,30.6
+Cairo West,Ergonomic Power Bank,107,192,43,SKU-00042,Red Sea Import Group,14,60000,7952.24,16.7
+Cairo West,Foldable Power Bank,241,245,81,SKU-00043,Red Sea Import Group,13,60000,4007.83,29.5
+Cairo West,Ergonomic Whiteboard,78,137,28,SKU-00044,Upper Egypt Producers,11,60000,2538.9,17.1
+Cairo West,Industrial Office Chair,76,109,37,SKU-00045,Sinai Logistics Supply,15,60000,7163.76,20.9
+Cairo West,Adjustable Coffee Maker,23,24,8,SKU-00046,Nile Manufacturing Co.,8,60000,2172.12,28.8
+Cairo West,Portable Air Purifier,202,145,44,SKU-00047,Red Sea Import Group,15,60000,5272.2,41.8
+Cairo West,Smart Speaker,240,161,51,SKU-00048,Red Sea Import Group,15,60000,22944.0,44.7
+Cairo West,Wireless Office Chair,83,94,20,SKU-00049,Red Sea Import Group,16,60000,4115.97,26.5
+Cairo West,Multi-Purpose Printer,119,96,27,SKU-00050,Mediterranean Sourcing Ltd.,13,60000,2370.48,37.2
+Cairo West,Rechargeable Keyboard,61,252,87,SKU-00051,Mediterranean Sourcing Ltd.,14,60000,5217.94,7.3
+Cairo West,Wireless Monitor Stand,391,327,78,SKU-00052,Red Sea Import Group,15,60000,40746.11,35.9
+Cairo West,Industrial Storage Box,431,309,100,SKU-00053,Alexandria Trading House,11,60000,18558.86,41.8
+Cairo West,Heavy-Duty Extension Cord,281,360,92,SKU-00054,Nile Manufacturing Co.,7,60000,33023.12,23.4
+Cairo West,Industrial Filing Cabinet,11,70,16,SKU-00055,Delta Industrial Supply,12,60000,157.3,4.7
+Cairo West,Heavy-Duty Headset,594,352,98,SKU-00056,Sinai Logistics Supply,15,60000,26177.58,50.6
+Cairo West,Heavy-Duty Mouse,221,245,43,SKU-00057,Alexandria Trading House,11,60000,15363.92,27.1
+Cairo West,Portable Filing Cabinet,146,84,20,SKU-00058,Red Sea Import Group,13,60000,10952.92,52.1
+Cairo West,Multi-Purpose Desk Lamp,527,305,83,SKU-00059,Sinai Logistics Supply,14,60000,49864.74,51.8
+Cairo West,Eco Keyboard,352,342,96,SKU-00060,Sinai Logistics Supply,14,60000,17744.32,30.9
+Cairo West,Compact Headset,261,186,34,SKU-00061,Nile Manufacturing Co.,6,60000,7443.72,42.1
+Cairo West,Rechargeable Whiteboard,253,263,56,SKU-00062,Sinai Logistics Supply,15,60000,36771.02,28.9
+Cairo West,Industrial Router,135,110,19,SKU-00063,Delta Industrial Supply,11,60000,2938.95,36.8
+Cairo West,Heavy-Duty Water Bottle,27,20,3,SKU-00064,Delta Industrial Supply,10,60000,157.41,40.5
+Cairo West,Smart Air Purifier,340,298,70,SKU-00065,Nile Manufacturing Co.,8,60000,28471.6,34.2
+Cairo West,Adjustable Air Purifier,191,269,69,SKU-00066,Mediterranean Sourcing Ltd.,11,60000,5191.38,21.3
+Cairo West,Rechargeable Router,62,40,10,SKU-00067,Alexandria Trading House,8,60000,6252.7,46.5
+Cairo West,Stainless Steel Desk Lamp,293,206,38,SKU-00068,Cairo Wholesale Partners,4,60000,29396.69,42.7
+Cairo West,Rechargeable Water Bottle,22,129,42,SKU-00069,Upper Egypt Producers,11,60000,1714.68,5.1
+Cairo West,Compact Extension Cord,493,290,64,SKU-00070,Delta Industrial Supply,12,60000,26548.05,51.0
+Cairo West,Wireless Power Bank,58,36,6,SKU-00071,Cairo Wholesale Partners,7,60000,6085.94,48.3
+Cairo West,Industrial Speaker,202,206,50,SKU-00072,Alexandria Trading House,11,60000,18355.74,29.4
+Cairo West,Portable Paper Shredder,31,21,5,SKU-00073,Sinai Logistics Supply,17,60000,1407.4,44.3
+Cairo West,Multi-Purpose Headset,310,187,44,SKU-00074,Alexandria Trading House,10,60000,6686.7,49.7
+Cairo West,Compact Water Bottle,524,302,75,SKU-00075,Upper Egypt Producers,13,60000,12670.32,52.1
+Alexandria,Standard Power Bank,384,292,97,SKU-00001,Upper Egypt Producers,12,50000,39617.28,39.5
+Alexandria,Smart Power Bank,131,131,39,SKU-00002,Cairo Wholesale Partners,6,50000,14585.54,30.0
+Alexandria,Heavy-Duty Coffee Maker,234,171,55,SKU-00003,Mediterranean Sourcing Ltd.,11,50000,28005.12,41.1
+Alexandria,Adjustable Webcam,449,348,62,SKU-00004,Red Sea Import Group,16,50000,6645.2,38.7
+Alexandria,Premium Printer,188,229,76,SKU-00005,Delta Industrial Supply,12,50000,10825.04,24.6
+Alexandria,Premium Keyboard,415,275,64,SKU-00006,Alexandria Trading House,8,50000,38860.6,45.3
+Alexandria,Wireless Router,116,72,16,SKU-00007,Sinai Logistics Supply,14,50000,13631.16,48.3
+Alexandria,Industrial Keyboard,33,31,7,SKU-00008,Red Sea Import Group,15,50000,4020.72,31.9
+Alexandria,Standard Monitor Stand,469,321,50,SKU-00009,Red Sea Import Group,16,50000,61607.84,43.8
+Alexandria,Heavy-Duty Speaker,175,131,28,SKU-00010,Upper Egypt Producers,13,50000,18000.5,40.1
+Alexandria,Stainless Steel Webcam,252,356,80,SKU-00011,Sinai Logistics Supply,16,50000,6413.4,21.2
+Alexandria,Ergonomic Webcam,469,351,78,SKU-00012,Sinai Logistics Supply,15,50000,21217.56,40.1
+Alexandria,Compact Whiteboard,79,115,20,SKU-00013,Sinai Logistics Supply,15,50000,7347.0,20.6
+Alexandria,Ergonomic Printer,35,218,73,SKU-00014,Delta Industrial Supply,10,50000,3378.9,4.8
+Alexandria,Adjustable Paper Shredder,146,254,63,SKU-00015,Delta Industrial Supply,12,50000,851.18,17.2
+Alexandria,Foldable Office Chair,141,222,63,SKU-00016,Upper Egypt Producers,13,50000,10844.31,19.1
+Alexandria,Smart Keyboard,57,59,17,SKU-00017,Upper Egypt Producers,10,50000,8370.45,29.0
+Alexandria,Adjustable Keyboard,24,189,45,SKU-00018,Alexandria Trading House,8,50000,325.68,3.8
+Alexandria,Wireless Filing Cabinet,249,180,37,SKU-00019,Mediterranean Sourcing Ltd.,14,50000,14551.56,41.5
+Alexandria,Heavy-Duty Paper Shredder,367,397,136,SKU-00020,Mediterranean Sourcing Ltd.,14,50000,33077.71,27.7
+Alexandria,Smart Desk Lamp,304,335,73,SKU-00021,Delta Industrial Supply,12,50000,42824.48,27.2
+Alexandria,Foldable Keyboard,22,41,9,SKU-00022,Alexandria Trading House,8,50000,348.26,16.1
+Alexandria,Standard Filing Cabinet,25,20,4,SKU-00023,Alexandria Trading House,9,50000,3156.5,37.5
+Alexandria,Industrial Paper Shredder,65,80,18,SKU-00024,Mediterranean Sourcing Ltd.,14,50000,3231.15,24.4
+Alexandria,Adjustable Power Bank,143,84,28,SKU-00025,Delta Industrial Supply,10,50000,6911.19,51.1
+Alexandria,Standard Printer,569,379,127,SKU-00026,Mediterranean Sourcing Ltd.,13,50000,25286.36,45.0
+Alexandria,Smart Paper Shredder,66,113,18,SKU-00027,Red Sea Import Group,15,50000,8809.02,17.5
+Alexandria,Ergonomic Coffee Maker,58,315,79,SKU-00028,Mediterranean Sourcing Ltd.,12,50000,1683.74,5.5
+Alexandria,Rechargeable Backpack,303,204,49,SKU-00029,Delta Industrial Supply,12,50000,4711.65,44.6
+Alexandria,Wireless Whiteboard,62,73,13,SKU-00030,Sinai Logistics Supply,17,50000,7466.66,25.5
+Alexandria,Foldable Whiteboard,67,305,82,SKU-00031,Red Sea Import Group,13,50000,8813.85,6.6
+Alexandria,Standard Speaker,34,37,7,SKU-00032,Nile Manufacturing Co.,8,50000,1437.18,27.6
+Alexandria,Premium Power Bank,78,149,28,SKU-00033,Cairo Wholesale Partners,4,50000,11396.58,15.7
+Alexandria,Stainless Steel Backpack,514,342,101,SKU-00034,Cairo Wholesale Partners,6,50000,72078.22,45.1
+Alexandria,Heavy-Duty Backpack,100,127,28,SKU-00035,Cairo Wholesale Partners,7,50000,2259.0,23.6
+Alexandria,Smart Filing Cabinet,266,344,69,SKU-00036,Mediterranean Sourcing Ltd.,13,50000,7330.96,23.2
+Alexandria,Ergonomic Office Chair,77,130,34,SKU-00037,Nile Manufacturing Co.,9,50000,4622.31,17.8
+Alexandria,Compact Backpack,25,134,32,SKU-00038,Red Sea Import Group,14,50000,2562.0,5.6
+Alexandria,Foldable Desk Lamp,194,126,23,SKU-00039,Delta Industrial Supply,9,50000,1177.58,46.2
+Alexandria,Adjustable Whiteboard,139,191,45,SKU-00040,Red Sea Import Group,16,50000,13032.64,21.8
+Alexandria,Standard Desk Lamp,138,137,33,SKU-00041,Cairo Wholesale Partners,4,50000,17817.18,30.2
+Alexandria,Ergonomic Power Bank,59,39,8,SKU-00042,Red Sea Import Group,14,50000,4384.88,45.4
+Alexandria,Foldable Power Bank,438,256,66,SKU-00043,Red Sea Import Group,15,50000,7283.94,51.3
+Alexandria,Ergonomic Whiteboard,161,187,58,SKU-00044,Upper Egypt Producers,11,50000,5240.55,25.8
+Alexandria,Industrial Office Chair,162,166,49,SKU-00045,Sinai Logistics Supply,15,50000,15270.12,29.3
+Alexandria,Adjustable Coffee Maker,195,153,53,SKU-00046,Nile Manufacturing Co.,7,50000,18415.8,38.2
+Alexandria,Portable Air Purifier,163,189,54,SKU-00047,Red Sea Import Group,16,50000,4254.3,25.9
+Alexandria,Smart Speaker,417,301,60,SKU-00048,Red Sea Import Group,15,50000,39865.2,41.6
+Alexandria,Wireless Office Chair,255,282,57,SKU-00049,Red Sea Import Group,16,50000,12645.45,27.1
+Alexandria,Multi-Purpose Printer,182,354,66,SKU-00050,Mediterranean Sourcing Ltd.,13,50000,3625.44,15.4
+Alexandria,Rechargeable Keyboard,78,58,14,SKU-00051,Mediterranean Sourcing Ltd.,13,50000,6672.12,40.3
+Alexandria,Wireless Monitor Stand,201,238,36,SKU-00052,Red Sea Import Group,16,50000,20946.21,25.3
+Alexandria,Industrial Storage Box,31,229,72,SKU-00053,Alexandria Trading House,11,50000,1334.86,4.1
+Alexandria,Heavy-Duty Extension Cord,592,382,65,SKU-00054,Nile Manufacturing Co.,7,50000,69571.84,46.5
+Alexandria,Industrial Filing Cabinet,57,65,19,SKU-00055,Delta Industrial Supply,11,50000,815.1,26.3
+Alexandria,Heavy-Duty Headset,115,75,23,SKU-00056,Sinai Logistics Supply,14,50000,5068.05,46.0
+Alexandria,Heavy-Duty Mouse,485,364,58,SKU-00057,Alexandria Trading House,10,50000,33717.2,40.0
+Alexandria,Portable Filing Cabinet,400,235,60,SKU-00058,Red Sea Import Group,14,50000,30008.0,51.1
+Alexandria,Multi-Purpose Desk Lamp,185,315,82,SKU-00059,Sinai Logistics Supply,15,50000,17504.7,17.6
+Alexandria,Eco Keyboard,168,277,50,SKU-00060,Sinai Logistics Supply,17,50000,8468.88,18.2
+Alexandria,Compact Headset,207,354,94,SKU-00061,Nile Manufacturing Co.,6,50000,5903.64,17.5
+Alexandria,Rechargeable Whiteboard,259,200,55,SKU-00062,Sinai Logistics Supply,14,50000,37643.06,38.9
+Alexandria,Industrial Router,61,69,20,SKU-00063,Delta Industrial Supply,11,50000,1327.97,26.5
+Alexandria,Heavy-Duty Water Bottle,538,342,90,SKU-00064,Delta Industrial Supply,9,50000,3136.54,47.2
+Alexandria,Smart Air Purifier,409,377,105,SKU-00065,Nile Manufacturing Co.,7,50000,34249.66,32.5
+Alexandria,Adjustable Air Purifier,592,363,107,SKU-00066,Mediterranean Sourcing Ltd.,11,50000,16090.56,48.9
+Alexandria,Rechargeable Router,245,155,51,SKU-00067,Alexandria Trading House,10,50000,24708.25,47.4
+Alexandria,Stainless Steel Desk Lamp,434,289,97,SKU-00068,Cairo Wholesale Partners,7,50000,43543.22,45.1
+Alexandria,Rechargeable Water Bottle,607,398,129,SKU-00069,Upper Egypt Producers,13,50000,47309.58,45.8
+Alexandria,Compact Extension Cord,89,116,30,SKU-00070,Delta Industrial Supply,11,50000,4792.65,23.0
+Alexandria,Wireless Power Bank,625,360,108,SKU-00071,Cairo Wholesale Partners,6,50000,65581.25,52.1
+Alexandria,Industrial Speaker,141,181,44,SKU-00072,Alexandria Trading House,8,50000,12812.67,23.4
+Alexandria,Portable Paper Shredder,389,262,67,SKU-00073,Sinai Logistics Supply,15,50000,17660.6,44.5
+Alexandria,Multi-Purpose Headset,245,186,61,SKU-00074,Alexandria Trading House,11,50000,5284.65,39.5
+Alexandria,Compact Water Bottle,455,384,98,SKU-00075,Upper Egypt Producers,12,50000,11001.9,35.5
+Mansoura,Standard Power Bank,164,205,52,SKU-00001,Upper Egypt Producers,12,40000,16919.88,24.0
+Mansoura,Smart Power Bank,118,169,51,SKU-00002,Cairo Wholesale Partners,5,40000,13138.12,20.9
+Mansoura,Heavy-Duty Coffee Maker,14,121,28,SKU-00003,Mediterranean Sourcing Ltd.,11,40000,1675.52,3.5
+Mansoura,Adjustable Webcam,363,243,77,SKU-00004,Red Sea Import Group,14,40000,5372.4,44.8
+Mansoura,Premium Printer,251,277,71,SKU-00005,Delta Industrial Supply,12,40000,14452.58,27.2
+Mansoura,Premium Keyboard,75,75,19,SKU-00006,Alexandria Trading House,11,40000,7023.0,30.0
+Mansoura,Wireless Router,225,304,86,SKU-00007,Sinai Logistics Supply,17,40000,26439.75,22.2
+Mansoura,Industrial Keyboard,436,345,79,SKU-00008,Red Sea Import Group,16,40000,53122.24,37.9
+Mansoura,Standard Monitor Stand,634,387,105,SKU-00009,Red Sea Import Group,13,40000,83282.24,49.1
+Mansoura,Heavy-Duty Speaker,131,95,25,SKU-00010,Upper Egypt Producers,12,40000,13474.66,41.4
+Mansoura,Stainless Steel Webcam,315,235,75,SKU-00011,Sinai Logistics Supply,17,40000,8016.75,40.2
+Mansoura,Ergonomic Webcam,105,204,33,SKU-00012,Sinai Logistics Supply,17,40000,4750.2,15.4
+Mansoura,Compact Whiteboard,39,253,50,SKU-00013,Sinai Logistics Supply,14,40000,3627.0,4.6
+Mansoura,Ergonomic Printer,169,144,40,SKU-00014,Delta Industrial Supply,10,40000,16315.26,35.2
+Mansoura,Adjustable Paper Shredder,18,20,6,SKU-00015,Delta Industrial Supply,9,40000,104.94,27.0
+Mansoura,Foldable Office Chair,462,302,93,SKU-00016,Upper Egypt Producers,13,40000,35532.42,45.9
+Mansoura,Smart Keyboard,87,90,27,SKU-00017,Upper Egypt Producers,11,40000,12775.95,29.0
+Mansoura,Adjustable Keyboard,146,118,23,SKU-00018,Alexandria Trading House,9,40000,1981.22,37.1
+Mansoura,Wireless Filing Cabinet,367,304,58,SKU-00019,Mediterranean Sourcing Ltd.,11,40000,21447.48,36.2
+Mansoura,Heavy-Duty Paper Shredder,13,159,31,SKU-00020,Mediterranean Sourcing Ltd.,13,40000,1171.69,2.5
+Mansoura,Smart Desk Lamp,290,218,40,SKU-00021,Delta Industrial Supply,12,40000,40852.3,39.9
+Mansoura,Foldable Keyboard,9,58,11,SKU-00022,Alexandria Trading House,9,40000,142.47,4.7
+Mansoura,Standard Filing Cabinet,101,108,37,SKU-00023,Alexandria Trading House,11,40000,12752.26,28.1
+Mansoura,Industrial Paper Shredder,598,371,82,SKU-00024,Mediterranean Sourcing Ltd.,11,40000,29726.58,48.4
+Mansoura,Adjustable Power Bank,297,245,70,SKU-00025,Delta Industrial Supply,11,40000,14354.01,36.4
+Mansoura,Standard Printer,454,314,58,SKU-00026,Mediterranean Sourcing Ltd.,13,40000,20175.76,43.4
+Mansoura,Smart Paper Shredder,27,121,35,SKU-00027,Red Sea Import Group,16,40000,3603.69,6.7
+Mansoura,Ergonomic Coffee Maker,405,323,57,SKU-00028,Mediterranean Sourcing Ltd.,11,40000,11757.15,37.6
+Mansoura,Rechargeable Backpack,299,288,47,SKU-00029,Delta Industrial Supply,10,40000,4649.45,31.1
+Mansoura,Wireless Whiteboard,217,279,61,SKU-00030,Sinai Logistics Supply,16,40000,26133.31,23.3
+Mansoura,Foldable Whiteboard,234,365,62,SKU-00031,Red Sea Import Group,14,40000,30782.7,19.2
+Mansoura,Standard Speaker,40,31,9,SKU-00032,Nile Manufacturing Co.,8,40000,1690.8,38.7
+Mansoura,Premium Power Bank,189,257,89,SKU-00033,Cairo Wholesale Partners,5,40000,27614.79,22.1
+Mansoura,Stainless Steel Backpack,204,194,34,SKU-00034,Cairo Wholesale Partners,6,40000,28606.92,31.5
+Mansoura,Heavy-Duty Backpack,292,192,59,SKU-00035,Cairo Wholesale Partners,4,40000,6596.28,45.6
+Mansoura,Smart Filing Cabinet,174,317,71,SKU-00036,Mediterranean Sourcing Ltd.,14,40000,4795.44,16.5
+Mansoura,Ergonomic Office Chair,248,315,94,SKU-00037,Nile Manufacturing Co.,7,40000,14887.44,23.6
+Mansoura,Compact Backpack,231,311,55,SKU-00038,Red Sea Import Group,13,40000,23672.88,22.3
+Mansoura,Foldable Desk Lamp,240,203,38,SKU-00039,Delta Industrial Supply,10,40000,1456.8,35.5
+Mansoura,Adjustable Whiteboard,423,343,92,SKU-00040,Red Sea Import Group,13,40000,39660.48,37.0
+Mansoura,Standard Desk Lamp,129,86,22,SKU-00041,Cairo Wholesale Partners,6,40000,16655.19,45.0
+Mansoura,Ergonomic Power Bank,544,344,95,SKU-00042,Red Sea Import Group,16,40000,40430.08,47.4
+Mansoura,Foldable Power Bank,247,158,35,SKU-00043,Red Sea Import Group,15,40000,4107.61,46.9
+Mansoura,Ergonomic Whiteboard,118,72,24,SKU-00044,Upper Egypt Producers,10,40000,3840.9,49.2
+Mansoura,Industrial Office Chair,298,204,41,SKU-00045,Sinai Logistics Supply,15,40000,28089.48,43.8
+Mansoura,Adjustable Coffee Maker,108,199,41,SKU-00046,Nile Manufacturing Co.,7,40000,10199.52,16.3
+Mansoura,Portable Air Purifier,254,301,85,SKU-00047,Red Sea Import Group,15,40000,6629.4,25.3
+Mansoura,Smart Speaker,370,314,66,SKU-00048,Red Sea Import Group,13,40000,35372.0,35.4
+Mansoura,Wireless Office Chair,346,250,39,SKU-00049,Red Sea Import Group,14,40000,17158.14,41.5
+Mansoura,Multi-Purpose Printer,43,304,72,SKU-00050,Mediterranean Sourcing Ltd.,12,40000,856.56,4.2
+Mansoura,Rechargeable Keyboard,266,251,79,SKU-00051,Mediterranean Sourcing Ltd.,12,40000,22753.64,31.8
+Mansoura,Wireless Monitor Stand,225,257,66,SKU-00052,Red Sea Import Group,15,40000,23447.25,26.3
+Mansoura,Industrial Storage Box,289,289,85,SKU-00053,Alexandria Trading House,9,40000,12444.34,30.0
+Mansoura,Heavy-Duty Extension Cord,195,213,40,SKU-00054,Nile Manufacturing Co.,7,40000,22916.4,27.5
+Mansoura,Industrial Filing Cabinet,16,143,31,SKU-00055,Delta Industrial Supply,12,40000,228.8,3.4
+Mansoura,Heavy-Duty Headset,364,221,36,SKU-00056,Sinai Logistics Supply,14,40000,16041.48,49.4
+Mansoura,Heavy-Duty Mouse,188,194,45,SKU-00057,Alexandria Trading House,8,40000,13069.76,29.1
+Mansoura,Portable Filing Cabinet,98,66,20,SKU-00058,Red Sea Import Group,15,40000,7351.96,44.5
+Mansoura,Multi-Purpose Desk Lamp,169,123,32,SKU-00059,Sinai Logistics Supply,15,40000,15990.78,41.2
+Mansoura,Eco Keyboard,373,292,67,SKU-00060,Sinai Logistics Supply,14,40000,18802.93,38.3
+Mansoura,Compact Headset,383,300,88,SKU-00061,Nile Manufacturing Co.,6,40000,10923.16,38.3
+Mansoura,Rechargeable Whiteboard,394,253,43,SKU-00062,Sinai Logistics Supply,16,40000,57263.96,46.7
+Mansoura,Industrial Router,113,128,29,SKU-00063,Delta Industrial Supply,9,40000,2460.01,26.5
+Mansoura,Heavy-Duty Water Bottle,13,99,33,SKU-00064,Delta Industrial Supply,11,40000,75.79,3.9
+Mansoura,Smart Air Purifier,258,260,83,SKU-00065,Nile Manufacturing Co.,7,40000,21604.92,29.8
+Mansoura,Adjustable Air Purifier,14,329,60,SKU-00066,Mediterranean Sourcing Ltd.,11,40000,380.52,1.3
+Mansoura,Rechargeable Router,613,360,113,SKU-00067,Alexandria Trading House,10,40000,61821.05,51.1
+Mansoura,Stainless Steel Desk Lamp,77,55,9,SKU-00068,Cairo Wholesale Partners,4,40000,7725.41,42.0
+Mansoura,Rechargeable Water Bottle,65,47,10,SKU-00069,Upper Egypt Producers,10,40000,5066.1,41.5
+Mansoura,Compact Extension Cord,16,121,31,SKU-00070,Delta Industrial Supply,10,40000,861.6,4.0
+Mansoura,Wireless Power Bank,65,50,17,SKU-00071,Cairo Wholesale Partners,4,40000,6820.45,39.0
+Mansoura,Industrial Speaker,102,145,23,SKU-00072,Alexandria Trading House,11,40000,9268.74,21.1
+Mansoura,Portable Paper Shredder,306,209,36,SKU-00073,Sinai Logistics Supply,16,40000,13892.4,43.9
+Mansoura,Multi-Purpose Headset,280,177,28,SKU-00074,Alexandria Trading House,9,40000,6039.6,47.5
+Mansoura,Compact Water Bottle,329,377,85,SKU-00075,Upper Egypt Producers,13,40000,7955.22,26.2
