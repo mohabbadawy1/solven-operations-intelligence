@@ -23,7 +23,7 @@ instruction: this module builds a "report skeleton" in pure Python
 first -- every number, ranking, warehouse name, confidence score, and
 piece of evidence that appears in the final report is copied directly
 from the four analytics dicts before the AI is ever called. The single
-OpenAI call that follows is asked to return *only* narrative text (an
+Groq call that follows is asked to return *only* narrative text (an
 executive summary, one-sentence framings, department briefings) keyed
 to match the skeleton, which Python then merges in. The model
 literally cannot corrupt a number, because no number ever depends on
@@ -52,9 +52,9 @@ exactly, return only JSON). The user prompt supplies a curated -- not
 dumped -- context: only the fields a report actually cites, so the
 model isn't tempted to editorialize on data it wasn't asked to
 discuss. All of this lives behind the `AIProvider` interface
-(`generate_json(system_prompt, user_prompt) -> str`); `OpenAIProvider`
+(`generate_json(system_prompt, user_prompt) -> str`); `GroqProvider`
 is the only concrete implementation today, but nothing in
-`generate_executive_report` imports the `openai` package directly, so
+`generate_executive_report` imports the `groq` package directly, so
 adding a second provider (Anthropic, a local model, a different
 OpenAI-compatible endpoint) means implementing that one interface, not
 touching orchestration, prompting, merging, validation, or rendering.
@@ -73,9 +73,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-import openai
+import groq
 from dotenv import load_dotenv
-from openai import OpenAI
+from groq import Groq
 
 # --------------------------------------------------------------------------
 # Configuration
@@ -84,7 +84,7 @@ from openai import OpenAI
 PLATFORM_NAME = "Solven Operations Intelligence Platform"
 REPORT_TYPE = "Weekly Executive Operations Report"
 
-DEFAULT_MODEL = "gpt-4o-mini"
+DEFAULT_MODEL = "llama-3.3-70b-versatile"
 DEFAULT_TEMPERATURE = 0.3
 DEFAULT_MAX_OUTPUT_TOKENS = 4000
 DEFAULT_TIMEOUT_SECONDS = 60.0
@@ -108,6 +108,42 @@ URGENCY_BY_SEVERITY = {"HIGH": "Immediate", "MEDIUM": "This Quarter", "LOW": "Mo
 
 REQUIRED_DEPARTMENTS = ["operations", "logistics", "customer_experience", "supply_chain", "executive_leadership"]
 
+# Presentation-layer lookups below (health icons, action ownership, action
+# horizons). These are display metadata, not analytics: they classify
+# values the analytics engines already computed -- they never compute a
+# score, rate, or confidence figure of their own.
+
+HEALTH_STATUS_ICON = {"Healthy": "\U0001F7E2", "At Risk": "\U0001F7E1", "Critical": "\U0001F534", "Unknown": "⚪"}
+SEVERITY_ICON = {"HIGH": "\U0001F534", "MEDIUM": "\U0001F7E0", "LOW": "\U0001F7E1"}
+
+# Which department a recommended action lands on, keyed by the same root-
+# cause category vocabulary analysis/correlations.py already assigns
+# (Warehouse Bottleneck / Supplier Risk / Process Design). Unrecognized or
+# future categories fall back to DEFAULT_OWNER rather than raising.
+OWNER_BY_ROOT_CAUSE_CATEGORY = {
+    "Warehouse Bottleneck": "Operations & Logistics",
+    "Supplier Risk": "Supply Chain & Procurement",
+    "Process Design": "Operations Leadership",
+}
+DEFAULT_OWNER = "Executive Leadership"
+
+# Buckets an action's existing estimated_timeframe ("14-30 days", "30-60
+# days", "60-120 days") into an executive-readable horizon, by the leading
+# day count. (exclusive_day_ceiling, label) evaluated in order with a
+# strict "<" so the three known, contiguous ranges never collide at their
+# shared boundary (e.g. "60-120 days" lands in Strategic, not Near-Term,
+# even though "30-60 days" also mentions 60). The last entry is the
+# catch-all for anything longer or unparsed.
+ACTION_HORIZONS = [
+    (30, "Immediate (0-30 Days)"),
+    (60, "Near-Term (30-60 Days)"),
+    (float("inf"), "Strategic (60-120 Days)"),
+]
+
+# Priority order used to break ties when more than one warehouse is
+# equally implicated across delivery, customer experience, and inventory.
+RISK_LOCATION_SOURCES = ("delivery", "customer_experience", "inventory")
+
 # Columns/keys each analytics engine's output must have for this module
 # to trust it. delivery_analysis keeps the flatter shape analysis/delivery.py
 # has always returned; complaints/inventory/correlations share the newer
@@ -118,13 +154,21 @@ REQUIRED_INVENTORY_KEYS = ["summary", "rankings", "anomalies", "health_score"]
 REQUIRED_CORRELATION_KEYS = ["executive_summary", "root_causes", "business_impacts", "priority_actions", "confidence_scores", "methodology"]
 
 REQUIRED_NARRATIVE_KEYS = [
-    "executive_summary", "overall_business_health_narrative", "risk_narratives",
-    "root_cause_notes", "recommendation_rationale", "expected_business_impact", "department_breakdown",
+    "executive_headline", "why_it_matters", "consequence_of_inaction", "executive_summary",
+    "overall_business_health_narrative", "risk_narratives", "root_cause_notes",
+    "recommendation_rationale", "expected_business_impact", "department_breakdown", "if_no_action_narrative",
 ]
 REQUIRED_REPORT_KEYS = [
-    "metadata", "executive_summary", "overall_business_health", "top_business_risks",
-    "root_causes", "recommended_actions", "expected_business_impact", "department_breakdown", "appendix",
+    "metadata", "executive_headline", "why_it_matters", "consequence_of_inaction", "executive_summary",
+    "overall_business_health", "highest_risk_location", "highest_priority_initiative", "top_business_risks",
+    "root_causes", "recommended_actions", "expected_business_impact", "department_breakdown",
+    "if_no_action_narrative", "appendix",
 ]
+
+# AI-authored free-text fields walked by the hallucinated-number heuristic
+# (_find_unverified_numbers). Kept as one list so every new narrative field
+# added to the schema is grounding-checked by construction, not by memory.
+NARRATIVE_TEXT_REPORT_KEYS = ["executive_headline", "why_it_matters", "consequence_of_inaction", "executive_summary", "if_no_action_narrative"]
 
 # Numbers this small are almost always a rank, a count of items, or a
 # list index in narrative prose ("the top 3 risks"), not a metric --
@@ -167,7 +211,7 @@ class AIProvider(ABC):
     Deliberately minimal: "given a system prompt and a user prompt,
     return a JSON string." Nothing about prompt construction, response
     merging, or validation lives here or depends on any one vendor's
-    SDK -- only `OpenAIProvider` below imports `openai`.
+    SDK -- only `GroqProvider` below imports `groq`.
     """
 
     @property
@@ -184,11 +228,10 @@ class AIProvider(ABC):
 
 @dataclass(frozen=True)
 class AIConfig:
-    """OpenAI configuration, read entirely from environment variables. Never hardcoded."""
+    """Groq configuration, read entirely from environment variables. Never hardcoded."""
 
     api_key: str
     model: str
-    organization_id: str | None
     timeout_seconds: float
     max_retries: int
     temperature: float
@@ -199,23 +242,22 @@ class AIConfig:
         """Load configuration from the environment (via a .env file if present).
 
         Raises:
-            ConfigurationError: If OPENAI_API_KEY is not set.
+            ConfigurationError: If GROQ_API_KEY is not set.
         """
         load_dotenv()
-        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        api_key = os.getenv("GROQ_API_KEY", "").strip()
         if not api_key:
             raise ConfigurationError(
-                "OPENAI_API_KEY is not set. Add it to a .env file at the project root "
+                "GROQ_API_KEY is not set. Add it to a .env file at the project root "
                 "(see .env.example) or export it in your environment before generating a report."
             )
         return cls(
             api_key=api_key,
-            model=os.getenv("OPENAI_MODEL", "").strip() or DEFAULT_MODEL,
-            organization_id=os.getenv("OPENAI_ORG_ID", "").strip() or None,
-            timeout_seconds=_float_env("OPENAI_TIMEOUT_SECONDS", DEFAULT_TIMEOUT_SECONDS),
-            max_retries=int(_float_env("OPENAI_MAX_RETRIES", DEFAULT_MAX_RETRIES)),
-            temperature=_float_env("OPENAI_TEMPERATURE", DEFAULT_TEMPERATURE),
-            max_output_tokens=int(_float_env("OPENAI_MAX_OUTPUT_TOKENS", DEFAULT_MAX_OUTPUT_TOKENS)),
+            model=os.getenv("GROQ_MODEL", "").strip() or DEFAULT_MODEL,
+            timeout_seconds=_float_env("GROQ_TIMEOUT_SECONDS", DEFAULT_TIMEOUT_SECONDS),
+            max_retries=int(_float_env("GROQ_MAX_RETRIES", DEFAULT_MAX_RETRIES)),
+            temperature=_float_env("GROQ_TEMPERATURE", DEFAULT_TEMPERATURE),
+            max_output_tokens=int(_float_env("GROQ_MAX_OUTPUT_TOKENS", DEFAULT_MAX_OUTPUT_TOKENS)),
         )
 
 
@@ -231,7 +273,7 @@ def _float_env(name: str, default: float) -> float:
 
 
 def _call_with_retry(call: Callable[[], str], max_retries: int) -> str:
-    """Retry transient OpenAI failures with exponential backoff; fail fast on non-retryable errors.
+    """Retry transient Groq failures with exponential backoff; fail fast on non-retryable errors.
 
     Authentication and malformed-request errors are never retried --
     retrying them cannot succeed. Rate limits, timeouts, connection
@@ -242,35 +284,32 @@ def _call_with_retry(call: Callable[[], str], max_retries: int) -> str:
     for attempt in range(max_retries + 1):
         try:
             return call()
-        except openai.AuthenticationError as exc:
-            raise AIProviderError(f"OpenAI authentication failed -- check OPENAI_API_KEY: {exc}") from exc
-        except openai.BadRequestError as exc:
-            raise AIProviderError(f"OpenAI rejected the request as malformed: {exc}") from exc
+        except groq.AuthenticationError as exc:
+            raise AIProviderError(f"Groq authentication failed -- check GROQ_API_KEY: {exc}") from exc
+        except groq.BadRequestError as exc:
+            raise AIProviderError(f"Groq rejected the request as malformed: {exc}") from exc
         except (
-            openai.RateLimitError, openai.APITimeoutError,
-            openai.APIConnectionError, openai.InternalServerError, openai.APIError,
+            groq.RateLimitError, groq.APITimeoutError,
+            groq.APIConnectionError, groq.InternalServerError, groq.APIError,
         ) as exc:
             last_error = exc
             if attempt < max_retries:
                 time.sleep(RETRY_BACKOFF_SECONDS * (2 ** attempt))
                 continue
-    raise AIProviderError(f"OpenAI API call failed after {max_retries + 1} attempt(s): {last_error}") from last_error
+    raise AIProviderError(f"Groq API call failed after {max_retries + 1} attempt(s): {last_error}") from last_error
 
 
-class OpenAIProvider(AIProvider):
-    """Default AI provider: OpenAI chat completions in JSON mode.
+class GroqProvider(AIProvider):
+    """Default AI provider: Groq chat completions in JSON mode.
 
     Configuration comes entirely from AIConfig (i.e. entirely from
-    environment variables) -- no API key, model name, or organization
-    ID is ever hardcoded here.
+    environment variables) -- no API key or model name is ever
+    hardcoded here.
     """
 
     def __init__(self, config: AIConfig | None = None) -> None:
         self._config = config or AIConfig.from_env()
-        client_kwargs: dict[str, Any] = {"api_key": self._config.api_key, "timeout": self._config.timeout_seconds}
-        if self._config.organization_id:
-            client_kwargs["organization"] = self._config.organization_id
-        self._client = OpenAI(**client_kwargs)
+        self._client = Groq(api_key=self._config.api_key, timeout=self._config.timeout_seconds)
 
     @property
     def model_name(self) -> str:
@@ -290,7 +329,7 @@ class OpenAIProvider(AIProvider):
             )
             content = response.choices[0].message.content if response.choices else None
             if not content or not content.strip():
-                raise AIProviderError("OpenAI returned an empty response.")
+                raise AIProviderError("Groq returned an empty response.")
             return content
 
         return _call_with_retry(_call, self._config.max_retries)
@@ -338,6 +377,89 @@ def _match_by_title(items: list[dict[str, Any]], title: str, key: str) -> str:
             value = item.get(key, "")
             return value if isinstance(value, str) else ""
     return ""
+
+
+def _action_owner(root_cause_category: str | None) -> str:
+    """Map a root-cause category (already computed upstream) to an owning department."""
+    return OWNER_BY_ROOT_CAUSE_CATEGORY.get(root_cause_category or "", DEFAULT_OWNER)
+
+
+def _action_horizon(estimated_timeframe: str | None) -> str:
+    """Bucket an action's existing estimated_timeframe string into an executive-readable horizon."""
+    match = re.search(r"\d+", estimated_timeframe or "")
+    leading_days = int(match.group()) if match else None
+    if leading_days is None:
+        return ACTION_HORIZONS[-1][1]
+    for ceiling, label in ACTION_HORIZONS:
+        if leading_days < ceiling:
+            return label
+    return ACTION_HORIZONS[-1][1]
+
+
+def _highest_risk_location(
+    delivery_analysis: dict[str, Any], complaints_analysis: dict[str, Any], inventory_analysis: dict[str, Any]
+) -> str | None:
+    """The warehouse implicated as worst-performing by the most analytics engines.
+
+    Reads only warehouse names each engine already ranked worst/highest-risk
+    -- no new comparison, scoring, or statistic is computed here. Ties are
+    broken by RISK_LOCATION_SOURCES order (delivery, then customer
+    experience, then inventory).
+    """
+    candidates = {
+        "delivery": delivery_analysis.get("warehouse_intelligence", {}).get("worst_warehouse"),
+        "customer_experience": complaints_analysis.get("rankings", {}).get("warehouse", {}).get("worst_warehouse"),
+        "inventory": inventory_analysis.get("rankings", {}).get("warehouse", {}).get("highest_risk_warehouse"),
+    }
+    named = {source: warehouse for source, warehouse in candidates.items() if warehouse}
+    if not named:
+        return None
+
+    counts: dict[str, int] = {}
+    for warehouse in named.values():
+        counts[warehouse] = counts.get(warehouse, 0) + 1
+    max_count = max(counts.values())
+    tied = {warehouse for warehouse, count in counts.items() if count == max_count}
+    for source in RISK_LOCATION_SOURCES:
+        if named.get(source) in tied:
+            return named[source]
+    return next(iter(tied))
+
+
+def _trend(previous_score: float | None, current_score: float | None) -> dict[str, Any]:
+    """Compare a health score to the same score from the last persisted report, if any.
+
+    Purely a diff of two numbers the analytics engines already computed on
+    two separate runs -- no forecasting, no new metric. `available` is
+    False whenever there is no prior report or the prior report didn't
+    carry this domain, in which case the caller shows "No historical
+    comparison available" rather than a synthesized trend.
+    """
+    if previous_score is None or current_score is None:
+        return {"available": False, "direction": None, "delta": None}
+    delta = round(current_score - previous_score, 1)
+    if delta > 0:
+        direction = "up"
+    elif delta < 0:
+        direction = "down"
+    else:
+        direction = "flat"
+    return {"available": True, "direction": direction, "delta": delta}
+
+
+def _load_previous_report(json_path: Path) -> dict[str, Any] | None:
+    """Load the last executive report this module persisted, for trend comparison.
+
+    Returns None (not an error) if no prior report exists yet or it can't
+    be parsed -- a missing history is the expected steady state for a
+    brand-new deployment, not a failure.
+    """
+    if not json_path.exists():
+        return None
+    try:
+        return json.loads(json_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
 
 
 # --------------------------------------------------------------------------
@@ -397,14 +519,15 @@ def _build_report_skeleton(
     correlation_analysis: dict[str, Any],
     model_name: str,
     generation_started_at: datetime,
+    previous_report: dict[str, Any] | None,
 ) -> dict[str, Any]:
     """Build the report's numeric/factual skeleton -- everything except narrative prose.
 
     Every value here is copied or directly derived from the four
-    analytics dicts. Narrative string fields (executive_summary,
-    per-item "why it matters" framing, department paragraphs, etc.)
-    are intentionally absent; `_merge_narrative_into_skeleton` adds
-    them after the AI call.
+    analytics dicts (plus, for `trend`, the previous persisted report).
+    Narrative string fields (executive_summary, per-item "why it
+    matters" framing, department paragraphs, etc.) are intentionally
+    absent; `_merge_narrative_into_skeleton` adds them after the AI call.
     """
     delivery_health = delivery_analysis.get("operations_health_score", {})
     complaints_health = complaints_analysis.get("health_score", {})
@@ -418,8 +541,14 @@ def _build_report_skeleton(
     valid_scores = [s for s in scores.values() if s is not None]
     scores["operations_overall"] = round(sum(valid_scores) / len(valid_scores), 1) if valid_scores else None
 
+    previous_health = (previous_report or {}).get("overall_business_health", {})
     overall_business_health = {
-        domain: {"score": score, "status": _status_from_score(score)} for domain, score in scores.items()
+        domain: {
+            "score": score,
+            "status": _status_from_score(score),
+            "trend": _trend(previous_health.get(domain, {}).get("score"), score),
+        }
+        for domain, score in scores.items()
     }
 
     business_impacts = correlation_analysis.get("business_impacts", [])
@@ -444,6 +573,7 @@ def _build_report_skeleton(
         }
         for root_cause in correlation_analysis.get("root_causes", [])
     ]
+    category_by_title = {root_cause["title"]: root_cause["category"] for root_cause in root_causes}
 
     recommended_actions = [
         {
@@ -454,6 +584,8 @@ def _build_report_skeleton(
             "difficulty": action["difficulty"],
             "estimated_timeframe": action["estimated_timeframe"],
             "confidence": action["confidence"],
+            "owner": _action_owner(category_by_title.get(action["title"])),
+            "horizon": _action_horizon(action["estimated_timeframe"]),
         }
         for action in correlation_analysis.get("priority_actions", [])
     ]
@@ -470,6 +602,8 @@ def _build_report_skeleton(
     return {
         "metadata": metadata,
         "overall_business_health": overall_business_health,
+        "highest_risk_location": _highest_risk_location(delivery_analysis, complaints_analysis, inventory_analysis),
+        "highest_priority_initiative": recommended_actions[0]["title"] if recommended_actions else None,
         "top_business_risks": top_business_risks,
         "root_causes": root_causes,
         "recommended_actions": recommended_actions,
@@ -501,6 +635,8 @@ def _build_ai_context(
 
     return {
         "overall_business_health": skeleton["overall_business_health"],
+        "highest_risk_location": skeleton["highest_risk_location"],
+        "highest_priority_initiative": skeleton["highest_priority_initiative"],
         "delivery": {
             "kpis": delivery_analysis.get("executive_kpis", {}),
             "best_warehouse": delivery_warehouses.get("best_warehouse"),
@@ -533,24 +669,28 @@ def _build_ai_context(
 # Prompt engineering
 # --------------------------------------------------------------------------
 
-SYSTEM_PROMPT = """You are the Chief Operations Officer of a logistics company, writing the weekly executive operations report for the CEO, the executive leadership team, and department heads.
+SYSTEM_PROMPT = """You are the Chief Operations Officer of a logistics company, writing the weekly executive operations report for the CEO, the executive leadership team, and department heads. This report is read Monday morning, in under five minutes, by people who will act on it. Write the way McKinsey, Amazon Operations, or Palantir Foundry would brief a COO -- not the way a chatbot summarizes data.
 
-Every number, ranking, root cause, and recommendation in the context you are given has already been computed by the company's analytics platform. That platform is deterministic and authoritative: it has already run the statistics, correlations, and confidence scoring. Your job is not to analyze -- it is to communicate what has already been found, in the voice of an experienced operator briefing leadership.
+Every number, ranking, root cause, and recommendation in the context you are given has already been computed by the company's analytics platform. That platform is deterministic and authoritative: it has already run the statistics, correlations, and confidence scoring. Your job is not to analyze -- it is to communicate what has already been found, and to translate it into business consequences (revenue, customers, cost, reputation) an executive immediately understands.
 
 Rules you must follow without exception:
 1. Never perform, estimate, or restate a calculation. Use only the figures given to you, copied exactly as provided (same digits, same units, same warehouse/supplier/category names).
 2. Never invent a root cause, risk, recommendation, or finding that is not present in the provided context. If a list in the context is empty, say so plainly instead of manufacturing content to fill space.
-3. Never fabricate a dollar figure, percentage, or ROI estimate. If the context does not state a number, describe the expected outcome in qualitative terms only (e.g. "reduced delay rate," not "a 12% improvement" unless that 12% appears in the context).
-4. Write like a management-consulting executive briefing (McKinsey/Bain/Deloitte/Palantir tone): concise, direct, plain declarative sentences. No buzzwords ("synergy," "leverage," "game-changing"), no unnecessary enthusiasm, no chatbot phrasing ("I'd be happy to," "Great question," "Let's dive in").
-5. Return ONLY a single JSON object matching the schema you are given. No markdown code fences, no prose outside the JSON, no trailing commentary."""
+3. Never fabricate a dollar figure, percentage, or ROI estimate, and never forecast a future number. If the context does not state a number, describe the outcome in qualitative business terms only -- e.g. "elevated churn risk among high-volume accounts," not "a 12% improvement" or "an estimated $2M exposure" unless that figure already appears in the context.
+4. Write like a management-consulting executive briefing: short paragraphs (2-4 sentences), plain declarative sentences, varied sentence structure. Do not open sentences with "This indicates," "We should," or "Our overall." Do not use the phrase "business health is at risk" or any other generic hedge -- name the specific issue instead. No buzzwords ("synergy," "leverage," "game-changing"), no chatbot phrasing ("I'd be happy to," "Great question," "Let's dive in").
+5. Every business-impact sentence should read like a consultant naming the stakes -- customer churn, SLA penalties, margin/revenue exposure, carrying cost, warehouse throughput, reputational risk -- using only the categories the evidence actually supports. Do not force-fit a category that isn't grounded in the given evidence.
+6. Return ONLY a single JSON object matching the schema you are given. No markdown code fences, no prose outside the JSON, no trailing commentary."""
 
 NARRATIVE_JSON_SCHEMA_EXAMPLE = """{
+  "executive_headline": "string, one sentence naming the single most important operational issue this period",
+  "why_it_matters": "string, 1-3 sentences on the business stakes of that issue",
+  "consequence_of_inaction": "string, 1-3 sentences, qualitative, on what happens if it is not addressed",
   "executive_summary": "string, 2-4 short paragraphs",
   "overall_business_health_narrative": {
     "delivery": "string", "customer_experience": "string", "inventory": "string", "operations_overall": "string"
   },
   "risk_narratives": [
-    {"title": "string, must exactly match a title from top_business_risks", "why_it_matters": "string"}
+    {"title": "string, must exactly match a title from top_business_risks", "business_impact": "string, executive business-impact framing (churn, SLA, revenue, cost, reputation)"}
   ],
   "root_cause_notes": [
     {"title": "string, must exactly match a title from root_causes", "executive_note": "string"}
@@ -564,7 +704,8 @@ NARRATIVE_JSON_SCHEMA_EXAMPLE = """{
   "department_breakdown": {
     "operations": "string", "logistics": "string", "customer_experience": "string",
     "supply_chain": "string", "executive_leadership": "string"
-  }
+  },
+  "if_no_action_narrative": "string, 2-3 short paragraphs on the likely operational consequences of leaving the current top risks and root causes unaddressed"
 }"""
 
 
@@ -582,13 +723,17 @@ Write the narrative content for this week's executive report. Return a single JS
 {NARRATIVE_JSON_SCHEMA_EXAMPLE}
 
 Requirements for each field:
-- "executive_summary": overall business health, the single biggest operational issue, the single biggest opportunity, and your recommendation as COO -- grounded entirely in the context above.
+- "executive_headline": names the #1 ranked item in "top_business_risks" (or the top "highest_priority_initiative" if there are no risks) in a single sentence that would stop a CEO mid-scroll. No throat-clearing.
+- "why_it_matters": grounded in "highest_risk_location" and the evidence already in "top_business_risks" / "root_causes" -- why this specific issue is a business problem, not just an operational one.
+- "consequence_of_inaction": qualitative only, grounded in "business_impact" / "expected_business_impact" text already present in root_causes and recommended_actions. No new numbers, no forecasts.
+- "executive_summary": open with the same issue named in "executive_headline," then cover overall business health, the single biggest opportunity, and your recommendation as COO -- grounded entirely in the context above. Do not restate "executive_headline" verbatim; build on it.
 - "overall_business_health_narrative": one plain-business-terms sentence per domain explaining what that score means.
-- "risk_narratives": exactly one entry per item in "top_business_risks" above, matched by "title" exactly.
+- "risk_narratives": exactly one entry per item in "top_business_risks" above, matched by "title" exactly; "business_impact" translates the risk into what it costs the business (customers, penalties, revenue, cost, reputation) -- pick only the framings the evidence supports.
 - "root_cause_notes": exactly one entry per item in "root_causes" above, matched by "title" exactly. If "root_causes" is empty, return an empty list here and say so plainly in the executive summary instead of inventing one.
 - "recommendation_rationale": exactly one entry per item in "recommended_actions" above, matched by "title" exactly.
 - "expected_business_impact": 3-5 items describing, qualitatively, what improves if the recommended actions are executed -- based only on the business_impact / expected_business_impact text already present in root_causes and recommended_actions above. No new numbers.
-- "department_breakdown": one paragraph each for operations, logistics, customer_experience, supply_chain, and executive_leadership -- what that specific audience needs to know from this report."""
+- "department_breakdown": one paragraph each for operations, logistics, customer_experience, supply_chain, and executive_leadership -- what that specific audience needs to know from this report.
+- "if_no_action_narrative": what happens across the business if "top_business_risks" and "root_causes" go unaddressed -- grounded only in the evidence and business_impact text already given. If both lists are empty, state plainly that no material risk requiring escalation was identified this period."""
 
 
 # --------------------------------------------------------------------------
@@ -602,8 +747,10 @@ def _validate_narrative_response(narrative: Any) -> dict[str, Any]:
     missing = [key for key in REQUIRED_NARRATIVE_KEYS if key not in narrative]
     if missing:
         raise ResponseValidationError(f"AI response is missing required keys: {missing}")
-    if not isinstance(narrative["executive_summary"], str) or not narrative["executive_summary"].strip():
-        raise ResponseValidationError("AI response's executive_summary is empty or not a string.")
+
+    for text_key in NARRATIVE_TEXT_REPORT_KEYS:
+        if not isinstance(narrative.get(text_key), str) or not narrative[text_key].strip():
+            raise ResponseValidationError(f"AI response's '{text_key}' is empty or not a string.")
 
     department_breakdown = narrative.get("department_breakdown")
     if not isinstance(department_breakdown, dict):
@@ -632,8 +779,9 @@ def _validate_final_report(report: dict[str, Any]) -> None:
     missing = [key for key in REQUIRED_REPORT_KEYS if key not in report]
     if missing:
         raise ResponseValidationError(f"Assembled report is missing required sections: {missing}")
-    if not isinstance(report["executive_summary"], str) or not report["executive_summary"].strip():
-        raise ResponseValidationError("Assembled report has an empty executive_summary.")
+    for text_key in NARRATIVE_TEXT_REPORT_KEYS:
+        if not isinstance(report[text_key], str) or not report[text_key].strip():
+            raise ResponseValidationError(f"Assembled report has an empty '{text_key}'.")
     if not report["overall_business_health"]:
         raise ResponseValidationError("Assembled report has an empty overall_business_health.")
     if not report["department_breakdown"]:
@@ -685,9 +833,9 @@ def _find_unverified_numbers(report: dict[str, Any], context_numbers: set[str]) 
     guarantee that every *skeleton* number is Python-sourced.
     """
     narrative_text = " ".join([
-        report.get("executive_summary", ""),
+        *(report.get(key, "") for key in NARRATIVE_TEXT_REPORT_KEYS),
         " ".join(block.get("narrative", "") for block in report.get("overall_business_health", {}).values()),
-        " ".join(risk.get("why_it_matters", "") for risk in report.get("top_business_risks", [])),
+        " ".join(risk.get("business_impact", "") for risk in report.get("top_business_risks", [])),
         " ".join(item.get("expected_improvement", "") for item in report.get("expected_business_impact", [])),
         " ".join(report.get("department_breakdown", {}).values()),
     ])
@@ -707,13 +855,19 @@ def _merge_narrative_into_skeleton(skeleton: dict[str, Any], narrative: dict[str
     """
     report: dict[str, Any] = {
         "metadata": dict(skeleton["metadata"]),
+        "executive_headline": narrative["executive_headline"].strip(),
+        "why_it_matters": narrative["why_it_matters"].strip(),
+        "consequence_of_inaction": narrative["consequence_of_inaction"].strip(),
         "executive_summary": narrative["executive_summary"].strip(),
         "overall_business_health": {},
+        "highest_risk_location": skeleton["highest_risk_location"],
+        "highest_priority_initiative": skeleton["highest_priority_initiative"],
         "top_business_risks": [],
         "root_causes": [],
         "recommended_actions": [],
         "expected_business_impact": narrative.get("expected_business_impact", []),
         "department_breakdown": dict(narrative["department_breakdown"]),
+        "if_no_action_narrative": narrative["if_no_action_narrative"].strip(),
         "appendix": {**skeleton["appendix"], "data_limitations": list(skeleton["appendix"]["data_limitations"])},
     }
 
@@ -726,7 +880,7 @@ def _merge_narrative_into_skeleton(skeleton: dict[str, Any], narrative: dict[str
     risk_narratives = narrative.get("risk_narratives", [])
     for risk in skeleton["top_business_risks"]:
         report["top_business_risks"].append({
-            **risk, "why_it_matters": _match_by_title(risk_narratives, risk["title"], "why_it_matters"),
+            **risk, "business_impact": _match_by_title(risk_narratives, risk["title"], "business_impact"),
         })
 
     root_cause_notes = narrative.get("root_cause_notes", [])
@@ -747,6 +901,135 @@ def _merge_narrative_into_skeleton(skeleton: dict[str, Any], narrative: dict[str
 # --------------------------------------------------------------------------
 # Markdown rendering (deterministic -- not a second AI call)
 # --------------------------------------------------------------------------
+#
+# Trend architecture (see requirement 7): every health block already
+# carries a `trend` dict shaped {"available", "direction", "delta"} --
+# `_trend()` fills it in from the previous persisted report when one
+# exists, and leaves `available=False` otherwise. `_render_trend_cell`
+# below is the only place that turns that dict into text, so adding a
+# new trend presentation later (a sparkline, a color, an arrow icon
+# swap) is a one-function change, not a rewrite of the report loop.
+
+def _label(key: str) -> str:
+    """"customer_experience" -> "Customer Experience". Used for every domain/department heading."""
+    return key.replace("_", " ").title()
+
+
+def _fmt_score(score: float | None) -> str:
+    return "N/A" if score is None else str(score)
+
+
+def _fmt_confidence(value: float | None) -> str:
+    return "N/A" if value is None else f"{value:.0%}"
+
+
+def _render_trend_cell(trend: dict[str, Any]) -> str:
+    if not trend.get("available"):
+        return "No historical comparison available"
+    direction = trend.get("direction")
+    if direction == "flat":
+        return "▬ Flat vs. last report"
+    arrow = "▲" if direction == "up" else "▼"
+    return f"{arrow} {trend['delta']:+.1f} pts vs. last report"
+
+
+def _render_executive_alert(report: dict[str, Any]) -> list[str]:
+    """The callout box a COO reads in the first five seconds: issue, stakes, cost of inaction, top action."""
+    top_action_title = report.get("highest_priority_initiative")
+    top_action = next(
+        (action for action in report["recommended_actions"] if action["title"] == top_action_title), None
+    )
+    lines = [
+        f"> **{report['executive_headline']}**",
+        ">",
+        f"> {report['why_it_matters']}",
+        ">",
+        f"> **If nothing changes:** {report['consequence_of_inaction']}",
+    ]
+    if top_action:
+        lines.append(">")
+        lines.append(f"> **Top priority:** {top_action['title']} -- Owner: {top_action['owner']} ({top_action['horizon']})")
+    return lines
+
+
+def _render_dashboard(report: dict[str, Any]) -> list[str]:
+    """The five-second-read KPI table plus the two headline facts that aren't scores."""
+    lines = ["| Metric | Status | Score | Trend |", "|---|---|---|---|"]
+    for domain, block in report["overall_business_health"].items():
+        icon = HEALTH_STATUS_ICON.get(block["status"], "")
+        lines.append(
+            f"| {_label(domain)} | {icon} {block['status']} | {_fmt_score(block['score'])} | "
+            f"{_render_trend_cell(block['trend'])} |"
+        )
+    lines.append("")
+    lines.append(f"**Highest Risk Location:** {report['highest_risk_location'] or 'Not identified this period.'}")
+    lines.append("")
+    lines.append(f"**Highest Priority Initiative:** {report['highest_priority_initiative'] or 'No priority initiative identified this period.'}")
+    return lines
+
+
+def _render_risks(risks: list[dict[str, Any]]) -> list[str]:
+    if not risks:
+        return ["_No significant business risks were identified this period._"]
+    lines: list[str] = []
+    for risk in risks:
+        icon = SEVERITY_ICON.get(risk["severity"], "")
+        lines.append(f"### {risk['rank']}. {icon} {risk['title']} -- {risk['severity']} · {risk['urgency']}")
+        lines.append(f"- **Evidence:** {risk['evidence']}")
+        if risk.get("business_impact"):
+            lines.append(f"- **Executive Business Impact:** {risk['business_impact']}")
+        lines.append("")
+    return lines
+
+
+def _render_root_causes(root_causes: list[dict[str, Any]]) -> list[str]:
+    if not root_causes:
+        return ["_No cross-domain root cause met the platform's evidence threshold this period._"]
+    lines: list[str] = []
+    for root_cause in root_causes:
+        lines.append(f"### {root_cause['title']} (confidence: {_fmt_confidence(root_cause['confidence'])})")
+        if root_cause.get("executive_note"):
+            lines.append(root_cause["executive_note"])
+        lines.append("")
+        if root_cause.get("evidence"):
+            lines.append("**Evidence:**")
+            for item in root_cause["evidence"]:
+                lines.append(f"- {item}")
+        lines.append(f"\n**Business impact:** {root_cause.get('business_impact', '')}")
+        lines.append("")
+    return lines
+
+
+def _render_action_plan(actions: list[dict[str, Any]]) -> list[str]:
+    """A scan table for triage, then the same actions grouped by horizon for execution."""
+    if not actions:
+        return ["_No priority actions were identified this period._", ""]
+
+    lines = ["| Priority | Initiative | Owner | Timeline | Confidence |", "|---|---|---|---|---|"]
+    for action in actions:
+        lines.append(
+            f"| {action['priority']} | {action['title']} | {action['owner']} | "
+            f"{action['horizon']} | {_fmt_confidence(action['confidence'])} |"
+        )
+    lines.append("")
+
+    for _, horizon_label in ACTION_HORIZONS:
+        horizon_actions = [action for action in actions if action["horizon"] == horizon_label]
+        if not horizon_actions:
+            continue
+        lines.append(f"### {horizon_label}")
+        lines.append("")
+        for action in horizon_actions:
+            lines.append(f"**{action['priority']}. {action['title']}**  ")
+            lines.append(f"Owner: {action['owner']} · Difficulty: {action['difficulty']} · Est. timeframe: {action['estimated_timeframe']} · Confidence: {_fmt_confidence(action['confidence'])}")
+            lines.append("")
+            lines.append(action.get("reason", ""))
+            if action.get("executive_rationale"):
+                lines.append(f"*{action['executive_rationale']}*")
+            lines.append(f"**Expected outcome:** {action.get('expected_business_impact', '')}")
+            lines.append("")
+    return lines
+
 
 def _render_markdown(report: dict[str, Any]) -> str:
     """Render the final report dict to professionally formatted Markdown.
@@ -757,94 +1040,60 @@ def _render_markdown(report: dict[str, Any]) -> str:
     communication one, and Python does it more reliably and cheaply.
     """
     metadata = report["metadata"]
+    divider = "---"
     lines: list[str] = [
         f"# {metadata['report_type']}",
         f"*{metadata['platform']} -- Generated {metadata['generated_at']}*",
+        "",
+        divider,
+        "",
+        "## Executive Alert",
+        "",
+        *_render_executive_alert(report),
+        "",
+        divider,
+        "",
+        "## Executive Dashboard",
+        "",
+        *_render_dashboard(report),
+        "",
+        divider,
         "",
         "## Executive Summary",
         "",
         report["executive_summary"],
         "",
-        "## Overall Business Health",
-        "",
-        "| Domain | Score | Status |",
-        "|---|---|---|",
     ]
-    for domain, block in report["overall_business_health"].items():
-        lines.append(f"| {domain.replace('_', ' ').title()} | {block.get('score')} | {block.get('status')} |")
-    lines.append("")
+
     for domain, block in report["overall_business_health"].items():
         if block.get("narrative"):
-            lines.append(f"**{domain.replace('_', ' ').title()}:** {block['narrative']}")
+            lines.append(f"**{_label(domain)}:** {block['narrative']}")
     lines.append("")
 
-    lines.append("## Top Business Risks")
-    lines.append("")
-    if not report["top_business_risks"]:
-        lines.append("_No significant business risks were identified this period._")
-    for risk in report["top_business_risks"]:
-        lines.append(f"### {risk['rank']}. {risk['title']} ({risk['severity']} -- {risk['urgency']})")
-        lines.append(f"- **Evidence:** {risk['evidence']}")
-        if risk.get("why_it_matters"):
-            lines.append(f"- **Why it matters:** {risk['why_it_matters']}")
-        lines.append("")
+    lines.extend([divider, "", "## Top Business Risks", ""])
+    lines.extend(_render_risks(report["top_business_risks"]))
 
-    lines.append("## Root Cause Analysis")
-    lines.append("")
-    if not report["root_causes"]:
-        lines.append("_No cross-domain root cause met the platform's evidence threshold this period._")
-    for root_cause in report["root_causes"]:
-        lines.append(f"### {root_cause['title']} (confidence: {root_cause['confidence']})")
-        if root_cause.get("executive_note"):
-            lines.append(root_cause["executive_note"])
-        lines.append("")
-        if root_cause.get("evidence"):
-            lines.append("**Evidence:**")
-            for item in root_cause["evidence"]:
-                lines.append(f"- {item}")
-        lines.append(f"\n**Business impact:** {root_cause.get('business_impact', '')}")
-        lines.append("")
+    lines.extend([divider, "", "## Root Cause Analysis", ""])
+    lines.extend(_render_root_causes(report["root_causes"]))
 
-    lines.append("## Executive Recommendations")
-    lines.append("")
-    if report["recommended_actions"]:
-        lines.append("| Priority | Recommendation | Difficulty | Timeframe | Confidence |")
-        lines.append("|---|---|---|---|---|")
-        for action in report["recommended_actions"]:
-            lines.append(
-                f"| {action['priority']} | {action['title']} | {action['difficulty']} | "
-                f"{action['estimated_timeframe']} | {action['confidence']} |"
-            )
-        lines.append("")
-        for action in report["recommended_actions"]:
-            lines.append(f"**{action['priority']}. {action['title']}**  ")
-            lines.append(action.get("reason", ""))
-            if action.get("executive_rationale"):
-                lines.append(f"*{action['executive_rationale']}*")
-            lines.append("")
-    else:
-        lines.append("_No priority actions were identified this period._")
-        lines.append("")
+    lines.extend([divider, "", "## If No Action Is Taken", "", report["if_no_action_narrative"], "", divider, ""])
 
-    lines.append("## Expected Business Impact")
-    lines.append("")
+    lines.extend(["## 90-Day Action Plan", ""])
+    lines.extend(_render_action_plan(report["recommended_actions"]))
+
+    lines.extend([divider, "", "## Expected Business Impact", ""])
     for item in report["expected_business_impact"]:
         lines.append(f"- **{item.get('area', '')}:** {item.get('expected_improvement', '')}")
     lines.append("")
 
-    lines.append("## Department Breakdown")
-    lines.append("")
+    lines.extend([divider, "", "## Department Breakdown", ""])
     for department, text in report["department_breakdown"].items():
-        lines.append(f"### {department.replace('_', ' ').title()}")
+        lines.append(f"### {_label(department)}")
         lines.append(text)
         lines.append("")
 
     appendix = report["appendix"]
-    lines.append("## Appendix")
-    lines.append("")
-    lines.append("### Methodology")
-    lines.append(appendix.get("methodology_summary", ""))
-    lines.append("")
+    lines.extend([divider, "", "## Appendix", "", "### Methodology", appendix.get("methodology_summary", ""), ""])
     lines.append("### Confidence Methodology")
     lines.append(appendix.get("confidence_explanation", ""))
     lines.append("")
@@ -895,7 +1144,7 @@ def generate_executive_report(
         complaints_analysis: Output of analysis.complaints.analyze_complaints.
         inventory_analysis: Output of analysis.inventory.analyze_inventory.
         correlation_analysis: Output of analysis.correlations.analyze_correlations.
-        provider: The AI backend to use. Defaults to `OpenAIProvider()`,
+        provider: The AI backend to use. Defaults to `GroqProvider()`,
             which reads its configuration from environment variables.
             Pass a different `AIProvider` implementation (or a test
             double) to use another backend without touching this
@@ -909,13 +1158,19 @@ def generate_executive_report(
 
             {
                 "metadata": {...},
+                "executive_headline": "...",
+                "why_it_matters": "...",
+                "consequence_of_inaction": "...",
                 "executive_summary": "...",
                 "overall_business_health": {...},
+                "highest_risk_location": "..." | None,
+                "highest_priority_initiative": "..." | None,
                 "top_business_risks": [...],
                 "root_causes": [...],
                 "recommended_actions": [...],
                 "expected_business_impact": [...],
                 "department_breakdown": {...},
+                "if_no_action_narrative": "...",
                 "appendix": {...},
             }
 
@@ -923,7 +1178,7 @@ def generate_executive_report(
         AnalyticsInputError: If any of the four analytics dicts is
             missing, empty, or malformed.
         ConfigurationError: If required AI provider configuration
-            (e.g. OPENAI_API_KEY) is missing.
+            (e.g. GROQ_API_KEY) is missing.
         AIProviderError: If the AI provider fails (auth, timeout, rate
             limit, connection error) after retries are exhausted.
         ResponseValidationError: If the AI's response, or the final
@@ -936,11 +1191,16 @@ def generate_executive_report(
     inventory_analysis = _require_analysis(inventory_analysis, REQUIRED_INVENTORY_KEYS, "inventory_analysis")
     correlation_analysis = _require_analysis(correlation_analysis, REQUIRED_CORRELATION_KEYS, "correlation_analysis")
 
-    provider = provider or OpenAIProvider()
+    provider = provider or GroqProvider()
+
+    output_directory = Path(output_dir) if output_dir else DEFAULT_OUTPUT_DIR
+    json_path = output_directory / REPORT_JSON_FILENAME
+    md_path = output_directory / REPORT_MARKDOWN_FILENAME
+    previous_report = _load_previous_report(json_path)
 
     skeleton = _build_report_skeleton(
         delivery_analysis, complaints_analysis, inventory_analysis, correlation_analysis,
-        provider.model_name, started_at,
+        provider.model_name, started_at, previous_report,
     )
     context = _build_ai_context(delivery_analysis, complaints_analysis, inventory_analysis, correlation_analysis, skeleton)
 
@@ -961,9 +1221,6 @@ def generate_executive_report(
             f"{unverified_numbers}."
         )
 
-    output_directory = Path(output_dir) if output_dir else DEFAULT_OUTPUT_DIR
-    json_path = output_directory / REPORT_JSON_FILENAME
-    md_path = output_directory / REPORT_MARKDOWN_FILENAME
     report["metadata"]["generation_duration_seconds"] = round((datetime.now(timezone.utc) - started_at).total_seconds(), 2)
     report["metadata"]["saved_json_path"] = str(json_path)
     report["metadata"]["saved_markdown_path"] = str(md_path)
