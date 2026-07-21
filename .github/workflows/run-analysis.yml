@@ -20,10 +20,15 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Install Playwright Chromium
+        run: python -m playwright install --with-deps chromium
+
       - name: Run analysis
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
+          set -euo pipefail
+
           python app.py
 
           echo "Checking generated reports..."
@@ -31,6 +36,7 @@ jobs:
           test -f outputs/executive_report.json
           test -f outputs/executive_report.md
           test -f outputs/executive_report.html
+          test -f outputs/executive_report.pdf
 
           echo "All report files were generated successfully."
           ls -lah outputs/
@@ -43,5 +49,6 @@ jobs:
             outputs/executive_report.json
             outputs/executive_report.md
             outputs/executive_report.html
+            outputs/executive_report.pdf
           retention-days: 7
           if-no-files-found: error

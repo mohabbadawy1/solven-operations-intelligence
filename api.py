@@ -133,6 +133,7 @@ def _success_payload(report: dict[str, Any]) -> dict[str, Any]:
             "json": metadata.get("saved_json_path"),
             "markdown": metadata.get("saved_markdown_path"),
             "html": metadata.get("saved_html_path"),
+            "pdf": metadata.get("saved_pdf_path"),
         },
         "summary": {
             "operations_health_score": operations_overall.get("score"),

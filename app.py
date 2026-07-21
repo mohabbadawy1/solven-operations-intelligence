@@ -15,6 +15,7 @@ Usage:
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +25,7 @@ from analysis.complaints import analyze_complaints
 from analysis.correlations import analyze_correlations
 from analysis.delivery import analyze_deliveries
 from analysis.inventory import analyze_inventory
+from ai.pdf_report_renderer import PDFRenderError, render_pdf
 from ai.report_generator import ConfigurationError, ReportGenerationError, generate_executive_report
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -140,16 +142,27 @@ def run_pipeline() -> dict[str, Any]:
     print(f"  Saved: {report['metadata']['saved_markdown_path']}")
     print(f"  Saved: {report['metadata']['saved_html_path']}")
 
+    print("\nRendering PDF from HTML report...")
+    html_path = Path(report["metadata"]["saved_html_path"])
+    pdf_path = render_pdf(html_path, html_path.with_suffix(".pdf"))
+    report["metadata"]["saved_pdf_path"] = str(pdf_path)
+    print(f"  Saved: {pdf_path}")
+
     return report
 
 
 def main() -> None:
     """CLI entry point: run the pipeline and print a friendly outcome on failure.
 
-    Mirrors the previous behavior of this script exactly -- errors from
-    report generation are caught and summarized rather than raised as a
-    traceback. Callers that need the report itself (e.g. api.py) should
-    call `run_pipeline()` directly instead.
+    Mirrors the previous behavior of this script for report generation
+    errors -- those are caught and summarized rather than raised as a
+    traceback. PDF rendering failures are different: by the time
+    `render_pdf` runs, the JSON/Markdown/HTML report already exists, so
+    a PDF failure is a real regression in this run's output rather than
+    a soft "skip", and it exits non-zero so CI (and any other caller
+    that checks the exit code) fails loudly instead of reporting
+    success with a missing PDF. Callers that need the report itself
+    (e.g. api.py) should call `run_pipeline()` directly instead.
     """
     try:
         run_pipeline()
@@ -157,6 +170,9 @@ def main() -> None:
         print(f"  Skipped -- {exc}")
     except ReportGenerationError as exc:
         print(f"  Failed -- {exc}")
+    except PDFRenderError as exc:
+        print(f"  Failed -- {exc}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
