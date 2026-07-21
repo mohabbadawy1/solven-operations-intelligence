@@ -23,20 +23,25 @@ jobs:
       - name: Run analysis
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: python app.py
-
-      - name: Show generated report files
         run: |
-          echo "Generated report files:"
-          find . -type f \( -name "*.html" -o -name "*.json" -o -name "*.md" \) | sort
+          python app.py
+
+          echo "Checking generated reports..."
+
+          test -f outputs/executive_report.json
+          test -f outputs/executive_report.md
+          test -f outputs/executive_report.html
+
+          echo "All report files were generated successfully."
+          ls -lah outputs/
 
       - name: Upload generated report
         uses: actions/upload-artifact@v4
         with:
           name: operations-intelligence-report
           path: |
-            **/*.html
-            **/*.json
-            **/*.md
+            outputs/executive_report.json
+            outputs/executive_report.md
+            outputs/executive_report.html
           retention-days: 7
           if-no-files-found: error
