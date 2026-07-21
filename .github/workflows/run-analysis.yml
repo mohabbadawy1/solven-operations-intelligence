@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -25,9 +25,18 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python app.py
 
+      - name: Show generated report files
+        run: |
+          echo "Generated report files:"
+          find . -type f \( -name "*.html" -o -name "*.json" -o -name "*.md" \) | sort
+
       - name: Upload generated report
         uses: actions/upload-artifact@v4
         with:
           name: operations-intelligence-report
-          path: outputs/
+          path: |
+            **/*.html
+            **/*.json
+            **/*.md
           retention-days: 7
+          if-no-files-found: error
