@@ -77,6 +77,8 @@ import groq
 from dotenv import load_dotenv
 from groq import Groq
 
+from ai.html_report_renderer import HTMLRenderError, render_html
+
 # --------------------------------------------------------------------------
 # Configuration
 # --------------------------------------------------------------------------
@@ -94,6 +96,7 @@ RETRY_BACKOFF_SECONDS = 1.0
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent.parent / "outputs"
 REPORT_JSON_FILENAME = "executive_report.json"
 REPORT_MARKDOWN_FILENAME = "executive_report.md"
+REPORT_HTML_FILENAME = "executive_report.html"
 
 # How many candidates Python selects (deterministically, by severity/
 # confidence already computed upstream) before asking the AI to write
@@ -161,7 +164,7 @@ REQUIRED_NARRATIVE_KEYS = [
 REQUIRED_REPORT_KEYS = [
     "metadata", "executive_headline", "why_it_matters", "consequence_of_inaction", "executive_summary",
     "overall_business_health", "highest_risk_location", "highest_priority_initiative", "top_business_risks",
-    "root_causes", "recommended_actions", "expected_business_impact", "department_breakdown",
+    "root_causes", "recommended_actions", "charts", "expected_business_impact", "department_breakdown",
     "if_no_action_narrative", "appendix",
 ]
 
@@ -447,6 +450,19 @@ def _trend(previous_score: float | None, current_score: float | None) -> dict[st
     return {"available": True, "direction": direction, "delta": delta}
 
 
+def _customer_sentiment_split(complaints_analysis: dict[str, Any]) -> dict[str, float | None]:
+    """Split the complaints engine's negative_sentiment_percentage into its complement.
+
+    A two-segment donut needs both slices; the engine only ever computed
+    the one number, so the other slice is just 100 minus it -- arithmetic
+    for the chart to render, not a second sentiment classification.
+    """
+    negative = complaints_analysis.get("summary", {}).get("negative_sentiment_percentage")
+    if negative is None:
+        return {"negative_percentage": None, "non_negative_percentage": None}
+    return {"negative_percentage": negative, "non_negative_percentage": round(100 - negative, 1)}
+
+
 def _load_previous_report(json_path: Path) -> dict[str, Any] | None:
     """Load the last executive report this module persisted, for trend comparison.
 
@@ -590,6 +606,30 @@ def _build_report_skeleton(
         for action in correlation_analysis.get("priority_actions", [])
     ]
 
+    # Every recommended action is already built 1:1 from a root cause (same
+    # title -- see analysis/correlations.py::_build_priority_actions), so its
+    # owner and priority are joined back onto that root cause here. This is a
+    # lookup over two lists the platform already computed, not a new score.
+    action_by_title = {action["title"]: action for action in recommended_actions}
+    for root_cause in root_causes:
+        matching_action = action_by_title.get(root_cause["title"])
+        root_cause["owner"] = matching_action["owner"] if matching_action else None
+        root_cause["priority"] = matching_action["priority"] if matching_action else None
+
+    charts = {
+        # Ranked, warehouse-level on-time delivery rate -- the same
+        # ranked_warehouses list analysis/delivery.py already produces,
+        # narrowed to the two fields a comparison chart needs.
+        "warehouse_performance": [
+            {"warehouse": row.get("warehouse"), "on_time_rate_percentage": row.get("on_time_rate_percentage")}
+            for row in delivery_analysis.get("warehouse_intelligence", {}).get("ranked_warehouses", [])
+        ],
+        # The complaints engine's own negative_sentiment_percentage, split
+        # into its complement so a two-segment donut can render it -- no
+        # new sentiment classification happens here.
+        "customer_sentiment": _customer_sentiment_split(complaints_analysis),
+    }
+
     metadata = {
         "report_id": str(uuid.uuid4()),
         "generated_at": generation_started_at.isoformat(),
@@ -607,6 +647,7 @@ def _build_report_skeleton(
         "top_business_risks": top_business_risks,
         "root_causes": root_causes,
         "recommended_actions": recommended_actions,
+        "charts": charts,
         "appendix": _build_appendix(complaints_analysis, inventory_analysis, correlation_analysis),
     }
 
@@ -865,6 +906,7 @@ def _merge_narrative_into_skeleton(skeleton: dict[str, Any], narrative: dict[str
         "top_business_risks": [],
         "root_causes": [],
         "recommended_actions": [],
+        "charts": skeleton["charts"],
         "expected_business_impact": narrative.get("expected_business_impact", []),
         "department_breakdown": dict(narrative["department_breakdown"]),
         "if_no_action_narrative": narrative["if_no_action_narrative"].strip(),
@@ -948,7 +990,7 @@ def _render_executive_alert(report: dict[str, Any]) -> list[str]:
     ]
     if top_action:
         lines.append(">")
-        lines.append(f"> **Top priority:** {top_action['title']} -- Owner: {top_action['owner']} ({top_action['horizon']})")
+        lines.append(f"> **Top priority:** {top_action['title']} -- Owner: {top_action['owner']} · {top_action['horizon']}")
     return lines
 
 
@@ -1110,11 +1152,15 @@ def _render_markdown(report: dict[str, Any]) -> str:
 # Persistence
 # --------------------------------------------------------------------------
 
-def _save_report(report: dict[str, Any], markdown: str, output_dir: Path, json_path: Path, md_path: Path) -> None:
-    """Write both artifacts to disk, creating outputs/ if it doesn't exist."""
+def _save_report(
+    report: dict[str, Any], markdown: str, html: str,
+    output_dir: Path, json_path: Path, md_path: Path, html_path: Path,
+) -> None:
+    """Write all three artifacts (JSON, Markdown, HTML) to disk, creating outputs/ if it doesn't exist."""
     output_dir.mkdir(parents=True, exist_ok=True)
     json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     md_path.write_text(markdown, encoding="utf-8")
+    html_path.write_text(html, encoding="utf-8")
 
 
 # --------------------------------------------------------------------------
@@ -1136,8 +1182,9 @@ def generate_executive_report(
     in Python -> curate an AI context -> call the AI provider for
     narrative text only -> validate that response -> merge narrative
     into the skeleton -> validate the assembled report -> render
-    Markdown -> persist both JSON and Markdown to `output_dir` ->
-    return the report dict.
+    Markdown and HTML (both pure functions over the same report dict,
+    no further AI calls) -> persist JSON, Markdown, and HTML to
+    `output_dir` -> return the report dict.
 
     Args:
         delivery_analysis: Output of analysis.delivery.analyze_deliveries.
@@ -1149,9 +1196,9 @@ def generate_executive_report(
             Pass a different `AIProvider` implementation (or a test
             double) to use another backend without touching this
             function's logic.
-        output_dir: Directory to write executive_report.json and
-            executive_report.md into. Defaults to `outputs/` at the
-            project root.
+        output_dir: Directory to write executive_report.json,
+            executive_report.md, and executive_report.html into.
+            Defaults to `outputs/` at the project root.
 
     Returns:
         The final report dict, shaped as::
@@ -1182,7 +1229,8 @@ def generate_executive_report(
         AIProviderError: If the AI provider fails (auth, timeout, rate
             limit, connection error) after retries are exhausted.
         ResponseValidationError: If the AI's response, or the final
-            assembled report, fails structural validation.
+            assembled report, fails structural validation, or if the
+            HTML renderer rejects the assembled report as malformed.
     """
     started_at = datetime.now(timezone.utc)
 
@@ -1196,6 +1244,7 @@ def generate_executive_report(
     output_directory = Path(output_dir) if output_dir else DEFAULT_OUTPUT_DIR
     json_path = output_directory / REPORT_JSON_FILENAME
     md_path = output_directory / REPORT_MARKDOWN_FILENAME
+    html_path = output_directory / REPORT_HTML_FILENAME
     previous_report = _load_previous_report(json_path)
 
     skeleton = _build_report_skeleton(
@@ -1224,10 +1273,15 @@ def generate_executive_report(
     report["metadata"]["generation_duration_seconds"] = round((datetime.now(timezone.utc) - started_at).total_seconds(), 2)
     report["metadata"]["saved_json_path"] = str(json_path)
     report["metadata"]["saved_markdown_path"] = str(md_path)
+    report["metadata"]["saved_html_path"] = str(html_path)
 
     _validate_final_report(report)
 
     markdown = _render_markdown(report)
-    _save_report(report, markdown, output_directory, json_path, md_path)
+    try:
+        html = render_html(report)
+    except HTMLRenderError as exc:
+        raise ResponseValidationError(f"Failed to render the HTML report: {exc}") from exc
+    _save_report(report, markdown, html, output_directory, json_path, md_path, html_path)
 
     return report

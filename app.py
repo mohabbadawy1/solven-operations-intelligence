@@ -1,10 +1,13 @@
 """Application entry point for the Solven Operations Intelligence Platform.
 
-Loads raw operational data, runs the analysis layer, and (eventually)
-triggers AI-powered executive report generation. Currently, AI
-reasoning is not implemented — this script only wires together data
-loading and analysis placeholders so the pipeline can be extended
-incrementally.
+Loads raw operational data, runs the full analysis layer, and triggers
+AI-powered executive report generation.
+
+The entire pipeline is orchestrated by `run_pipeline()` below -- the
+single place that sequences data loading, the four analytics engines,
+and report generation. `python app.py` (via `main()`) and api.py's
+POST /run-analysis both call this same function, so there is exactly
+one orchestration path and no duplicated pipeline logic.
 
 Usage:
     python app.py
@@ -13,6 +16,7 @@ Usage:
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 
@@ -40,8 +44,27 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     return shipments_df, complaints_df, inventory_df
 
 
-def main() -> None:
-    """Run the operations intelligence pipeline end-to-end."""
+def run_pipeline() -> dict[str, Any]:
+    """Run the operations intelligence pipeline end-to-end and return the executive report.
+
+    Loads the raw datasets, runs delivery/complaints/inventory analysis,
+    cross-domain correlation, and AI executive report generation, in
+    that order. This is the one orchestration entry point for the whole
+    platform -- it contains no analytics of its own, only calls into
+    analysis/* and ai.report_generator.
+
+    Returns:
+        The final report dict returned by
+        `ai.report_generator.generate_executive_report` (see that
+        function's docstring for its exact shape).
+
+    Raises:
+        ConfigurationError: If required AI provider configuration
+            (e.g. GROQ_API_KEY) is missing.
+        ReportGenerationError: If the AI executive report fails to
+            generate for any other reason (invalid analytics input, AI
+            provider failure, response validation failure).
+    """
     print("Solven Operations Intelligence Platform")
     print("=" * 50)
 
@@ -109,13 +132,27 @@ def main() -> None:
         print(f"    {action['priority']}. {action['title']} ({action['difficulty']}, {action['estimated_timeframe']})")
 
     print("\nGenerating AI executive report...")
+    report = generate_executive_report(
+        delivery_insights, complaint_insights, inventory_insights, correlation_insights,
+    )
+    print(f"  Report ID: {report['metadata']['report_id']}")
+    print(f"  Saved: {report['metadata']['saved_json_path']}")
+    print(f"  Saved: {report['metadata']['saved_markdown_path']}")
+    print(f"  Saved: {report['metadata']['saved_html_path']}")
+
+    return report
+
+
+def main() -> None:
+    """CLI entry point: run the pipeline and print a friendly outcome on failure.
+
+    Mirrors the previous behavior of this script exactly -- errors from
+    report generation are caught and summarized rather than raised as a
+    traceback. Callers that need the report itself (e.g. api.py) should
+    call `run_pipeline()` directly instead.
+    """
     try:
-        report = generate_executive_report(
-            delivery_insights, complaint_insights, inventory_insights, correlation_insights,
-        )
-        print(f"  Report ID: {report['metadata']['report_id']}")
-        print(f"  Saved: {report['metadata']['saved_json_path']}")
-        print(f"  Saved: {report['metadata']['saved_markdown_path']}")
+        run_pipeline()
     except ConfigurationError as exc:
         print(f"  Skipped -- {exc}")
     except ReportGenerationError as exc:
