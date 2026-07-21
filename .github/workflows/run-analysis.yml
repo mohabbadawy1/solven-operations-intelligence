@@ -1,0 +1,33 @@
+name: Run Operations Intelligence
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run analysis
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python app.py
+
+      - name: Upload generated report
+        uses: actions/upload-artifact@v4
+        with:
+          name: operations-intelligence-report
+          path: outputs/
+          retention-days: 7
