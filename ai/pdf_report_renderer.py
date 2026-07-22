@@ -4,10 +4,45 @@ This module owns exactly one job: take the already-rendered
 `executive_report.html` file on disk and print it to
 `executive_report.pdf` using headless Chromium via Playwright. It
 performs no analytics and no re-styling of its own -- Chromium simply
-loads the same self-contained HTML file (including its embedded
-`@media print` rules) that a human would open in a browser, so the
-PDF is a faithful print of what `ai/html_report_renderer.py` already
-produced rather than a second, independently-maintained document.
+loads the same self-contained HTML file that a human would open in a
+browser, so the PDF is a faithful print of what
+`ai/html_report_renderer.py` already produced rather than a second,
+independently-maintained document.
+
+The report's CSS is a fixed-width desktop design (`.report` caps at
+1120px) with a four/two/three/two-column grid system. An A4 *portrait*
+page is only ~640px wide once margins are subtracted, which is
+narrower than any of that design's grid tracks were ever meant to
+render at -- forcing the grids to reflow into that width crushes every
+card. This module instead prints to A4 **landscape** (the widest
+standard page size this design can use without a custom paper size),
+whose ~26.5cm-wide printable area lets `.report`'s own `max-width:
+1120px` reflow only mildly (to ~1002px, ~89% of its full design width)
+-- a normal, gentle responsive narrowing rather than a crush, and
+close enough to the desktop design that grid columns, card
+proportions, and text wrapping all stay visually close to the browser
+original.
+
+Page *size* is intentionally owned here in Python, not in the HTML's
+CSS: an explicit `@page { size }` rule would take priority over the
+`width`/`height` passed to `page.pdf()` below, so the report's
+stylesheet deliberately leaves page size unset (see the `@media print`
+block in ai/html_report_renderer.py) and only owns pagination rules
+(break-inside, etc.) instead.
+
+Page *margin* is deliberately passed to `page.pdf()` as zero. Chromium
+never paints a page's background into its own PDF margin -- that
+gutter is physically outside the printable content box, so a nonzero
+`page.pdf(margin=...)` shows up as unpainted white paper framing the
+dark report regardless of `print_background` or any CSS background.
+The report's 1.6cm of visual breathing room is instead spent as
+`.page { padding: 1.6cm }` in the print stylesheet -- still inside
+body's own painted box, so the dark background reaches every physical
+edge of the page, and `.report`'s own `max-width` naturally reflows to
+fit next to that padding with no extra work here (an explicit
+`page.pdf(scale=...)` on top of that padding was tried and rejected --
+see git history -- because it double-counted the margin, shrinking
+`.report` too far and leaving the padding visibly larger than 1.6cm).
 
 Loading the file via a `file://` URL (rather than serving it over
 HTTP) means no server process is needed, which keeps this working
@@ -17,6 +52,25 @@ identically on a local macOS machine and in GitHub Actions.
 from __future__ import annotations
 
 from pathlib import Path
+
+# A4 landscape, not portrait: portrait's ~640px-wide printable area is
+# narrower than this report's grid system was designed for, forcing
+# every card grid to crush down. Landscape's printable width comes
+# much closer to the design's native 1120px.
+PAGE_WIDTH_CM = 29.7
+PAGE_HEIGHT_CM = 21.0
+
+# Zero PDF-level margin: the report's 1.6cm of visual breathing room
+# is spent as `.page { padding: 1.6cm }` in the print stylesheet
+# instead (see module docstring for why). Keep these two values in
+# sync by hand -- the modules don't import from each other.
+ZERO_PDF_MARGINS = {"top": "0cm", "bottom": "0cm", "left": "0cm", "right": "0cm"}
+
+# Desktop-width viewport so any live (pre-print) page state -- font
+# loading, general layout -- resolves the same way a normal browser
+# window would. Print layout itself is governed by PAGE_WIDTH_CM/
+# PAGE_HEIGHT_CM above, not by this viewport.
+PDF_VIEWPORT = {"width": 1440, "height": 1200}
 
 
 class PDFRenderError(Exception):
@@ -30,22 +84,15 @@ class PDFRenderError(Exception):
     """
 
 
-# A4 in portrait, with margins generous enough to match the 1.6cm
-# `@page` margin the HTML report already declares for print in its
-# embedded stylesheet (see the `@media print` block in
-# ai/html_report_renderer.py) -- kept in sync there rather than
-# imported, since that module has no dependency on this one.
-PDF_MARGINS = {"top": "1.6cm", "bottom": "1.6cm", "left": "1.6cm", "right": "1.6cm"}
-
-
 def render_pdf(html_path: str | Path, pdf_path: str | Path) -> Path:
     """Render a local `executive_report.html` file to a PDF at `pdf_path`.
 
-    Launches headless Chromium via Playwright, opens `html_path`
-    directly from disk, emulates print media (so the report's
-    `@media print` rules apply), and prints an A4 PDF with backgrounds
-    enabled -- preserving the report's black-and-gold styling instead
-    of falling back to a plain white print.
+    Launches headless Chromium, waits for layout and web fonts to
+    settle, then prints an A4-landscape PDF with a zero PDF-level
+    margin (see module docstring) so the dark report background
+    reaches every edge of the page -- no white paper border, and no
+    reflow beyond the mild, natural narrowing `.report`'s own
+    `max-width` already does next to its in-document padding.
 
     Args:
         html_path: Path to the already-generated executive_report.html.
@@ -81,14 +128,17 @@ def render_pdf(html_path: str | Path, pdf_path: str | Path) -> Path:
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch()
             try:
-                page = browser.new_page()
+                page = browser.new_page(viewport=PDF_VIEWPORT)
                 page.goto(html_path.as_uri(), wait_until="load")
+                page.evaluate("document.fonts.ready")
+
                 page.emulate_media(media="print")
                 page.pdf(
                     path=str(pdf_path),
-                    format="A4",
+                    width=f"{PAGE_WIDTH_CM}cm",
+                    height=f"{PAGE_HEIGHT_CM}cm",
+                    margin=ZERO_PDF_MARGINS,
                     print_background=True,
-                    margin=PDF_MARGINS,
                 )
             finally:
                 browser.close()

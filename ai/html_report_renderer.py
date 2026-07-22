@@ -26,8 +26,8 @@ Layout is organized as one builder function per section (mirrors the
 report's own section list): header, executive alert, KPI dashboard,
 performance charts, executive summary, business risks, root causes,
 if-no-action, action-plan timeline, expected impact, department
-breakdown, appendix, footer. A small set of chart/component primitives
-(`_hbar_row`, `_donut_html`, `_badge_html`, ...) are shared across
+breakdown, appendix, executive conclusion, footer. A small set of
+chart/component primitives (`_hbar_row`, `_donut_html`, `_badge_html`, ...) are shared across
 those builders so no section reimplements its own bar or badge markup.
 """
 
@@ -337,7 +337,7 @@ def _render_sentiment_chart(customer_sentiment: dict[str, Any]) -> str:
     non_negative = customer_sentiment.get("non_negative_percentage") if customer_sentiment else None
     if negative is None or non_negative is None:
         return ""
-    donut = _donut_html(negative, f"Negative &middot; {negative}%", f"Non-negative &middot; {non_negative}%", "Negative")
+    donut = _donut_html(negative, f"Negative · {negative}%", f"Non-negative · {non_negative}%", "Negative")
     return f"""
   <div class="card chart-card">
     <p class="chart-title">Customer Sentiment</p>
@@ -408,7 +408,7 @@ def _render_charts(report: dict[str, Any]) -> str:
 def _render_summary(report: dict[str, Any]) -> str:
     narrative_rows = "\n".join(
         f'    <div class="summary-row"><span class="summary-domain">{_esc(_label(domain))}</span>'
-        f'<span>{_esc(block.get("narrative"))}</span></div>'
+        f'<span class="summary-text">{_esc(block.get("narrative"))}</span></div>'
         for domain, block in report.get("overall_business_health", {}).items()
         if block.get("narrative")
     )
@@ -652,6 +652,98 @@ def _render_appendix(appendix: dict[str, Any]) -> str:
 """.strip()
 
 
+# --------------------------------------------------------------------------
+# Executive Conclusion
+# --------------------------------------------------------------------------
+
+
+def _render_conclusion(report: dict[str, Any]) -> str:
+    """Closing executive summary, assembled from fields already on `report`.
+
+    Like every other section here, this invents no new number or
+    finding -- it re-composes overall_business_health, top_business_risks,
+    root_causes, and recommended_actions (already computed and narrated
+    upstream) into a final "so what" read for a reader who only has time
+    for the first and last page.
+    """
+    health = report.get("overall_business_health", {}) or {}
+    statuses = [block.get("status") for block in health.values() if block.get("status")]
+    healthy = statuses.count("Healthy")
+    at_risk = statuses.count("At Risk")
+    critical = statuses.count("Critical")
+    total = len(statuses)
+
+    if total:
+        health_line = (
+            f"Across {total} monitored business domain{'s' if total != 1 else ''} this period, "
+            f"{healthy} {'is' if healthy == 1 else 'are'} Healthy, {at_risk} At Risk, "
+            f"and {critical} Critical."
+        )
+    else:
+        health_line = "No business health domains were scored this period."
+
+    findings_items = [rc.get("title") for rc in (report.get("root_causes") or [])[:3] if rc.get("title")]
+    if not findings_items:
+        findings_items = [risk.get("title") for risk in (report.get("top_business_risks") or [])[:3] if risk.get("title")]
+    findings_html = "".join(f"<li>{_esc(item)}</li>" for item in findings_items) or (
+        '<li class="empty-state">No material findings were identified this period.</li>'
+    )
+
+    risks = sorted(report.get("top_business_risks") or [], key=lambda risk: risk.get("rank") or 0)[:3]
+    risks_html = "".join(
+        f'<li>{_esc(risk.get("title"))} {_badge_html(risk.get("severity") or "LOW", SEVERITY_CLASS.get(risk.get("severity"), DEFAULT_SEVERITY_CLASS))}</li>'
+        for risk in risks
+    ) or '<li class="empty-state">No significant business risks were identified this period.</li>'
+
+    actions = sorted(report.get("recommended_actions") or [], key=lambda action: action.get("priority") or 99)[:3]
+    actions_html = "".join(
+        f'<li><strong>{_esc(action.get("title"))}</strong> &mdash; Owner: {_esc(action.get("owner"))}</li>'
+        for action in actions
+    ) or '<li class="empty-state">No priority actions were identified this period.</li>'
+
+    if critical:
+        outlook = (
+            f"Immediate executive attention is warranted: {critical} domain{'s' if critical != 1 else ''} "
+            f"{'is' if critical == 1 else 'are'} rated Critical this period. Executing the highest-impact "
+            "recommendations above is the primary lever to stabilize operations."
+        )
+    elif at_risk:
+        outlook = (
+            f"Operations are broadly stable, but {at_risk} domain{'s' if at_risk != 1 else ''} "
+            f"{'requires' if at_risk == 1 else 'require'} close monitoring. Sustained execution of the "
+            "recommended actions above should keep the business on a Healthy trajectory."
+        )
+    elif total:
+        outlook = (
+            "All monitored business domains are Healthy this period. Continued execution of the "
+            "recommended actions above will help sustain this position."
+        )
+    else:
+        outlook = "Insufficient data was available this period to project an overall outlook."
+
+    return f"""
+<section class="section">
+  <h2 class="section-title">Executive Conclusion</h2>
+  <div class="card conclusion-card">
+    <p class="conclusion-headline">{_esc(health_line)}</p>
+    <div class="conclusion-block">
+      <p class="conclusion-label">Most Significant Findings</p>
+      <ul class="conclusion-list">{findings_html}</ul>
+    </div>
+    <div class="conclusion-block">
+      <p class="conclusion-label">Primary Business Risks</p>
+      <ul class="conclusion-list">{risks_html}</ul>
+    </div>
+    <div class="conclusion-block">
+      <p class="conclusion-label">Highest-Impact Recommendations</p>
+      <ul class="conclusion-list">{actions_html}</ul>
+    </div>
+    <p class="conclusion-outlook"><strong>Overall Outlook:</strong> {_esc(outlook)}</p>
+  </div>
+</section>
+""".strip()
+
+
 def _render_footer(metadata: dict[str, Any]) -> str:
     return f"""
 <footer class="report-footer">
@@ -694,6 +786,7 @@ def render_html(report: dict[str, Any]) -> str:
             _render_expected_impact(report.get("expected_business_impact", [])),
             _render_departments(report.get("department_breakdown", {})),
             _render_appendix(report.get("appendix", {})),
+            _render_conclusion(report),
             _render_footer(metadata),
         ])
     except (KeyError, TypeError, AttributeError) as exc:
@@ -755,7 +848,16 @@ _CSS = """
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+html {
+  background: var(--bg);
+}
 
 body {
   margin: 0;
@@ -894,13 +996,14 @@ body {
 
 /* ---- Executive summary ---- */
 .lead { font-size: 17px; color: var(--ink); }
-.summary-grid { margin-top: 4px; }
-.summary-row {
-  display: grid; grid-template-columns: 180px 1fr; gap: 16px; padding: 12px 0;
-  border-bottom: 1px solid var(--line-dark); font-size: 14px; color: var(--cream-muted);
+.summary-grid { display: table; width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 4px; }
+.summary-row { display: table-row; }
+.summary-domain, .summary-text {
+  display: table-cell; padding: 12px 0; border-bottom: 1px solid var(--line-dark);
+  font-size: 14px; color: var(--cream-muted); vertical-align: top;
 }
-.summary-row:last-child { border-bottom: none; }
-.summary-domain { color: var(--gold); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+.summary-row:last-child .summary-domain, .summary-row:last-child .summary-text { border-bottom: none; }
+.summary-domain { width: 180px; padding-right: 16px; color: var(--gold); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
 
 /* ---- Risks ---- */
 .risk-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -962,6 +1065,17 @@ body {
 
 .empty-state { color: var(--cream-muted); font-style: italic; font-size: 14px; }
 
+/* ---- Executive Conclusion ---- */
+.conclusion-card { border-left: 2px solid var(--gold); }
+.conclusion-headline { font-size: 19px; font-weight: 600; color: var(--ink); margin-bottom: 20px !important; }
+.conclusion-block { margin-bottom: 18px; }
+.conclusion-block:last-of-type { margin-bottom: 0; }
+.conclusion-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 8px !important; }
+.conclusion-list { margin: 0; padding-left: 18px; font-size: 14px; color: var(--ink-muted); }
+.conclusion-list li { margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.conclusion-list li:last-child { margin-bottom: 0; }
+.conclusion-outlook { font-size: 14px; color: var(--ink); padding-top: 16px; margin-top: 4px !important; border-top: 1px solid var(--line-light); }
+
 /* ---- Footer ---- */
 .report-footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line-dark); font-size: 12px; color: var(--cream-muted); }
 .report-footer p { margin: 0 0 4px; }
@@ -972,46 +1086,91 @@ body {
    tablet narrows the grids; mobile collapses to a single column.
    ========================================================== */
 
-/* Tablet */
-@media (max-width: 1024px) {
+/* Tablet -- scoped to `screen` so these narrow-viewport rules never
+   apply during PDF printing: Chromium evaluates width-based media
+   features against the paper's CSS-pixel width (~700-750px for A4),
+   which falls inside these breakpoints and would otherwise silently
+   re-flow the print output into the tablet/mobile grid instead of the
+   desktop one the HTML report is designed around. */
+@media screen and (max-width: 1024px) {
   .page { padding: 48px 24px 96px; }
   .chart-grid { grid-template-columns: 1fr; }
   .timeline-grid { grid-template-columns: 1fr 1fr; }
 }
 
 /* Mobile */
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .page { padding: 32px 16px 64px; }
   .title { font-size: 32px; }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .fact-grid { grid-template-columns: 1fr; }
   .dept-grid { grid-template-columns: 1fr; }
   .timeline-grid { grid-template-columns: 1fr; }
-  .summary-row { grid-template-columns: 1fr; gap: 4px; }
+  .summary-grid { display: block; }
+  .summary-row { display: block; padding: 8px 0; }
+  .summary-domain, .summary-text { display: block; width: auto; padding: 0; border-bottom: none; }
+  .summary-domain { margin-bottom: 4px; }
   .donut-wrap { flex-direction: column; align-items: flex-start; }
 }
 
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
   .kpi-grid { grid-template-columns: 1fr; }
   .alert-card { padding: 24px; }
 }
 
-/* ---- Print ---- */
+/* ---- Print ----
+   The goal is a faithful print of the exact same design used on
+   screen -- same dark background, same gold/cream palette, same
+   4/2/3/2-column grids at their real desktop proportions -- not a
+   separate, narrower document. Page *size* is deliberately not set
+   here: an explicit `@page { size }` at-rule takes priority over the
+   `width`/`height`/`landscape` arguments ai/pdf_report_renderer.py
+   passes to Playwright's `page.pdf()`, so declaring one here would
+   silently fight that module's page-geometry + scale computation.
+   Geometry lives in Python; this block only ever adds pagination
+   rules and never reassigns color, background, typography, or grid
+   column counts (so the PDF and the on-screen HTML stay visually
+   identical) -- except the action-plan timeline, which is
+   deliberately linearized to one column so its cards paginate
+   predictably instead of one column detaching onto a later page.
+
+   Visual margin is spent here as `.page` padding, not as a
+   Playwright/`@page` PDF margin: Chromium's print pipeline never
+   paints a background into that margin gutter -- it's physically
+   outside the printable content box, so ANY page-level margin (no
+   matter what background/print_background settings are used) shows
+   up as unpainted white paper around the dark report. Padding on an
+   in-flow element, by contrast, is still inside body's own painted
+   box, so the dark background reaches every edge of the page and the
+   1.6cm of breathing room survives as space, not as paper. Keep this
+   value equal to PAGE_MARGIN_CM in ai/pdf_report_renderer.py (which
+   passes zero page margin to Playwright) -- the two together are what
+   reproduce the original 1.6cm-margin look without the white gutter. */
 @media print {
-  @page { margin: 1.6cm; }
-  body { background: #ffffff; color: #16161A; font-size: 12px; }
-  .page { padding: 0; background: #ffffff; }
-  .report { max-width: 100%; }
-  .report-header { border-bottom-color: #C9A84C; }
-  .brand-word, .title { color: #16161A; }
-  .meta-line, .report-footer { color: #4A4536; }
-  .section-title { color: #8E7229; border-bottom-color: #C9A84C; }
-  .card { background: #ffffff; border: 1px solid #D8CFB4; break-inside: avoid; box-shadow: none; transform: none; }
-  .card:hover { box-shadow: none; transform: none; border-color: #D8CFB4; }
-  .trend-unavailable { color: #6B6A63; }
-  .chart-grid { grid-template-columns: repeat(2, 1fr); }
-  .timeline-grid { grid-template-columns: repeat(3, 1fr); }
-  .action-card, .risk-card, .kpi-card, .dept-card, .chart-card, .root-cause-card { break-inside: avoid; }
+  .page { padding: 1.6cm; }
+  .card:hover { box-shadow: none; transform: none; }
+
+  .section { break-inside: auto; }
+  .section-title { break-after: avoid; page-break-after: avoid; }
+  /* Only the small, structured cards get a hard no-split rule --
+     letting a KPI/risk/action card break mid-card looks broken.
+     Long prose-only cards (the plain `.card` used for the executive
+     summary intro, `.no-action-card`, `.appendix-card`) are
+     deliberately left out: forcing a multi-paragraph block to stay
+     whole is what previously stranded the next section alone on a
+     mostly-blank page whenever that block didn't fit in the
+     remaining space -- splitting a paragraph across a page boundary
+     is normal in a printed report and reads far better than a
+     half-empty page. */
+  .kpi-card, .fact-card, .chart-card, .risk-card, .root-cause-card,
+  .action-card, .dept-card, .conclusion-card, .alert-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .summary-row { break-inside: avoid; page-break-inside: avoid; }
+  .kpi-grid, .fact-grid, .chart-grid, .dept-grid, .timeline-grid { break-inside: auto; }
+
+  .timeline-grid { grid-template-columns: 1fr; row-gap: 20px; }
   .timeline-column { break-inside: avoid-page; }
 }
 """
