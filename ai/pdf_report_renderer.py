@@ -9,40 +9,30 @@ browser, so the PDF is a faithful print of what
 `ai/html_report_renderer.py` already produced rather than a second,
 independently-maintained document.
 
-The report's CSS is a fixed-width desktop design (`.report` caps at
-1120px) with a four/two/three/two-column grid system. An A4 *portrait*
-page is only ~640px wide once margins are subtracted, which is
-narrower than any of that design's grid tracks were ever meant to
-render at -- forcing the grids to reflow into that width crushes every
-card. This module instead prints to A4 **landscape** (the widest
-standard page size this design can use without a custom paper size),
-whose ~26.5cm-wide printable area lets `.report`'s own `max-width:
-1120px` reflow only mildly (to ~1002px, ~89% of its full design width)
--- a normal, gentle responsive narrowing rather than a crush, and
-close enough to the desktop design that grid columns, card
-proportions, and text wrapping all stay visually close to the browser
-original.
+Unlike the report's previous fixed-width desktop design, the HTML
+document itself is now document-first (a single portrait column, print
+typography, an A4-shaped content width) -- see the design-system note
+at the bottom of ai/html_report_renderer.py. That means this module no
+longer needs to fight the page geometry to make a desktop layout fit;
+it just prints a standard A4 portrait page with real margins, the way
+any consulting/enterprise PDF is produced.
 
-Page *size* is intentionally owned here in Python, not in the HTML's
-CSS: an explicit `@page { size }` rule would take priority over the
-`width`/`height` passed to `page.pdf()` below, so the report's
-stylesheet deliberately leaves page size unset (see the `@media print`
-block in ai/html_report_renderer.py) and only owns pagination rules
-(break-inside, etc.) instead.
-
-Page *margin* is deliberately passed to `page.pdf()` as zero. Chromium
-never paints a page's background into its own PDF margin -- that
-gutter is physically outside the printable content box, so a nonzero
-`page.pdf(margin=...)` shows up as unpainted white paper framing the
-dark report regardless of `print_background` or any CSS background.
-The report's 1.6cm of visual breathing room is instead spent as
-`.page { padding: 1.6cm }` in the print stylesheet -- still inside
-body's own painted box, so the dark background reaches every physical
-edge of the page, and `.report`'s own `max-width` naturally reflows to
-fit next to that padding with no extra work here (an explicit
-`page.pdf(scale=...)` on top of that padding was tried and rejected --
-see git history -- because it double-counted the margin, shrinking
-`.report` too far and leaving the padding visibly larger than 1.6cm).
+Page geometry is owned here, in Python:
+  - `format="A4"`, `landscape=False` set the paper size.
+  - `prefer_css_page_size=True` lets the document's own `@page { size:
+    A4 portrait }` rule (see the `@media print` block in
+    ai/html_report_renderer.py) take priority if the two ever
+    disagree, rather than silently fighting it.
+  - `margin` is a real, nonzero PDF-level margin (unlike the previous
+    zero-margin + `.page`-padding workaround this module used when it
+    printed edge-to-edge landscape) -- Chromium paints each page's
+    background right up to that margin, so a nonzero margin here is
+    just normal printable whitespace, not a rendering bug to route
+    around.
+  - `display_header_footer=True` with an empty header and a small
+    footer template adds the "Solven Operations Intelligence ·
+    Confidential · Page X of Y" footer Chromium renders once per page,
+    outside the page's own HTML/CSS.
 
 Loading the file via a `file://` URL (rather than serving it over
 HTTP) means no server process is needed, which keeps this working
@@ -53,24 +43,28 @@ from __future__ import annotations
 
 from pathlib import Path
 
-# A4 landscape, not portrait: portrait's ~640px-wide printable area is
-# narrower than this report's grid system was designed for, forcing
-# every card grid to crush down. Landscape's printable width comes
-# much closer to the design's native 1120px.
-PAGE_WIDTH_CM = 29.7
-PAGE_HEIGHT_CM = 21.0
+PDF_FORMAT = "A4"
+PDF_MARGIN = {"top": "14mm", "right": "14mm", "bottom": "16mm", "left": "14mm"}
 
-# Zero PDF-level margin: the report's 1.6cm of visual breathing room
-# is spent as `.page { padding: 1.6cm }` in the print stylesheet
-# instead (see module docstring for why). Keep these two values in
-# sync by hand -- the modules don't import from each other.
-ZERO_PDF_MARGINS = {"top": "0cm", "bottom": "0cm", "left": "0cm", "right": "0cm"}
+# Matches PDF_MARGIN's left/right so the footer's text aligns with the
+# document's own content edges rather than spanning the full paper width.
+_FOOTER_TEMPLATE = """
+<div style="width:100%; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+            font-size:7px; color:#8A887A; padding:0 14mm; display:flex; justify-content:space-between; align-items:center;">
+  <span>Solven Operations Intelligence &middot; Confidential</span>
+  <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
+</div>
+""".strip()
+
+# Suppresses Chromium's default header (title + URL) -- an empty
+# template, not an absent one, is what turns the header off.
+_HEADER_TEMPLATE = '<div style="font-size:0; line-height:0;"></div>'
 
 # Desktop-width viewport so any live (pre-print) page state -- font
 # loading, general layout -- resolves the same way a normal browser
-# window would. Print layout itself is governed by PAGE_WIDTH_CM/
-# PAGE_HEIGHT_CM above, not by this viewport.
-PDF_VIEWPORT = {"width": 1440, "height": 1200}
+# window would. Print layout itself is governed by PDF_FORMAT/PDF_MARGIN
+# above, not by this viewport.
+PDF_VIEWPORT = {"width": 900, "height": 1400}
 
 
 class PDFRenderError(Exception):
@@ -88,11 +82,8 @@ def render_pdf(html_path: str | Path, pdf_path: str | Path) -> Path:
     """Render a local `executive_report.html` file to a PDF at `pdf_path`.
 
     Launches headless Chromium, waits for layout and web fonts to
-    settle, then prints an A4-landscape PDF with a zero PDF-level
-    margin (see module docstring) so the dark report background
-    reaches every edge of the page -- no white paper border, and no
-    reflow beyond the mild, natural narrowing `.report`'s own
-    `max-width` already does next to its in-document padding.
+    settle, then prints an A4 portrait PDF with real print margins and
+    a repeating "Confidential · Page X of Y" footer.
 
     Args:
         html_path: Path to the already-generated executive_report.html.
@@ -135,10 +126,14 @@ def render_pdf(html_path: str | Path, pdf_path: str | Path) -> Path:
                 page.emulate_media(media="print")
                 page.pdf(
                     path=str(pdf_path),
-                    width=f"{PAGE_WIDTH_CM}cm",
-                    height=f"{PAGE_HEIGHT_CM}cm",
-                    margin=ZERO_PDF_MARGINS,
+                    format=PDF_FORMAT,
+                    landscape=False,
                     print_background=True,
+                    prefer_css_page_size=True,
+                    margin=PDF_MARGIN,
+                    display_header_footer=True,
+                    header_template=_HEADER_TEMPLATE,
+                    footer_template=_FOOTER_TEMPLATE,
                 )
             finally:
                 browser.close()

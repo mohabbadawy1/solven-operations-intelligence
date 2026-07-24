@@ -12,27 +12,34 @@ a plain HTML/CSS rendering of numbers analysis/*.py already computed
 sentiment percentage, root-cause confidence, etc.), never a new
 statistic and never an invented one.
 
-The document is fully self-contained (all CSS inlined, no external
-fonts/scripts/CDNs, no network calls) so it opens correctly from disk
-with no internet connection, and is styled to be both screen-readable
-and printable via an embedded `@media print` block.
+The document is designed document-first, not website-first: a single
+portrait content column, a dark cover panel followed by a light
+editorial body, and a typographic/spacing scale built for A4 print
+(see ai/pdf_report_renderer.py for how it is printed). It is still a
+plain self-contained HTML file with all CSS inlined and no external
+fonts/scripts/CDNs, so it opens correctly from disk with no internet
+connection and reads reasonably in a browser -- but the print
+rendering in @media print is the primary target this design is built
+for, not a secondary override of a desktop layout.
 
 All dynamic text is passed through `html.escape` before being placed
 in the document -- the report contains free-text narrative from an LLM
 and evidence strings copied from source data, neither of which is
 trusted to be free of `<`, `&`, or `"` characters.
 
-Layout is organized as one builder function per section (mirrors the
-report's own section list): header, executive alert, KPI dashboard,
+Layout is organized as one builder function per section: cover
+(branding + title + executive alert, dark), dashboard (KPI cards),
 performance charts, executive summary, business risks, root causes,
-if-no-action, action-plan timeline, expected impact, department
-breakdown, appendix, executive conclusion, footer. A small set of
-chart/component primitives (`_hbar_row`, `_donut_html`, `_badge_html`, ...) are shared across
-those builders so no section reimplements its own bar or badge markup.
+if-no-action, action plan, expected impact, department breakdown,
+appendix, executive conclusion, closing footer. A small set of
+chart/component primitives (`_hbar_row`, `_donut_html`, `_badge_html`,
+`_meta_row`, `_info_row`, ...) are shared across those builders so no
+section reimplements its own bar, badge, or label/value row markup.
 """
 
 from __future__ import annotations
 
+from datetime import datetime
 from html import escape
 from typing import Any
 
@@ -70,6 +77,11 @@ DEFAULT_SEVERITY_CLASS = "severity-low"
 # render_html from this one); if that vocabulary ever changes, update it
 # in both places.
 ACTION_HORIZON_ORDER = ("Immediate (0-30 Days)", "Near-Term (30-60 Days)", "Strategic (60-120 Days)")
+ACTION_HORIZON_CLASS = {
+    "Immediate (0-30 Days)": "phase-immediate",
+    "Near-Term (30-60 Days)": "phase-near-term",
+    "Strategic (60-120 Days)": "phase-strategic",
+}
 
 
 # --------------------------------------------------------------------------
@@ -102,6 +114,27 @@ def _percent(value: float | None, of: float = 100.0) -> float:
 
 def _fmt_confidence(value: float | None) -> str:
     return "N/A" if value is None else f"{value:.0%}"
+
+
+def _fmt_datetime(value: str | None) -> str:
+    """An ISO-8601 timestamp -> "24 Jul 2026, 09:15 UTC".
+
+    Pure presentation of the existing metadata.generated_at value
+    (always produced by `datetime.now(timezone.utc).isoformat()`
+    upstream) -- never a new value. Falls back to the raw string if it
+    can't be parsed, so a future change to how the timestamp is
+    produced degrades gracefully instead of raising.
+    """
+    if not value:
+        return ""
+    try:
+        parsed = datetime.fromisoformat(str(value))
+    except ValueError:
+        return str(value)
+    formatted = parsed.strftime("%d %b %Y, %H:%M")
+    if formatted.startswith("0"):
+        formatted = formatted[1:]
+    return f"{formatted} UTC"
 
 
 def _brand_lockup(platform: str | None) -> tuple[str, str]:
@@ -149,6 +182,27 @@ def _badge_html(text: Any, css_class: str = "") -> str:
     return f'<span class="{classes}">{_esc(text)}</span>'
 
 
+def _meta_row(pairs: list[tuple[str, Any]]) -> str:
+    """A compact row of small label/value chips (Owner, Difficulty, Timeline, Confidence, ...).
+
+    Skips any pair whose value is empty/None so an incomplete action or
+    root cause never renders a blank chip.
+    """
+    items = "".join(
+        f'<div class="meta-item"><span class="meta-k">{_esc(key)}</span><span class="meta-v">{_esc(value)}</span></div>'
+        for key, value in pairs
+        if value not in (None, "")
+    )
+    return f'<div class="meta-row">{items}</div>' if items else ""
+
+
+def _info_row(label: str, value: Any) -> str:
+    """A single labeled row (e.g. "Evidence" / "Business Impact") -- no inline bold-prefix prose."""
+    if value in (None, ""):
+        return ""
+    return f'<div class="info-row"><span class="info-label">{_esc(label)}</span><span class="info-value">{_esc(value)}</span></div>'
+
+
 # --------------------------------------------------------------------------
 # Chart primitives (pure HTML/CSS -- no canvas, no SVG library, no JS)
 # --------------------------------------------------------------------------
@@ -172,7 +226,7 @@ def _donut_html(primary_percent: float, primary_label: str, secondary_label: str
     primary_percent = max(0.0, min(100.0, primary_percent))
     return f"""
     <div class="donut-wrap">
-      <div class="donut" style="background: conic-gradient(var(--red) 0% {primary_percent}%, var(--surface-alt) {primary_percent}% 100%)">
+      <div class="donut" style="background: conic-gradient(var(--red) 0% {primary_percent}%, var(--line-soft) {primary_percent}% 100%)">
         <div class="donut-center">
           <span class="donut-value">{_esc(f"{primary_percent:.0f}%")}</span>
           <span class="donut-caption">{_esc(center_caption)}</span>
@@ -186,35 +240,16 @@ def _donut_html(primary_percent: float, primary_label: str, secondary_label: str
 
 
 # --------------------------------------------------------------------------
-# Header
+# Cover (branding + title + executive alert, dark panel, page 1 only)
 # --------------------------------------------------------------------------
 
 
-def _render_header(metadata: dict[str, Any]) -> str:
+def _render_cover(report: dict[str, Any]) -> str:
+    metadata = report["metadata"]
     brand, tagline = _brand_lockup(metadata.get("platform"))
     monogram = _esc(brand[:1]) if brand else ""
-    tagline_html = f'<p class="brand-tagline">{_esc(tagline)}</p>' if tagline else ""
-    return f"""
-<header class="report-header">
-  <div class="brand-row">
-    <span class="brand-mark">{monogram}</span>
-    <div>
-      <p class="brand-word">{_esc(brand)}</p>
-      {tagline_html}
-    </div>
-  </div>
-  <h1 class="title">{_esc(metadata.get('report_type'))}</h1>
-  <p class="meta-line">Generated {_esc(metadata.get('generated_at'))} &middot; Report {_esc(metadata.get('report_id'))}</p>
-</header>
-""".strip()
+    tagline_html = f'<p class="cover-tagline">{_esc(tagline)}</p>' if tagline else ""
 
-
-# --------------------------------------------------------------------------
-# Executive Alert
-# --------------------------------------------------------------------------
-
-
-def _render_executive_alert(report: dict[str, Any]) -> str:
     top_action_title = report.get("highest_priority_initiative")
     top_action = next(
         (action for action in report.get("recommended_actions", []) if action.get("title") == top_action_title), None
@@ -222,21 +257,32 @@ def _render_executive_alert(report: dict[str, Any]) -> str:
     top_priority_html = ""
     if top_action:
         top_priority_html = f"""
-    <div class="alert-row alert-row-action">
-      <span class="alert-tag">Top Priority</span>
-      <span>{_esc(top_action.get('title'))} &mdash; Owner: {_esc(top_action.get('owner'))} &middot; {_esc(top_action.get('horizon'))}</span>
-    </div>"""
+  <div class="cover-row">
+    <span class="cover-tag">Top Priority</span>
+    <span class="cover-row-text">{_esc(top_action.get('title'))} &mdash; Owner: {_esc(top_action.get('owner'))} &middot; {_esc(top_action.get('horizon'))}</span>
+  </div>"""
 
     return f"""
-<section class="section">
-  <div class="card alert-card">
-    <p class="alert-headline">{_esc(report.get('executive_headline'))}</p>
-    <p class="alert-body prose">{_esc(report.get('why_it_matters'))}</p>
-    <div class="alert-row">
-      <span class="alert-tag">If Nothing Changes</span>
-      <span>{_esc(report.get('consequence_of_inaction'))}</span>
-    </div>{top_priority_html}
+<section class="cover">
+  <div class="cover-brand">
+    <span class="cover-mark">{monogram}</span>
+    <div>
+      <p class="cover-word">{_esc(brand)}</p>
+      {tagline_html}
+    </div>
   </div>
+  <h1 class="cover-title">{_esc(metadata.get('report_type'))}</h1>
+  <div class="cover-meta-row">
+    <span class="cover-date">{_esc(_fmt_datetime(metadata.get('generated_at')))}</span>
+    <span class="cover-id">Report {_esc(metadata.get('report_id'))}</span>
+  </div>
+  <div class="cover-rule"></div>
+  <p class="cover-headline">{_esc(report.get('executive_headline'))}</p>
+  <p class="cover-body">{_esc(report.get('why_it_matters'))}</p>
+  <div class="cover-row">
+    <span class="cover-tag">If Nothing Changes</span>
+    <span class="cover-row-text">{_esc(report.get('consequence_of_inaction'))}</span>
+  </div>{top_priority_html}
 </section>
 """.strip()
 
@@ -249,14 +295,14 @@ def _render_executive_alert(report: dict[str, Any]) -> str:
 def _render_kpi_card(domain: str, block: dict[str, Any]) -> str:
     status = block.get("status") or "Unknown"
     status_class = STATUS_CLASS.get(status, DEFAULT_STATUS_CLASS)
-    insight_html = (
-        f'<p class="kpi-insight">&ldquo;{_esc(block["narrative"])}&rdquo;</p>' if block.get("narrative") else ""
-    )
+    score = block.get("score")
+    score_unit_html = '<span class="kpi-score-unit"> / 100</span>' if score is not None else ""
+    insight_html = f'<p class="kpi-insight">{_esc(block["narrative"])}</p>' if block.get("narrative") else ""
     return f"""
     <div class="card kpi-card">
       <p class="kpi-label">{_esc(_label(domain))}</p>
-      <p class="kpi-score">{_esc(_fmt_score(block.get('score')))}</p>
-      <div class="hbar-track kpi-track"><div class="hbar-fill {status_class}" style="width:{_percent(block.get('score'))}%"></div></div>
+      <p class="kpi-score">{_esc(_fmt_score(score))}{score_unit_html}</p>
+      <div class="hbar-track kpi-track"><div class="hbar-fill {status_class}" style="width:{_percent(score)}%"></div></div>
       <div class="kpi-meta-row">
         {_badge_html(status, status_class)}
         {_trend_html(block.get('trend', {}), compact=True)}
@@ -415,7 +461,7 @@ def _render_summary(report: dict[str, Any]) -> str:
     return f"""
 <section class="section">
   <h2 class="section-title">Executive Summary</h2>
-  <div class="card">
+  <div class="card card-prose">
     {_paragraphs_html(report.get('executive_summary', ''), css_class="prose lead")}
   </div>
   <div class="summary-grid">
@@ -438,10 +484,6 @@ def _render_risks(risks: list[dict[str, Any]]) -> str:
         for risk in risks:
             severity = risk.get("severity") or "LOW"
             severity_class = SEVERITY_CLASS.get(severity, DEFAULT_SEVERITY_CLASS)
-            impact_html = (
-                f'<p class="risk-impact"><strong>Executive Business Impact:</strong> {_esc(risk.get("business_impact"))}</p>'
-                if risk.get("business_impact") else ""
-            )
             cards.append(f"""
     <div class="card risk-card">
       <div class="risk-header">
@@ -452,8 +494,10 @@ def _render_risks(risks: list[dict[str, Any]]) -> str:
           {_badge_html(risk.get('urgency'), 'badge-outline')}
         </div>
       </div>
-      <p class="risk-evidence"><strong>Evidence:</strong> {_esc(risk.get('evidence'))}</p>
-      {impact_html}
+      <div class="info-stack">
+        {_info_row("Evidence", risk.get('evidence'))}
+        {_info_row("Business Impact", risk.get('business_impact'))}
+      </div>
     </div>""".strip())
         body = "\n".join(cards)
     return f"""
@@ -485,7 +529,7 @@ def _render_root_causes(root_causes: list[dict[str, Any]]) -> str:
                 if root_cause.get("executive_note") else ""
             )
             priority_badge = _badge_html(f"P{root_cause['priority']}", "badge-priority") if root_cause.get("priority") else ""
-            owner_html = f'<p class="root-cause-owner">Owner: {_esc(root_cause.get("owner"))}</p>' if root_cause.get("owner") else ""
+            meta_html = _meta_row([("Owner", root_cause.get("owner")), ("Confidence", _fmt_confidence(root_cause.get("confidence")))])
             cards.append(f"""
     <div class="card root-cause-card">
       <div class="root-cause-header">
@@ -493,13 +537,14 @@ def _render_root_causes(root_causes: list[dict[str, Any]]) -> str:
           {priority_badge}
           <span class="risk-title">{_esc(root_cause.get('title'))}</span>
         </div>
-        <span class="confidence-badge">Confidence: {_esc(_fmt_confidence(root_cause.get('confidence')))}</span>
       </div>
       <div class="hbar-track confidence-track"><div class="hbar-fill hbar-confidence" style="width:{_percent((root_cause.get('confidence') or 0) * 100)}%"></div></div>
       {note_html}
       {evidence_html}
-      <p class="root-cause-impact"><strong>Business impact:</strong> {_esc(root_cause.get('business_impact'))}</p>
-      {owner_html}
+      <div class="info-stack">
+        {_info_row("Business Impact", root_cause.get('business_impact'))}
+      </div>
+      {meta_html}
     </div>""".strip())
         body = "\n".join(cards)
     return f"""
@@ -519,7 +564,7 @@ def _render_no_action(report: dict[str, Any]) -> str:
     return f"""
 <section class="section">
   <h2 class="section-title">If No Action Is Taken</h2>
-  <div class="card no-action-card">
+  <div class="card card-prose no-action-card">
     {_paragraphs_html(report.get('if_no_action_narrative', ''), css_class="prose")}
   </div>
 </section>
@@ -527,7 +572,7 @@ def _render_no_action(report: dict[str, Any]) -> str:
 
 
 # --------------------------------------------------------------------------
-# 90-Day Action Plan (timeline roadmap)
+# 90-Day Action Plan
 # --------------------------------------------------------------------------
 
 
@@ -536,16 +581,24 @@ def _render_action_card(action: dict[str, Any]) -> str:
         f'<p class="action-rationale">{_esc(action.get("executive_rationale"))}</p>'
         if action.get("executive_rationale") else ""
     )
+    meta_html = _meta_row([
+        ("Owner", action.get("owner")),
+        ("Difficulty", action.get("difficulty")),
+        ("Timeline", action.get("estimated_timeframe")),
+        ("Confidence", _fmt_confidence(action.get("confidence"))),
+    ])
     return f"""
       <div class="card action-card">
         <div class="action-card-head">
           {_badge_html(f"P{action.get('priority')}", "badge-priority")}
           <p class="action-title">{_esc(action.get('title'))}</p>
         </div>
-        <p class="action-meta">Owner: {_esc(action.get('owner'))} &middot; Difficulty: {_esc(action.get('difficulty'))} &middot; Timeline: {_esc(action.get('estimated_timeframe'))} &middot; Confidence: {_esc(_fmt_confidence(action.get('confidence')))}</p>
+        {meta_html}
         <p class="action-reason">{_esc(action.get('reason'))}</p>
         {rationale_html}
-        <p class="action-outcome"><strong>Expected outcome:</strong> {_esc(action.get('expected_business_impact'))}</p>
+        <div class="info-stack">
+          {_info_row("Expected Outcome", action.get('expected_business_impact'))}
+        </div>
       </div>""".strip()
 
 
@@ -558,23 +611,29 @@ def _render_action_plan(actions: list[dict[str, Any]]) -> str:
 </section>
 """.strip()
 
-    columns_html = []
+    phase_blocks = []
     for horizon_label in ACTION_HORIZON_ORDER:
         horizon_actions = [action for action in actions if action.get("horizon") == horizon_label]
         if not horizon_actions:
             continue
         cards = "\n".join(_render_action_card(action) for action in horizon_actions)
-        columns_html.append(f"""
-    <div class="timeline-column">
-      <p class="timeline-title">{_esc(horizon_label)}</p>
+        phase_class = ACTION_HORIZON_CLASS.get(horizon_label, "")
+        phase_blocks.append(f"""
+    <div class="phase-block {phase_class}">
+      <div class="phase-head">
+        <span class="phase-dot"></span>
+        <p class="phase-title">{_esc(horizon_label)}</p>
+      </div>
+      <div class="phase-cards">
 {cards}
+      </div>
     </div>""".strip())
 
     return f"""
 <section class="section">
   <h2 class="section-title">90-Day Action Plan</h2>
-  <div class="timeline-grid">
-{chr(10).join(columns_html)}
+  <div class="phase-stack">
+{chr(10).join(phase_blocks)}
   </div>
 </section>
 """.strip()
@@ -589,7 +648,7 @@ def _render_expected_impact(items: list[dict[str, Any]]) -> str:
     if not items:
         return ""
     rows = "\n".join(
-        f'    <li><strong>{_esc(item.get("area"))}:</strong> {_esc(item.get("expected_improvement"))}</li>'
+        f'    <li><span class="impact-area">{_esc(item.get("area"))}</span><span class="impact-text">{_esc(item.get("expected_improvement"))}</span></li>'
         for item in items
     )
     return f"""
@@ -637,9 +696,9 @@ def _render_appendix(appendix: dict[str, Any]) -> str:
     limitations = appendix.get("data_limitations") or []
     limitations_html = "".join(f"<li>{_esc(item)}</li>" for item in limitations)
     return f"""
-<section class="section">
+<section class="section section-appendix">
   <h2 class="section-title">Appendix</h2>
-  <div class="card appendix-card">
+  <div class="card card-prose appendix-card">
     <h3 class="appendix-heading">Methodology</h3>
     <p class="prose">{_esc(appendix.get('methodology_summary'))}</p>
     <h3 class="appendix-heading">Confidence Methodology</h3>
@@ -747,7 +806,7 @@ def _render_conclusion(report: dict[str, Any]) -> str:
 def _render_footer(metadata: dict[str, Any]) -> str:
     return f"""
 <footer class="report-footer">
-  <p>{_esc(metadata.get('platform'))} &middot; AI model: {_esc(metadata.get('ai_model'))} &middot; Report ID {_esc(metadata.get('report_id'))}</p>
+  <p>{_esc(metadata.get('platform'))} &middot; AI model: {_esc(metadata.get('ai_model'))}</p>
   <p class="confidential">Confidential &mdash; prepared for internal executive distribution.</p>
 </footer>
 """.strip()
@@ -774,8 +833,7 @@ def render_html(report: dict[str, Any]) -> str:
     try:
         metadata = report["metadata"]
         body = "\n".join([
-            _render_header(metadata),
-            _render_executive_alert(report),
+            _render_cover(report),
             _render_dashboard(report),
             _render_charts(report),
             _render_summary(report),
@@ -804,11 +862,9 @@ def render_html(report: dict[str, Any]) -> str:
 </style>
 </head>
 <body>
-  <div class="page">
-    <div class="report">
+  <main class="report">
 {body}
-    </div>
-  </div>
+  </main>
 </body>
 </html>
 """
@@ -818,33 +874,45 @@ def render_html(report: dict[str, Any]) -> str:
 # Stylesheet (inlined -- no external CDN, no network dependency)
 # --------------------------------------------------------------------------
 #
-# Design system: Solven black-and-gold, in the register of Palantir
-# Foundry / Stripe / Linear rather than a printed document. Typography
-# is "Inter" first (used if the viewer's OS has it installed) falling
-# back to the platform's native UI font stack -- see TYPOGRAPHY below;
-# no font file is embedded, keeping the document lightweight and fully
-# offline. Spacing is an 8px system throughout. Gold is restricted to a
-# small set of attention-guiding roles (brand mark, section labels, the
-# executive alert, confidence bars, priority badges) rather than
-# applied as general decoration.
+# Design system: a dark title panel (Solven black/gold) opens the
+# report; every page after it is a light editorial document (dark ink
+# on warm off-white) in the register of a McKinsey/Palantir/Stripe
+# printed report rather than a dark web app. Typography is set in `pt`
+# (an absolute, print-accurate unit) against the hierarchy: cover
+# ~30pt, section titles ~16pt, subsection/item titles ~11.5-12pt, body
+# ~10pt, labels/metadata ~7.5-9pt. Spacing sticks to a 4/8/12/16/24/32
+# px scale throughout. "Inter" is used if the viewer's OS has it,
+# falling back to the platform's native UI font stack; no font file is
+# embedded, keeping the document lightweight and fully offline.
+# Page geometry (A4 portrait, margins, footer page numbers) is owned by
+# ai/pdf_report_renderer.py's Playwright call, not by this stylesheet
+# -- this file only ever adds pagination *behavior* (break-inside,
+# widows/orphans) inside @media print, never page size or margin.
 
 _CSS = """
 :root {
-  --bg: #0C0C0C;
-  --surface: #FAFAF8;
-  --surface-alt: #EFEEE7;
-  --ink: #16161A;
-  --ink-muted: #6B6A63;
-  --gold: #C9A84C;
-  --gold-deep: #8E7229;
-  --cream: #EBEAE3;
-  --cream-muted: #97958A;
-  --line-dark: rgba(201, 168, 76, 0.16);
-  --line-light: #E7E5DC;
-  --red: #A23B3B;
-  --green: #3F6E48;
-  --amber: #A8791E;
-  --radius: 3px;
+  --cover-bg: #0C0C0C;
+  --cover-ink: #F5F3EC;
+  --cover-ink-muted: #A6A398;
+  --cover-gold: #C9A84C;
+  --cover-line: rgba(201, 168, 76, 0.22);
+
+  --page-bg: #FAF9F5;
+  --card-bg: #FFFFFF;
+  --ink: #17171B;
+  --ink-muted: #5B5A54;
+  --ink-faint: #85837A;
+  --gold: #9C7A24;
+  --gold-soft: rgba(156, 122, 36, 0.12);
+  --line: #E7E4DA;
+  --line-soft: #EFEDE4;
+  --red: #9B3A34;
+  --red-soft: rgba(155, 58, 52, 0.10);
+  --green: #2F6B3F;
+  --green-soft: rgba(47, 107, 63, 0.10);
+  --amber: #93650F;
+  --amber-soft: rgba(147, 101, 15, 0.12);
+  --radius: 4px;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -855,79 +923,82 @@ _CSS = """
   color-adjust: exact;
 }
 
-html {
-  background: var(--bg);
-}
+html { background: var(--page-bg); }
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--cream);
+  background: var(--page-bg);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 10pt;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-.page { padding: 64px 32px 128px; }
+.report { max-width: 760px; margin: 0 auto; padding: 32px 24px 48px; }
+.prose { max-width: 64ch; }
 
-.report { max-width: 1120px; margin: 0 auto; }
+h1, h2, h3, h4 { margin: 0; }
 
-.prose { max-width: 68ch; }
-
-/* ---- Header ---- */
-.report-header { padding: 0 0 40px; border-bottom: 1px solid var(--line-dark); margin-bottom: 56px; }
-.brand-row { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
-.brand-mark {
-  width: 28px; height: 28px; flex: 0 0 auto; border-radius: var(--radius);
-  background: var(--gold); color: #14120C; font-weight: 700; font-size: 13px;
+/* ---- Cover ---- */
+.cover {
+  background: var(--cover-bg);
+  color: var(--cover-ink);
+  border-radius: 6px;
+  padding: 32px 32px 28px;
+  margin: 24px 0 32px;
+}
+.cover-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+.cover-mark {
+  width: 26px; height: 26px; flex: 0 0 auto; border-radius: 4px;
+  background: var(--cover-gold); color: #14120C; font-weight: 700; font-size: 8.5pt;
   display: inline-flex; align-items: center; justify-content: center;
 }
-.brand-word { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--gold); }
-.brand-tagline { margin: 2px 0 0; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cream-muted); }
-.title { margin: 0 0 14px; font-size: 48px; font-weight: 600; letter-spacing: -0.015em; color: var(--cream); line-height: 1.12; }
-.meta-line { margin: 0; font-size: 12px; color: var(--cream-muted); }
+.cover-word { margin: 0; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.16em; color: var(--cover-gold); }
+.cover-tagline { margin: 2px 0 0; font-size: 7.5pt; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted); }
+.cover-title { font-size: 30pt; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; color: var(--cover-ink); max-width: 20ch; margin-bottom: 16px; }
+.cover-meta-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.cover-date { font-size: 9pt; color: var(--cover-ink-muted); }
+.cover-id { font-size: 7.5pt; color: var(--cover-ink-muted); opacity: 0.85; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cover-rule { height: 1px; background: var(--cover-line); margin-bottom: 24px; }
+.cover-headline { font-size: 15pt; font-weight: 600; line-height: 1.35; color: var(--cover-ink); max-width: 44ch; margin-bottom: 12px; }
+.cover-body { font-size: 10pt; line-height: 1.55; color: var(--cover-ink-muted); max-width: 58ch; margin-bottom: 4px; }
+.cover-row { display: flex; gap: 12px; padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--cover-line); font-size: 9.5pt; color: var(--cover-ink); }
+.cover-tag { flex: 0 0 auto; width: 118px; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-gold); }
+.cover-row-text { flex: 1 1 auto; }
 
 /* ---- Section rhythm ---- */
-.section { margin-bottom: 56px; }
+.section { margin-bottom: 24px; }
 .section-title {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--gold); margin: 0 0 20px; padding-bottom: 12px;
-  border-bottom: 1px solid var(--line-dark);
+  font-size: 16pt; font-weight: 600; letter-spacing: -0.005em; color: var(--ink);
+  margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
 }
 
-/* ---- Warm-white content surfaces ---- */
+/* ---- Cards ---- */
 .card {
-  background: var(--surface); color: var(--ink); border-radius: var(--radius);
-  padding: 28px; margin-bottom: 16px; border: 1px solid var(--line-light);
-  transition: box-shadow 160ms ease, transform 160ms ease, border-color 160ms ease;
+  background: var(--card-bg); color: var(--ink); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 8px; border: 1px solid var(--line);
 }
-.card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28); transform: translateY(-1px); border-color: rgba(201, 168, 76, 0.35); }
 .card:last-child { margin-bottom: 0; }
-.card p { margin: 0 0 12px; }
+.card p { margin: 0 0 8px; }
 .card p:last-child { margin-bottom: 0; }
+.card-prose { padding: 24px; }
 
-/* ---- Executive Alert ---- */
-.alert-card { border-left: 2px solid var(--gold); padding: 32px 36px; }
-.alert-headline { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 14px !important; line-height: 1.3; }
-.alert-body { color: var(--ink-muted); font-size: 16px; }
-.alert-row { display: flex; gap: 10px; align-items: baseline; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--line-light); font-size: 14px; }
-.alert-row-action { color: var(--ink); }
-.alert-tag {
-  flex: 0 0 auto; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--gold-deep); white-space: nowrap;
-}
-
-/* ---- KPI dashboard ---- */
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
-.kpi-card { text-align: left; }
-.kpi-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 10px !important; }
-.kpi-score { font-size: 52px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: 14px !important; line-height: 1; }
-.kpi-track { margin-bottom: 14px; }
+/* ---- KPI dashboard ----
+   Flexbox, not CSS Grid: Chromium's print pagination fragments a
+   wrapped flex row far more predictably than a grid row, which tends
+   to get pushed to the next page as one atomic unit even when it
+   would fit in the remaining space. */
+.kpi-grid { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
+.kpi-card { flex: 1 1 calc(50% - 8px); }
+.kpi-label { font-size: 8pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; }
+.kpi-score { font-size: 28pt; font-weight: 600; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: 8px; line-height: 1; }
+.kpi-score-unit { font-size: 10pt; font-weight: 500; color: var(--ink-faint); }
+.kpi-track { margin-bottom: 8px; }
 .kpi-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.kpi-insight { font-size: 13px; color: var(--ink-muted); font-style: italic; margin-top: 16px !important; padding-top: 14px; border-top: 1px solid var(--line-light); }
+.kpi-insight { font-size: 9pt; color: var(--ink-muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
 
-.hbar-track { height: 5px; background: var(--surface-alt); border-radius: 2px; overflow: hidden; }
+.hbar-track { height: 5px; background: var(--line-soft); border-radius: 2px; overflow: hidden; }
 .hbar-fill { height: 100%; border-radius: 2px; background: var(--ink-muted); }
 .hbar-fill.status-healthy { background: var(--green); }
 .hbar-fill.status-at-risk { background: var(--amber); }
@@ -939,238 +1010,203 @@ body {
 .hbar-fill.hbar-confidence, .hbar-fill.hbar-neutral { background: var(--gold); }
 .hbar-fill.hbar-flag { background: var(--red); }
 
-.confidence-track { margin: 10px 0 14px; }
+.confidence-track { margin: 8px 0 12px; }
 
-.fact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.fact-grid { display: flex; flex-direction: column; gap: 8px; }
 .fact-card { margin-bottom: 0; }
-.fact-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px !important; }
-.fact-value { font-size: 19px; font-weight: 600; color: var(--ink); margin-bottom: 0 !important; }
+.fact-label { font-size: 8pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
+.fact-value { font-size: 12pt; font-weight: 600; line-height: 1.4; color: var(--ink); margin-bottom: 0; }
 
 /* ---- Charts ---- */
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-.chart-card { margin-bottom: 0; }
-.chart-title { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink); margin-bottom: 20px !important; }
+.chart-grid { display: flex; flex-wrap: wrap; gap: 16px; }
+.chart-card { flex: 1 1 calc(50% - 8px); margin-bottom: 0; padding: 12px; }
+.chart-grid .chart-card:last-child:nth-child(odd) { flex-basis: 100%; }
+.chart-title { font-size: 12pt; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
 
-.hbar-row { margin-bottom: 16px; }
+.hbar-row { margin-bottom: 8px; }
 .hbar-row:last-child { margin-bottom: 0; }
-.hbar-row-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; font-size: 13px; }
+.hbar-row-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; font-size: 9pt; }
 .hbar-label { color: var(--ink); font-weight: 500; }
-.hbar-value { color: var(--ink-muted); font-variant-numeric: tabular-nums; font-size: 12px; }
-.hbar-meta { margin-top: 6px; font-size: 11px; }
-.hbar-flag-label { color: var(--red); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; font-size: 10px; }
+.hbar-value { color: var(--ink-muted); font-variant-numeric: tabular-nums; font-size: 8.5pt; }
+.hbar-meta { margin-top: 4px; font-size: 7.5pt; }
+.hbar-flag-label { color: var(--red); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
 
-.donut-wrap { display: flex; align-items: center; gap: 24px; }
-.donut { position: relative; width: 116px; height: 116px; border-radius: 50%; flex: 0 0 auto; }
-.donut::after { content: ""; position: absolute; inset: 16px; border-radius: 50%; background: var(--surface); }
+.donut-wrap { display: flex; align-items: center; gap: 20px; }
+.donut { position: relative; width: 100px; height: 100px; border-radius: 50%; flex: 0 0 auto; }
+.donut::after { content: ""; position: absolute; inset: 14px; border-radius: 50%; background: var(--card-bg); }
 .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
-.donut-value { font-size: 22px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
-.donut-caption { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); }
-.donut-legend { display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: var(--ink-muted); }
+.donut-value { font-size: 15pt; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.donut-caption { font-size: 7.5pt; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); }
+.donut-legend { display: flex; flex-direction: column; gap: 8px; font-size: 9pt; color: var(--ink-muted); }
 .legend-item { display: flex; align-items: center; gap: 8px; }
 .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
 .legend-dot-primary { background: var(--red); }
-.legend-dot-secondary { background: var(--surface-alt); border: 1px solid var(--line-light); }
+.legend-dot-secondary { background: var(--line-soft); border: 1px solid var(--line); }
 
 /* ---- Badges ---- */
 .badge {
-  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
-  padding: 4px 8px; border-radius: var(--radius); background: var(--surface-alt); color: var(--ink-muted);
+  display: inline-block; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: var(--radius); background: var(--line-soft); color: var(--ink-muted);
 }
-.badge.status-healthy { background: rgba(63, 110, 72, 0.12); color: var(--green); }
-.badge.status-at-risk { background: rgba(168, 121, 30, 0.14); color: var(--amber); }
-.badge.status-critical { background: rgba(162, 59, 59, 0.12); color: var(--red); }
-.badge.severity-high { background: rgba(162, 59, 59, 0.12); color: var(--red); }
-.badge.severity-medium { background: rgba(168, 121, 30, 0.14); color: var(--amber); }
-.badge.severity-low { background: rgba(107, 106, 99, 0.14); color: var(--ink-muted); }
-.badge-outline { background: transparent; border: 1px solid var(--line-light); color: var(--ink-muted); }
-.badge-priority { background: rgba(201, 168, 76, 0.14); color: var(--gold-deep); }
-.confidence-badge { font-size: 12px; color: var(--gold-deep); font-weight: 600; white-space: nowrap; }
+.badge.status-healthy { background: var(--green-soft); color: var(--green); }
+.badge.status-at-risk { background: var(--amber-soft); color: var(--amber); }
+.badge.status-critical { background: var(--red-soft); color: var(--red); }
+.badge.severity-high { background: var(--red-soft); color: var(--red); }
+.badge.severity-medium { background: var(--amber-soft); color: var(--amber); }
+.badge.severity-low { background: var(--line-soft); color: var(--ink-muted); }
+.badge-outline { background: transparent; border: 1px solid var(--line); color: var(--ink-muted); }
+.badge-priority { background: var(--gold-soft); color: var(--gold); }
 
 /* ---- Trend indicators ---- */
-.trend { font-size: 11px; font-weight: 600; }
+.trend { font-size: 8pt; font-weight: 600; }
 .trend-up { color: var(--green); }
 .trend-down { color: var(--red); }
 .trend-flat { color: var(--ink-muted); }
-.trend-unavailable { color: var(--cream-muted); font-weight: 400; font-style: italic; }
-.kpi-meta-row .trend-unavailable { color: var(--ink-muted); }
+.trend-unavailable { color: var(--ink-faint); font-weight: 400; font-style: italic; }
+
+/* ---- Label/value rows (meta chips + info rows) ---- */
+.meta-row { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0; }
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-k { font-size: 7.5pt; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); }
+.meta-v { font-size: 9pt; color: var(--ink); }
+
+.info-stack { margin-top: 8px; }
+.info-row { display: flex; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line-soft); font-size: 9.5pt; }
+.info-stack .info-row:first-child { border-top: none; padding-top: 0; }
+.info-label { flex: 0 0 auto; width: 96px; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); }
+.info-value { flex: 1 1 auto; color: var(--ink-muted); }
 
 /* ---- Executive summary ---- */
-.lead { font-size: 17px; color: var(--ink); }
+.lead { font-size: 10.5pt; color: var(--ink); }
 .summary-grid { display: table; width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 4px; }
 .summary-row { display: table-row; }
 .summary-domain, .summary-text {
-  display: table-cell; padding: 12px 0; border-bottom: 1px solid var(--line-dark);
-  font-size: 14px; color: var(--cream-muted); vertical-align: top;
+  display: table-cell; padding: 10px 0; border-bottom: 1px solid var(--line-soft);
+  font-size: 9.5pt; color: var(--ink-muted); vertical-align: top;
 }
 .summary-row:last-child .summary-domain, .summary-row:last-child .summary-text { border-bottom: none; }
-.summary-domain { width: 180px; padding-right: 16px; color: var(--gold); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+.summary-domain { width: 150px; padding-right: 16px; color: var(--gold); font-weight: 600; font-size: 8pt; text-transform: uppercase; letter-spacing: 0.05em; }
 
 /* ---- Risks ---- */
-.risk-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.risk-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
 .risk-rank {
-  flex: 0 0 auto; width: 24px; height: 24px; border-radius: var(--radius); background: var(--ink);
-  color: var(--surface); font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+  flex: 0 0 auto; width: 22px; height: 22px; border-radius: var(--radius); background: var(--ink);
+  color: var(--card-bg); font-size: 9pt; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
 }
-.risk-title { font-size: 17px; font-weight: 600; letter-spacing: -0.005em; flex: 1 1 auto; }
+.risk-title { font-size: 11.5pt; font-weight: 600; letter-spacing: -0.005em; flex: 1 1 auto; }
 .risk-badges { display: flex; gap: 6px; flex: 0 0 auto; }
-.risk-evidence, .risk-impact { font-size: 14px; color: var(--ink-muted); }
-.risk-impact strong, .risk-evidence strong { color: var(--ink); }
 
 /* ---- Root causes ---- */
 .root-cause-header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
 .root-cause-heading { display: flex; align-items: center; gap: 10px; }
-.root-cause-note { color: var(--ink-muted); font-size: 14px; }
-.root-cause-impact { font-size: 14px; }
-.root-cause-owner { font-size: 12px; color: var(--ink-muted); font-weight: 500; }
-.evidence-list { margin: 0 0 12px; padding-left: 18px; font-size: 14px; color: var(--ink-muted); }
+.root-cause-note { font-size: 9.5pt; color: var(--ink-muted); }
+.evidence-list { margin: 0 0 8px; padding-left: 16px; font-size: 9.5pt; color: var(--ink-muted); }
 .evidence-list li { margin-bottom: 4px; }
 
 /* ---- If No Action ---- */
 .no-action-card { border-left: 2px solid var(--red); }
 
-/* ---- Action plan timeline ---- */
-.timeline-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
-.timeline-column { display: flex; flex-direction: column; }
-.timeline-title {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold);
-  margin: 0 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line-dark);
-}
-.action-card { margin-bottom: 14px; }
-.action-card-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
-.action-title { font-size: 15px; font-weight: 600; margin: 0 !important; }
-.action-meta { font-size: 11px; color: var(--ink-muted); margin-bottom: 12px !important; }
-.action-reason { font-size: 13px; }
-.action-rationale { font-size: 13px; font-style: italic; color: var(--ink-muted); }
-.action-outcome { font-size: 13px; }
+/* ---- Action plan ---- */
+.phase-stack { display: flex; flex-direction: column; gap: 20px; }
+.phase-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.phase-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; background: var(--ink-muted); }
+.phase-immediate .phase-dot { background: var(--red); }
+.phase-near-term .phase-dot { background: var(--amber); }
+.phase-strategic .phase-dot { background: var(--gold); }
+.phase-title { font-size: 12pt; font-weight: 600; color: var(--ink); margin: 0; }
+.phase-cards { display: flex; flex-direction: column; gap: 12px; }
+.action-card { margin-bottom: 0; }
+.action-card-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.action-title { font-size: 11pt; font-weight: 600; margin: 0; }
+.action-reason { font-size: 9.5pt; }
+.action-rationale { font-size: 9.5pt; color: var(--ink-muted); }
 
 /* ---- Expected impact ---- */
-.impact-list { margin: 0; padding-left: 18px; }
-.impact-list li { margin-bottom: 8px; }
-.impact-list li:last-child { margin-bottom: 0; }
+.impact-list { list-style: none; margin: 0; padding: 0; }
+.impact-list li { display: flex; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line-soft); font-size: 9.5pt; }
+.impact-list li:first-child { border-top: none; padding-top: 0; }
+.impact-area { flex: 0 0 auto; width: 150px; font-weight: 600; color: var(--ink); }
+.impact-text { flex: 1 1 auto; color: var(--ink-muted); }
 
 /* ---- Department breakdown ---- */
-.dept-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-.dept-card { margin-bottom: 0; position: relative; }
-.dept-index { position: absolute; top: 24px; right: 26px; font-size: 12px; font-weight: 700; color: var(--line-light); font-variant-numeric: tabular-nums; }
-.dept-title { font-size: 16px; font-weight: 600; margin-bottom: 10px !important; padding-right: 32px; }
-.dept-text { font-size: 14px; color: var(--ink-muted); }
+.dept-grid { display: flex; flex-wrap: wrap; gap: 16px; }
+.dept-card { flex: 1 1 calc(50% - 8px); margin-bottom: 0; position: relative; }
+.dept-grid .dept-card:last-child:nth-child(odd) { flex-basis: 100%; }
+.dept-index { position: absolute; top: 16px; right: 16px; font-size: 8pt; font-weight: 700; color: var(--line); font-variant-numeric: tabular-nums; }
+.dept-title { font-size: 11.5pt; font-weight: 600; margin-bottom: 8px; padding-right: 28px; }
+.dept-text { font-size: 9.5pt; color: var(--ink-muted); }
 
 /* ---- Appendix ---- */
-.appendix-heading { font-size: 13px; font-weight: 700; margin: 20px 0 8px; }
+.appendix-heading { font-size: 12pt; font-weight: 600; margin: 16px 0 6px; }
 .appendix-heading:first-child { margin-top: 0; }
-.appendix-card p { font-size: 14px; color: var(--ink-muted); }
-.limitations-list { margin: 0; padding-left: 18px; font-size: 13px; color: var(--ink-muted); }
-.limitations-list li { margin-bottom: 6px; }
-.appendix-footnote { font-size: 12px; color: var(--ink-muted); font-style: italic; margin-top: 18px !important; }
+.appendix-card p { font-size: 9.5pt; color: var(--ink-muted); }
+.limitations-list { margin: 0; padding-left: 16px; font-size: 9pt; color: var(--ink-muted); }
+.limitations-list li { margin-bottom: 4px; }
+.appendix-footnote { font-size: 8pt; color: var(--ink-faint); margin-top: 16px; }
 
-.empty-state { color: var(--cream-muted); font-style: italic; font-size: 14px; }
+.empty-state { color: var(--ink-faint); font-style: italic; font-size: 9.5pt; }
 
 /* ---- Executive Conclusion ---- */
 .conclusion-card { border-left: 2px solid var(--gold); }
-.conclusion-headline { font-size: 19px; font-weight: 600; color: var(--ink); margin-bottom: 20px !important; }
-.conclusion-block { margin-bottom: 18px; }
+.conclusion-headline { font-size: 12pt; font-weight: 600; color: var(--ink); margin-bottom: 16px; }
+.conclusion-block { margin-bottom: 12px; }
 .conclusion-block:last-of-type { margin-bottom: 0; }
-.conclusion-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 8px !important; }
-.conclusion-list { margin: 0; padding-left: 18px; font-size: 14px; color: var(--ink-muted); }
-.conclusion-list li { margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.conclusion-label { font-size: 8pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.conclusion-list { margin: 0; padding-left: 16px; font-size: 9.5pt; color: var(--ink-muted); }
+.conclusion-list li { margin-bottom: 4px; }
 .conclusion-list li:last-child { margin-bottom: 0; }
-.conclusion-outlook { font-size: 14px; color: var(--ink); padding-top: 16px; margin-top: 4px !important; border-top: 1px solid var(--line-light); }
+.conclusion-outlook { font-size: 9.5pt; color: var(--ink); padding-top: 12px; margin-top: 4px; border-top: 1px solid var(--line-soft); }
 
-/* ---- Footer ---- */
-.report-footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line-dark); font-size: 12px; color: var(--cream-muted); }
+/* ---- Closing footer ---- */
+.report-footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 8pt; color: var(--ink-faint); }
 .report-footer p { margin: 0 0 4px; }
-.confidential { letter-spacing: 0.04em; text-transform: uppercase; font-size: 11px; }
+.confidential { letter-spacing: 0.04em; text-transform: uppercase; font-size: 7.5pt; }
 
 /* ==========================================================
-   Responsive -- desktop-first: base styles above target desktop;
-   tablet narrows the grids; mobile collapses to a single column.
+   Responsive -- this design is single-column and print-first
+   already, so only mobile screen widths need adjustment.
    ========================================================== */
-
-/* Tablet -- scoped to `screen` so these narrow-viewport rules never
-   apply during PDF printing: Chromium evaluates width-based media
-   features against the paper's CSS-pixel width (~700-750px for A4),
-   which falls inside these breakpoints and would otherwise silently
-   re-flow the print output into the tablet/mobile grid instead of the
-   desktop one the HTML report is designed around. */
-@media screen and (max-width: 1024px) {
-  .page { padding: 48px 24px 96px; }
-  .chart-grid { grid-template-columns: 1fr; }
-  .timeline-grid { grid-template-columns: 1fr 1fr; }
-}
-
-/* Mobile */
-@media screen and (max-width: 768px) {
-  .page { padding: 32px 16px 64px; }
-  .title { font-size: 32px; }
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .fact-grid { grid-template-columns: 1fr; }
-  .dept-grid { grid-template-columns: 1fr; }
-  .timeline-grid { grid-template-columns: 1fr; }
-  .summary-grid { display: block; }
-  .summary-row { display: block; padding: 8px 0; }
-  .summary-domain, .summary-text { display: block; width: auto; padding: 0; border-bottom: none; }
-  .summary-domain { margin-bottom: 4px; }
-  .donut-wrap { flex-direction: column; align-items: flex-start; }
-}
-
-@media screen and (max-width: 480px) {
-  .kpi-grid { grid-template-columns: 1fr; }
-  .alert-card { padding: 24px; }
+@media screen and (max-width: 560px) {
+  .report { padding: 20px 16px 32px; }
+  .cover-title { font-size: 24pt; }
+  .kpi-card, .dept-card, .chart-card { flex-basis: 100%; }
 }
 
 /* ---- Print ----
-   The goal is a faithful print of the exact same design used on
-   screen -- same dark background, same gold/cream palette, same
-   4/2/3/2-column grids at their real desktop proportions -- not a
-   separate, narrower document. Page *size* is deliberately not set
-   here: an explicit `@page { size }` at-rule takes priority over the
-   `width`/`height`/`landscape` arguments ai/pdf_report_renderer.py
-   passes to Playwright's `page.pdf()`, so declaring one here would
-   silently fight that module's page-geometry + scale computation.
-   Geometry lives in Python; this block only ever adds pagination
-   rules and never reassigns color, background, typography, or grid
-   column counts (so the PDF and the on-screen HTML stay visually
-   identical) -- except the action-plan timeline, which is
-   deliberately linearized to one column so its cards paginate
-   predictably instead of one column detaching onto a later page.
+   Page size, margins, and the repeating footer with page numbers are
+   owned by ai/pdf_report_renderer.py's page.pdf() call, not here -- a
+   PDF-level margin (unlike the old zero-margin/`.page`-padding
+   approach this file used to require) now paints the page background
+   correctly on its own, so this block only ever adds pagination
+   *behavior*. */
+@page {
+  size: A4 portrait;
+  margin: 14mm 14mm 16mm 14mm;
+}
 
-   Visual margin is spent here as `.page` padding, not as a
-   Playwright/`@page` PDF margin: Chromium's print pipeline never
-   paints a background into that margin gutter -- it's physically
-   outside the printable content box, so ANY page-level margin (no
-   matter what background/print_background settings are used) shows
-   up as unpainted white paper around the dark report. Padding on an
-   in-flow element, by contrast, is still inside body's own painted
-   box, so the dark background reaches every edge of the page and the
-   1.6cm of breathing room survives as space, not as paper. Keep this
-   value equal to PAGE_MARGIN_CM in ai/pdf_report_renderer.py (which
-   passes zero page margin to Playwright) -- the two together are what
-   reproduce the original 1.6cm-margin look without the white gutter. */
 @media print {
-  .page { padding: 1.6cm; }
-  .card:hover { box-shadow: none; transform: none; }
+  .report { max-width: none; padding: 0; margin: 0; width: 100%; }
+
+  h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+
+  .cover { break-after: page; page-break-after: always; margin: 0; }
+  .section-appendix { break-before: page; page-break-before: always; }
 
   .section { break-inside: auto; }
-  .section-title { break-after: avoid; page-break-after: avoid; }
-  /* Only the small, structured cards get a hard no-split rule --
-     letting a KPI/risk/action card break mid-card looks broken.
-     Long prose-only cards (the plain `.card` used for the executive
-     summary intro, `.no-action-card`, `.appendix-card`) are
-     deliberately left out: forcing a multi-paragraph block to stay
-     whole is what previously stranded the next section alone on a
-     mostly-blank page whenever that block didn't fit in the
-     remaining space -- splitting a paragraph across a page boundary
-     is normal in a printed report and reads far better than a
-     half-empty page. */
+  /* Only small, structured cards get a hard no-split rule -- letting a
+     KPI/risk/action card break mid-card looks broken. Long prose-only
+     cards (.card-prose: the executive-summary intro, no-action,
+     appendix) are deliberately left out: forcing a multi-paragraph
+     block to stay whole is what strands the next section alone on a
+     mostly-blank page whenever that block doesn't fit in the
+     remaining space. */
   .kpi-card, .fact-card, .chart-card, .risk-card, .root-cause-card,
-  .action-card, .dept-card, .conclusion-card, .alert-card {
+  .action-card, .dept-card, .conclusion-card, table, figure {
     break-inside: avoid;
     page-break-inside: avoid;
   }
   .summary-row { break-inside: avoid; page-break-inside: avoid; }
-  .kpi-grid, .fact-grid, .chart-grid, .dept-grid, .timeline-grid { break-inside: auto; }
-
-  .timeline-grid { grid-template-columns: 1fr; row-gap: 20px; }
-  .timeline-column { break-inside: avoid-page; }
+  .phase-head { break-after: avoid; page-break-after: avoid; }
 }
 """
