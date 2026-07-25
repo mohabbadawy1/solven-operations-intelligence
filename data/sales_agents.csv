@@ -1,0 +1,33 @@
+sales_agent_id,name,team_id,project_id,manager,region,hire_date,seniority,monthly_target,active_flag
+AGT-001,Ahmed El-Masry,Team Apex,AUR,Dalia Sabry,New Cairo,2023-07-09,Principal,5625000.0,True
+AGT-002,Tarek Metwally,Team Apex,AUR,Dalia Sabry,New Cairo,2023-03-22,Mid,3375000.0,True
+AGT-003,Reem Sabry,Team Apex,AUR,Dalia Sabry,New Cairo,2021-09-19,Mid,3375000.0,True
+AGT-004,Sara Novak,Team Apex,AUR,Dalia Sabry,New Cairo,2023-10-15,Junior,2250000.0,True
+AGT-005,Farida Rashad,Team Apex,AUR,Dalia Sabry,New Cairo,2023-01-19,Senior,4500000.0,True
+AGT-006,Reem Farouk,Team Falcon,AUR,Dalia Naguib,New Cairo,2024-01-07,Senior,4500000.0,True
+AGT-007,Mona Barakat,Team Falcon,AUR,Dalia Naguib,New Cairo,2021-12-29,Mid,3375000.0,True
+AGT-008,Laila Gomaa,Team Falcon,AUR,Dalia Naguib,New Cairo,2023-02-13,Principal,5625000.0,True
+AGT-009,Nour Mostafa,Team Falcon,AUR,Dalia Naguib,New Cairo,2023-12-10,Senior,4500000.0,True
+AGT-010,Heba Novak,Team Falcon,AUR,Dalia Naguib,New Cairo,2023-07-06,Senior,4500000.0,True
+AGT-011,Laila Mostafa,Team Tide,CST,Ashraf El-Tahawy,North Coast,2023-03-05,Senior,2800000.0,True
+AGT-012,Ramy Fahmy,Team Tide,CST,Ashraf El-Tahawy,North Coast,2021-08-12,Senior,2800000.0,True
+AGT-013,Salma Novak,Team Tide,CST,Ashraf El-Tahawy,North Coast,2024-03-11,Mid,2100000.0,True
+AGT-014,Heba Al-Fahim,Team Tide,CST,Ashraf El-Tahawy,North Coast,2021-12-16,Senior,2800000.0,True
+AGT-015,Farida Metwally,Team Summit,VTX,Mariam Mostafa,New Administrative Capital,2022-08-23,Junior,3000000.0,True
+AGT-016,Yasmin Reda,Team Summit,VTX,Mariam Mostafa,New Administrative Capital,2022-08-22,Senior,6000000.0,True
+AGT-017,Yasmin Naguib,Team Summit,VTX,Mariam Mostafa,New Administrative Capital,2023-10-11,Senior,6000000.0,True
+AGT-018,Mohamed Mostafa,Team Summit,VTX,Mariam Mostafa,New Administrative Capital,2022-04-24,Senior,6000000.0,True
+AGT-019,Amr Kamal,Team Nile,HVW,Mariam Hegazy,6th of October City,2022-11-11,Senior,1800000.0,True
+AGT-020,Wael Zaki,Team Nile,HVW,Mariam Hegazy,6th of October City,2023-08-20,Junior,900000.0,True
+AGT-021,Dina El-Tahawy,Team Nile,HVW,Mariam Hegazy,6th of October City,2022-03-04,Principal,2250000.0,True
+AGT-022,Ziad Zaki,Team Nile,HVW,Mariam Hegazy,6th of October City,2022-08-13,Junior,900000.0,True
+AGT-023,Fady Barakat,Team Nile,HVW,Mariam Hegazy,6th of October City,2021-07-19,Junior,900000.0,True
+AGT-024,Sameh Shawky,Team Delta,HVW,Hana Sabry,6th of October City,2021-12-02,Mid,1350000.0,True
+AGT-025,Hassan Kamal,Team Delta,HVW,Hana Sabry,6th of October City,2022-10-15,Mid,1350000.0,True
+AGT-026,Omar Chevalier,Team Delta,HVW,Hana Sabry,6th of October City,2022-09-07,Senior,1800000.0,True
+AGT-027,Heba Nour,Team Delta,HVW,Hana Sabry,6th of October City,2024-01-22,Mid,1350000.0,True
+AGT-028,Laila Al-Fahim,Team Delta,HVW,Hana Sabry,6th of October City,2021-07-18,Principal,2250000.0,True
+AGT-029,Mona Zaki,Team Legacy,MER,Sara Zaki,New Cairo,2021-09-21,Mid,1500000.0,True
+AGT-030,Sameh Youssef,Team Legacy,MER,Sara Zaki,New Cairo,2022-10-16,Junior,1000000.0,True
+AGT-031,Reem Mostafa,Team Legacy,MER,Sara Zaki,New Cairo,2022-09-08,Junior,1000000.0,True
+AGT-032,Laila Abdallah,Team Legacy,MER,Sara Zaki,New Cairo,2023-02-24,Senior,2000000.0,True

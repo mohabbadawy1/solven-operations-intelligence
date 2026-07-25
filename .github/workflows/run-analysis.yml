@@ -1,4 +1,4 @@
-name: Run Operations Intelligence
+name: Run Real Estate Intelligence
 
 on:
   workflow_dispatch:
@@ -44,7 +44,7 @@ jobs:
       - name: Upload generated report
         uses: actions/upload-artifact@v4
         with:
-          name: operations-intelligence-report
+          name: real-estate-intelligence-report
           path: |
             outputs/executive_report.json
             outputs/executive_report.md

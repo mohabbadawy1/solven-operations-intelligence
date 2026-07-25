@@ -30,7 +30,7 @@ Page geometry is owned here, in Python:
     just normal printable whitespace, not a rendering bug to route
     around.
   - `display_header_footer=True` with an empty header and a small
-    footer template adds the "Solven Operations Intelligence ·
+    footer template adds the "Solven Real Estate Intelligence ·
     Confidential · Page X of Y" footer Chromium renders once per page,
     outside the page's own HTML/CSS.
 
@@ -51,7 +51,7 @@ PDF_MARGIN = {"top": "14mm", "right": "14mm", "bottom": "16mm", "left": "14mm"}
 _FOOTER_TEMPLATE = """
 <div style="width:100%; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
             font-size:7px; color:#8A887A; padding:0 14mm; display:flex; justify-content:space-between; align-items:center;">
-  <span>Solven Operations Intelligence &middot; Confidential</span>
+  <span>Solven Real Estate Intelligence &middot; Confidential</span>
   <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
 </div>
 """.strip()

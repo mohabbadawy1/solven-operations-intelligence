@@ -1,0 +1,800 @@
+snag_id,handover_id,unit_id,category,severity,created_at,target_resolution_date,resolved_at,status,contractor,reopen_count
+SNG-00001,HAN-0001,MER-P1-B1-01653,HVAC,Major,2025-10-26,2025-11-25,2025-12-08,Resolved,Nile Engineering Contractors,0
+SNG-00002,HAN-0003,MER-P1-B1-01655,Flooring,Minor,2025-11-03,2025-11-10,2025-11-12,Resolved,Delta Construction Group,0
+SNG-00003,HAN-0003,MER-P1-B1-01655,Doors & Windows,Minor,2025-10-20,2025-10-27,2025-10-28,Resolved,Prime MEP Solutions,0
+SNG-00004,HAN-0003,MER-P1-B1-01655,Flooring,Minor,2025-10-25,2025-11-01,,Open,Nile Engineering Contractors,0
+SNG-00005,HAN-0004,MER-P1-B1-01657,Structural,Moderate,2025-10-17,2025-10-31,,In Progress,Prime MEP Solutions,0
+SNG-00006,HAN-0004,MER-P1-B1-01657,Paint & Finishing,Minor,2025-10-23,2025-10-30,,In Progress,Cairo Structural Works,0
+SNG-00007,HAN-0005,MER-P1-B1-01658,Doors & Windows,Minor,2025-10-28,2025-11-04,2025-11-04,Resolved,Cairo Structural Works,0
+SNG-00008,HAN-0005,MER-P1-B1-01658,Plumbing,Minor,2025-10-14,2025-10-21,2025-10-22,Resolved,Cairo Structural Works,1
+SNG-00009,HAN-0006,MER-P1-B1-01659,Structural,Moderate,2025-10-18,2025-11-01,2025-11-02,Resolved,Horizon Build Partners,0
+SNG-00010,HAN-0006,MER-P1-B1-01659,Electrical,Minor,2025-10-23,2025-10-30,,Open,Prime MEP Solutions,0
+SNG-00011,HAN-0007,MER-P1-B1-01660,Paint & Finishing,Minor,2025-11-04,2025-11-11,2025-11-09,Resolved,Delta Construction Group,1
+SNG-00012,HAN-0007,MER-P1-B1-01660,Plumbing,Minor,2025-11-17,2025-11-24,2025-11-24,Resolved,Nile Engineering Contractors,1
+SNG-00013,HAN-0007,MER-P1-B1-01660,Flooring,Major,2025-11-03,2025-12-03,2025-12-07,Resolved,Cairo Structural Works,0
+SNG-00014,HAN-0008,MER-P1-B1-01661,Doors & Windows,Minor,2025-10-12,2025-10-19,,In Progress,Modern Facade Systems,0
+SNG-00015,HAN-0009,MER-P1-B1-01662,Paint & Finishing,Minor,2025-10-25,2025-11-01,,Open,Nile Engineering Contractors,0
+SNG-00016,HAN-0009,MER-P1-B1-01662,Flooring,Minor,2025-10-26,2025-11-02,2025-11-02,Resolved,Nile Engineering Contractors,0
+SNG-00017,HAN-0010,MER-P1-B1-01663,HVAC,Major,2025-10-19,2025-11-18,2025-12-09,Resolved,Prime MEP Solutions,0
+SNG-00018,HAN-0012,MER-P1-B1-01665,Plumbing,Moderate,2025-10-13,2025-10-27,2025-10-31,Resolved,Modern Facade Systems,0
+SNG-00019,HAN-0012,MER-P1-B1-01665,Flooring,Moderate,2025-10-14,2025-10-28,2025-11-04,Resolved,Prime MEP Solutions,0
+SNG-00020,HAN-0012,MER-P1-B1-01665,Paint & Finishing,Minor,2025-10-24,2025-10-31,2025-11-01,Resolved,Prime MEP Solutions,0
+SNG-00021,HAN-0013,MER-P1-B1-01666,Flooring,Moderate,2025-10-20,2025-11-03,,Open,Modern Facade Systems,0
+SNG-00022,HAN-0014,MER-P1-B1-01668,Paint & Finishing,Moderate,2025-11-07,2025-11-21,,Open,Delta Construction Group,0
+SNG-00023,HAN-0014,MER-P1-B1-01668,Electrical,Minor,2025-10-29,2025-11-05,2025-11-07,Resolved,Prime MEP Solutions,0
+SNG-00024,HAN-0014,MER-P1-B1-01668,Electrical,Moderate,2025-10-31,2025-11-14,,Open,Horizon Build Partners,0
+SNG-00025,HAN-0016,MER-P1-B1-01671,Doors & Windows,Moderate,2025-10-24,2025-11-07,2025-11-12,Resolved,Modern Facade Systems,0
+SNG-00026,HAN-0016,MER-P1-B1-01671,Structural,Major,2025-10-13,2025-11-12,,Open,Prime MEP Solutions,0
+SNG-00027,HAN-0017,MER-P1-B1-01672,Paint & Finishing,Minor,2025-11-04,2025-11-11,,Open,Delta Construction Group,0
+SNG-00028,HAN-0017,MER-P1-B1-01672,Electrical,Major,2025-10-31,2025-11-30,,Open,Prime MEP Solutions,0
+SNG-00029,HAN-0018,MER-P1-B1-01673,Plumbing,Moderate,2025-10-21,2025-11-04,2025-11-04,Resolved,Modern Facade Systems,0
+SNG-00030,HAN-0018,MER-P1-B1-01673,Electrical,Major,2025-10-18,2025-11-17,,Open,Delta Construction Group,0
+SNG-00031,HAN-0018,MER-P1-B1-01673,Flooring,Major,2025-10-13,2025-11-12,2025-11-20,Resolved,Delta Construction Group,0
+SNG-00032,HAN-0019,MER-P1-B1-01674,Flooring,Moderate,2025-10-24,2025-11-07,2025-11-13,Resolved,Cairo Structural Works,0
+SNG-00033,HAN-0019,MER-P1-B1-01674,HVAC,Minor,2025-10-24,2025-10-31,2025-11-02,Resolved,Nile Engineering Contractors,0
+SNG-00034,HAN-0019,MER-P1-B1-01674,Doors & Windows,Minor,2025-11-06,2025-11-13,,Open,Delta Construction Group,0
+SNG-00035,HAN-0020,MER-P1-B1-01675,Doors & Windows,Moderate,2025-10-29,2025-11-12,2025-11-17,Resolved,Cairo Structural Works,0
+SNG-00036,HAN-0020,MER-P1-B1-01675,Structural,Minor,2025-10-27,2025-11-03,,Open,Cairo Structural Works,0
+SNG-00037,HAN-0020,MER-P1-B1-01675,Plumbing,Major,2025-10-16,2025-11-15,2025-11-10,Resolved,Prime MEP Solutions,0
+SNG-00038,HAN-0022,MER-P1-B1-01677,Structural,Major,2025-10-22,2025-11-21,,Open,Prime MEP Solutions,0
+SNG-00039,HAN-0024,MER-P1-B1-01679,Paint & Finishing,Moderate,2025-10-15,2025-10-29,2025-11-02,Resolved,Prime MEP Solutions,0
+SNG-00040,HAN-0025,MER-P1-B1-01680,Structural,Minor,2025-11-19,2025-11-26,2025-11-27,Resolved,Delta Construction Group,0
+SNG-00041,HAN-0027,MER-P1-B1-01682,HVAC,Moderate,2025-10-22,2025-11-05,2025-11-15,Resolved,Horizon Build Partners,0
+SNG-00042,HAN-0027,MER-P1-B1-01682,Flooring,Minor,2025-10-22,2025-10-29,2025-11-03,Resolved,Nile Engineering Contractors,0
+SNG-00043,HAN-0027,MER-P1-B1-01682,Plumbing,Minor,2025-10-28,2025-11-04,2025-11-04,Resolved,Horizon Build Partners,0
+SNG-00044,HAN-0028,MER-P1-B1-01684,HVAC,Moderate,2025-10-13,2025-10-27,2025-11-04,Resolved,Nile Engineering Contractors,0
+SNG-00045,HAN-0028,MER-P1-B1-01684,HVAC,Minor,2025-10-30,2025-11-06,,In Progress,Nile Engineering Contractors,0
+SNG-00046,HAN-0029,MER-P1-B1-01685,Structural,Minor,2025-10-26,2025-11-02,2025-11-03,Resolved,Nile Engineering Contractors,0
+SNG-00047,HAN-0029,MER-P1-B1-01685,Structural,Minor,2025-11-01,2025-11-08,2025-11-07,Resolved,Modern Facade Systems,0
+SNG-00048,HAN-0029,MER-P1-B1-01685,Paint & Finishing,Major,2025-11-01,2025-12-01,2025-12-19,Resolved,Cairo Structural Works,0
+SNG-00049,HAN-0031,MER-P1-B1-01687,Paint & Finishing,Moderate,2025-10-28,2025-11-11,2025-11-18,Resolved,Horizon Build Partners,0
+SNG-00050,HAN-0031,MER-P1-B1-01687,Electrical,Moderate,2025-11-01,2025-11-15,2025-11-12,Resolved,Nile Engineering Contractors,0
+SNG-00051,HAN-0032,MER-P1-B1-01689,HVAC,Minor,2025-10-24,2025-10-31,,Open,Modern Facade Systems,0
+SNG-00052,HAN-0034,MER-P1-B2-01694,Electrical,Minor,2025-10-13,2025-10-20,2025-10-25,Resolved,Delta Construction Group,0
+SNG-00053,HAN-0034,MER-P1-B2-01694,Doors & Windows,Minor,2025-10-27,2025-11-03,,Open,Nile Engineering Contractors,0
+SNG-00054,HAN-0034,MER-P1-B2-01694,Flooring,Minor,2025-10-21,2025-10-28,2025-10-29,Resolved,Nile Engineering Contractors,0
+SNG-00055,HAN-0035,MER-P1-B2-01695,Doors & Windows,Minor,2025-10-25,2025-11-01,2025-10-31,Resolved,Delta Construction Group,0
+SNG-00056,HAN-0036,MER-P1-B2-01696,HVAC,Minor,2025-10-20,2025-10-27,2025-10-30,Resolved,Cairo Structural Works,0
+SNG-00057,HAN-0037,MER-P1-B2-01699,Flooring,Moderate,2025-11-05,2025-11-19,,Open,Delta Construction Group,0
+SNG-00058,HAN-0037,MER-P1-B2-01699,Structural,Major,2025-10-28,2025-11-27,2025-12-05,Resolved,Prime MEP Solutions,0
+SNG-00059,HAN-0037,MER-P1-B2-01699,Paint & Finishing,Minor,2025-10-23,2025-10-30,2025-10-31,Resolved,Nile Engineering Contractors,0
+SNG-00060,HAN-0038,MER-P1-B2-01700,HVAC,Minor,2025-10-22,2025-10-29,,Open,Cairo Structural Works,0
+SNG-00061,HAN-0038,MER-P1-B2-01700,Flooring,Moderate,2025-11-01,2025-11-15,2025-11-12,Resolved,Modern Facade Systems,0
+SNG-00062,HAN-0040,MER-P1-B2-01702,Paint & Finishing,Moderate,2025-10-16,2025-10-30,,In Progress,Horizon Build Partners,0
+SNG-00063,HAN-0042,MER-P1-B2-01705,HVAC,Moderate,2025-10-30,2025-11-13,,In Progress,Nile Engineering Contractors,0
+SNG-00064,HAN-0042,MER-P1-B2-01705,Plumbing,Moderate,2025-11-09,2025-11-23,,In Progress,Horizon Build Partners,0
+SNG-00065,HAN-0042,MER-P1-B2-01705,HVAC,Moderate,2025-10-25,2025-11-08,2025-11-04,Resolved,Nile Engineering Contractors,0
+SNG-00066,HAN-0043,MER-P1-B2-01706,Structural,Minor,2025-10-17,2025-10-24,2025-10-24,Resolved,Nile Engineering Contractors,1
+SNG-00067,HAN-0043,MER-P1-B2-01706,Flooring,Minor,2025-10-22,2025-10-29,,Open,Nile Engineering Contractors,0
+SNG-00068,HAN-0043,MER-P1-B2-01706,Flooring,Minor,2025-10-14,2025-10-21,2025-10-20,Resolved,Horizon Build Partners,0
+SNG-00069,HAN-0044,MER-P1-B2-01709,Doors & Windows,Minor,2025-10-27,2025-11-03,2025-11-03,Resolved,Cairo Structural Works,0
+SNG-00070,HAN-0045,MER-P1-B2-01710,Flooring,Minor,2025-10-17,2025-10-24,,Open,Nile Engineering Contractors,0
+SNG-00071,HAN-0045,MER-P1-B2-01710,Doors & Windows,Major,2025-10-20,2025-11-19,2025-11-07,Resolved,Cairo Structural Works,0
+SNG-00072,HAN-0045,MER-P1-B2-01710,Electrical,Moderate,2025-10-24,2025-11-07,2025-11-13,Resolved,Cairo Structural Works,0
+SNG-00073,HAN-0046,MER-P1-B2-01711,Flooring,Minor,2025-11-05,2025-11-12,2025-11-17,Resolved,Prime MEP Solutions,0
+SNG-00074,HAN-0046,MER-P1-B2-01711,Electrical,Minor,2025-10-17,2025-10-24,,In Progress,Modern Facade Systems,0
+SNG-00075,HAN-0049,MER-P1-B2-01715,Structural,Moderate,2025-10-06,2025-10-20,2025-10-31,Resolved,Delta Construction Group,0
+SNG-00076,HAN-0049,MER-P1-B2-01715,Doors & Windows,Moderate,2025-10-07,2025-10-21,2025-10-27,Resolved,Horizon Build Partners,0
+SNG-00077,HAN-0050,MER-P1-B2-01716,Paint & Finishing,Minor,2025-10-06,2025-10-13,2025-10-15,Resolved,Delta Construction Group,0
+SNG-00078,HAN-0054,MER-P1-B2-01722,Plumbing,Moderate,2025-10-16,2025-10-30,2025-11-07,Resolved,Prime MEP Solutions,0
+SNG-00079,HAN-0054,MER-P1-B2-01722,Electrical,Minor,2025-10-31,2025-11-07,2025-11-07,Resolved,Delta Construction Group,0
+SNG-00080,HAN-0054,MER-P1-B2-01722,HVAC,Moderate,2025-10-16,2025-10-30,,In Progress,Nile Engineering Contractors,0
+SNG-00081,HAN-0056,MER-P1-B2-01724,Flooring,Minor,2025-11-04,2025-11-11,2025-11-09,Resolved,Prime MEP Solutions,0
+SNG-00082,HAN-0056,MER-P1-B2-01724,Flooring,Minor,2025-10-25,2025-11-01,,Open,Prime MEP Solutions,0
+SNG-00083,HAN-0056,MER-P1-B2-01724,Electrical,Minor,2025-11-03,2025-11-10,2025-11-15,Resolved,Prime MEP Solutions,0
+SNG-00084,HAN-0057,MER-P1-B2-01725,Structural,Minor,2025-10-22,2025-10-29,2025-10-27,Resolved,Nile Engineering Contractors,0
+SNG-00085,HAN-0058,MER-P1-B2-01726,Electrical,Minor,2025-10-30,2025-11-06,,Open,Cairo Structural Works,0
+SNG-00086,HAN-0058,MER-P1-B2-01726,HVAC,Moderate,2025-11-01,2025-11-15,,Open,Cairo Structural Works,0
+SNG-00087,HAN-0058,MER-P1-B2-01726,Flooring,Moderate,2025-10-29,2025-11-12,,In Progress,Modern Facade Systems,0
+SNG-00088,HAN-0059,MER-P1-B3-01727,HVAC,Moderate,2026-02-09,2026-02-23,,Open,Nile Engineering Contractors,0
+SNG-00089,HAN-0059,MER-P1-B3-01727,Structural,Minor,2026-02-14,2026-02-21,,Open,Cairo Structural Works,0
+SNG-00090,HAN-0059,MER-P1-B3-01727,Plumbing,Major,2026-02-10,2026-03-12,2026-03-14,Resolved,Cairo Structural Works,1
+SNG-00091,HAN-0060,MER-P1-B3-01728,Flooring,Moderate,2026-01-02,2026-01-16,,Open,Delta Construction Group,0
+SNG-00092,HAN-0060,MER-P1-B3-01728,Electrical,Major,2026-01-09,2026-02-08,2026-02-25,Resolved,Horizon Build Partners,0
+SNG-00093,HAN-0060,MER-P1-B3-01728,Electrical,Moderate,2025-12-28,2026-01-11,,Open,Horizon Build Partners,0
+SNG-00094,HAN-0061,MER-P1-B3-01730,Paint & Finishing,Major,2026-02-10,2026-03-12,2026-03-08,Resolved,Delta Construction Group,0
+SNG-00095,HAN-0061,MER-P1-B3-01730,Plumbing,Moderate,2026-02-12,2026-02-26,2026-03-05,Resolved,Cairo Structural Works,0
+SNG-00096,HAN-0061,MER-P1-B3-01730,Paint & Finishing,Minor,2026-02-16,2026-02-23,,Open,Horizon Build Partners,0
+SNG-00097,HAN-0061,MER-P1-B3-01730,Flooring,Minor,2026-02-20,2026-02-27,,In Progress,Delta Construction Group,0
+SNG-00098,HAN-0061,MER-P1-B3-01730,Paint & Finishing,Moderate,2026-02-11,2026-02-25,,In Progress,Cairo Structural Works,0
+SNG-00099,HAN-0061,MER-P1-B3-01730,Paint & Finishing,Moderate,2026-02-08,2026-02-22,2026-03-02,Resolved,Cairo Structural Works,0
+SNG-00100,HAN-0061,MER-P1-B3-01730,HVAC,Major,2026-02-21,2026-03-23,,Open,Modern Facade Systems,0
+SNG-00101,HAN-0062,MER-P1-B3-01731,Electrical,Major,2026-02-24,2026-03-26,2026-04-12,Resolved,Horizon Build Partners,0
+SNG-00102,HAN-0062,MER-P1-B3-01731,Structural,Minor,2026-03-01,2026-03-08,,In Progress,Delta Construction Group,0
+SNG-00103,HAN-0062,MER-P1-B3-01731,Structural,Minor,2026-03-07,2026-03-14,2026-03-17,Resolved,Modern Facade Systems,0
+SNG-00104,HAN-0063,MER-P1-B3-01732,HVAC,Minor,2026-03-06,2026-03-13,2026-03-11,Resolved,Modern Facade Systems,0
+SNG-00105,HAN-0063,MER-P1-B3-01732,Electrical,Minor,2026-03-02,2026-03-09,2026-03-12,Resolved,Modern Facade Systems,0
+SNG-00106,HAN-0063,MER-P1-B3-01732,Plumbing,Major,2026-03-17,2026-04-16,,Open,Horizon Build Partners,0
+SNG-00107,HAN-0063,MER-P1-B3-01732,Doors & Windows,Moderate,2026-03-10,2026-03-24,2026-04-02,Resolved,Nile Engineering Contractors,0
+SNG-00108,HAN-0063,MER-P1-B3-01732,Doors & Windows,Major,2026-02-26,2026-03-28,2026-04-06,Resolved,Delta Construction Group,0
+SNG-00109,HAN-0063,MER-P1-B3-01732,Flooring,Major,2026-02-26,2026-03-28,,Open,Nile Engineering Contractors,0
+SNG-00110,HAN-0063,MER-P1-B3-01732,Plumbing,Moderate,2026-03-03,2026-03-17,,Open,Nile Engineering Contractors,0
+SNG-00111,HAN-0064,MER-P1-B3-01735,Paint & Finishing,Minor,2026-01-06,2026-01-13,,In Progress,Nile Engineering Contractors,0
+SNG-00112,HAN-0064,MER-P1-B3-01735,Paint & Finishing,Major,2025-12-28,2026-01-27,,Open,Nile Engineering Contractors,0
+SNG-00113,HAN-0064,MER-P1-B3-01735,Flooring,Major,2025-12-30,2026-01-29,2026-01-22,Resolved,Horizon Build Partners,0
+SNG-00114,HAN-0064,MER-P1-B3-01735,Structural,Moderate,2026-01-03,2026-01-17,2026-01-21,Resolved,Horizon Build Partners,0
+SNG-00115,HAN-0064,MER-P1-B3-01735,Flooring,Major,2026-01-02,2026-02-01,,In Progress,Horizon Build Partners,0
+SNG-00116,HAN-0064,MER-P1-B3-01735,Paint & Finishing,Minor,2026-01-05,2026-01-12,2026-01-12,Resolved,Horizon Build Partners,0
+SNG-00117,HAN-0064,MER-P1-B3-01735,HVAC,Moderate,2025-12-31,2026-01-14,2026-01-18,Resolved,Cairo Structural Works,0
+SNG-00118,HAN-0065,MER-P1-B3-01736,Plumbing,Minor,2026-03-15,2026-03-22,2026-03-26,Resolved,Cairo Structural Works,0
+SNG-00119,HAN-0065,MER-P1-B3-01736,Electrical,Major,2026-03-18,2026-04-17,,In Progress,Prime MEP Solutions,0
+SNG-00120,HAN-0065,MER-P1-B3-01736,Electrical,Major,2026-03-19,2026-04-18,,Open,Horizon Build Partners,0
+SNG-00121,HAN-0065,MER-P1-B3-01736,Flooring,Major,2026-03-20,2026-04-19,,Open,Cairo Structural Works,0
+SNG-00122,HAN-0066,MER-P1-B3-01737,Paint & Finishing,Moderate,2025-12-23,2026-01-06,,Open,Delta Construction Group,0
+SNG-00123,HAN-0066,MER-P1-B3-01737,Electrical,Moderate,2025-12-29,2026-01-12,2026-01-10,Resolved,Modern Facade Systems,1
+SNG-00124,HAN-0066,MER-P1-B3-01737,Doors & Windows,Major,2025-12-22,2026-01-21,2026-02-01,Resolved,Nile Engineering Contractors,0
+SNG-00125,HAN-0066,MER-P1-B3-01737,Electrical,Minor,2026-01-06,2026-01-13,2026-01-14,Resolved,Horizon Build Partners,0
+SNG-00126,HAN-0066,MER-P1-B3-01737,Plumbing,Moderate,2026-01-06,2026-01-20,2026-01-15,Resolved,Delta Construction Group,0
+SNG-00127,HAN-0066,MER-P1-B3-01737,Flooring,Moderate,2025-12-24,2026-01-07,,In Progress,Modern Facade Systems,0
+SNG-00128,HAN-0066,MER-P1-B3-01737,Plumbing,Minor,2025-12-23,2025-12-30,2025-12-30,Resolved,Horizon Build Partners,1
+SNG-00129,HAN-0067,MER-P1-B3-01738,Structural,Major,2026-03-16,2026-04-15,,Open,Delta Construction Group,0
+SNG-00130,HAN-0067,MER-P1-B3-01738,Doors & Windows,Major,2026-03-05,2026-04-04,,Open,Horizon Build Partners,0
+SNG-00131,HAN-0067,MER-P1-B3-01738,Electrical,Moderate,2026-03-08,2026-03-22,,In Progress,Modern Facade Systems,0
+SNG-00132,HAN-0067,MER-P1-B3-01738,Flooring,Minor,2026-03-12,2026-03-19,2026-03-18,Resolved,Horizon Build Partners,0
+SNG-00133,HAN-0068,MER-P1-B3-01739,Flooring,Major,2025-12-18,2026-01-17,,Open,Cairo Structural Works,0
+SNG-00134,HAN-0068,MER-P1-B3-01739,Electrical,Minor,2025-12-14,2025-12-21,2025-12-24,Resolved,Delta Construction Group,1
+SNG-00135,HAN-0068,MER-P1-B3-01739,HVAC,Minor,2025-12-30,2026-01-06,,Open,Prime MEP Solutions,0
+SNG-00136,HAN-0068,MER-P1-B3-01739,Flooring,Major,2025-12-20,2026-01-19,,Open,Horizon Build Partners,0
+SNG-00137,HAN-0068,MER-P1-B3-01739,Flooring,Major,2025-12-21,2026-01-20,2026-01-09,Resolved,Cairo Structural Works,0
+SNG-00138,HAN-0069,MER-P1-B3-01740,Flooring,Moderate,2026-02-01,2026-02-15,2026-02-22,Resolved,Prime MEP Solutions,0
+SNG-00139,HAN-0069,MER-P1-B3-01740,Doors & Windows,Moderate,2026-01-14,2026-01-28,,Open,Prime MEP Solutions,0
+SNG-00140,HAN-0069,MER-P1-B3-01740,Doors & Windows,Major,2026-01-22,2026-02-21,,In Progress,Nile Engineering Contractors,0
+SNG-00141,HAN-0070,MER-P1-B3-01741,HVAC,Major,2026-02-23,2026-03-25,,Open,Prime MEP Solutions,0
+SNG-00142,HAN-0070,MER-P1-B3-01741,Plumbing,Moderate,2026-02-21,2026-03-07,,In Progress,Horizon Build Partners,0
+SNG-00143,HAN-0070,MER-P1-B3-01741,Doors & Windows,Major,2026-02-10,2026-03-12,,In Progress,Prime MEP Solutions,0
+SNG-00144,HAN-0070,MER-P1-B3-01741,Structural,Moderate,2026-02-12,2026-02-26,2026-02-21,Resolved,Horizon Build Partners,0
+SNG-00145,HAN-0070,MER-P1-B3-01741,Plumbing,Moderate,2026-02-25,2026-03-11,,In Progress,Horizon Build Partners,0
+SNG-00146,HAN-0070,MER-P1-B3-01741,Plumbing,Moderate,2026-02-26,2026-03-12,2026-03-13,Resolved,Modern Facade Systems,0
+SNG-00147,HAN-0071,MER-P1-B3-01742,HVAC,Minor,2026-01-06,2026-01-13,,In Progress,Prime MEP Solutions,0
+SNG-00148,HAN-0071,MER-P1-B3-01742,Paint & Finishing,Major,2026-01-16,2026-02-15,2026-03-04,Resolved,Delta Construction Group,0
+SNG-00149,HAN-0071,MER-P1-B3-01742,Plumbing,Moderate,2026-01-05,2026-01-19,,Open,Nile Engineering Contractors,0
+SNG-00150,HAN-0071,MER-P1-B3-01742,Flooring,Major,2025-12-30,2026-01-29,,Open,Prime MEP Solutions,0
+SNG-00151,HAN-0072,MER-P1-B3-01744,Doors & Windows,Moderate,2026-01-23,2026-02-06,2026-02-07,Resolved,Cairo Structural Works,0
+SNG-00152,HAN-0072,MER-P1-B3-01744,HVAC,Moderate,2026-02-03,2026-02-17,,Open,Modern Facade Systems,0
+SNG-00153,HAN-0072,MER-P1-B3-01744,Plumbing,Moderate,2026-01-21,2026-02-04,,Open,Modern Facade Systems,0
+SNG-00154,HAN-0073,MER-P1-B3-01745,Structural,Major,2026-02-04,2026-03-06,,Open,Horizon Build Partners,0
+SNG-00155,HAN-0073,MER-P1-B3-01745,Electrical,Minor,2026-01-24,2026-01-31,,In Progress,Delta Construction Group,0
+SNG-00156,HAN-0073,MER-P1-B3-01745,Flooring,Minor,2026-02-02,2026-02-09,2026-02-07,Resolved,Horizon Build Partners,0
+SNG-00157,HAN-0073,MER-P1-B3-01745,HVAC,Major,2026-01-21,2026-02-20,2026-02-28,Resolved,Horizon Build Partners,0
+SNG-00158,HAN-0073,MER-P1-B3-01745,Flooring,Moderate,2026-02-08,2026-02-22,2026-03-01,Resolved,Modern Facade Systems,0
+SNG-00159,HAN-0073,MER-P1-B3-01745,Plumbing,Moderate,2026-01-30,2026-02-13,,Open,Cairo Structural Works,0
+SNG-00160,HAN-0073,MER-P1-B3-01745,Doors & Windows,Minor,2026-02-06,2026-02-13,,Open,Modern Facade Systems,0
+SNG-00161,HAN-0074,MER-P1-B3-01746,Electrical,Major,2026-01-29,2026-02-28,,Open,Delta Construction Group,0
+SNG-00162,HAN-0074,MER-P1-B3-01746,Flooring,Moderate,2026-01-22,2026-02-05,2026-02-06,Resolved,Cairo Structural Works,0
+SNG-00163,HAN-0074,MER-P1-B3-01746,HVAC,Major,2026-02-05,2026-03-07,2026-03-26,Resolved,Horizon Build Partners,0
+SNG-00164,HAN-0074,MER-P1-B3-01746,Structural,Moderate,2026-02-06,2026-02-20,,In Progress,Modern Facade Systems,0
+SNG-00165,HAN-0074,MER-P1-B3-01746,HVAC,Major,2026-01-20,2026-02-19,,Open,Nile Engineering Contractors,0
+SNG-00166,HAN-0074,MER-P1-B3-01746,Flooring,Minor,2026-02-03,2026-02-10,2026-02-08,Resolved,Nile Engineering Contractors,0
+SNG-00167,HAN-0074,MER-P1-B3-01746,Doors & Windows,Moderate,2026-01-24,2026-02-07,,In Progress,Cairo Structural Works,0
+SNG-00168,HAN-0074,MER-P1-B3-01746,Doors & Windows,Moderate,2026-01-22,2026-02-05,,Open,Delta Construction Group,0
+SNG-00169,HAN-0075,MER-P1-B3-01747,Doors & Windows,Moderate,2026-01-21,2026-02-04,2026-02-13,Resolved,Horizon Build Partners,0
+SNG-00170,HAN-0075,MER-P1-B3-01747,Paint & Finishing,Major,2026-01-11,2026-02-10,,Open,Nile Engineering Contractors,0
+SNG-00171,HAN-0075,MER-P1-B3-01747,Flooring,Moderate,2026-01-20,2026-02-03,,Open,Nile Engineering Contractors,0
+SNG-00172,HAN-0076,MER-P1-B3-01749,Flooring,Moderate,2026-03-03,2026-03-17,,Open,Horizon Build Partners,0
+SNG-00173,HAN-0076,MER-P1-B3-01749,Electrical,Major,2026-02-23,2026-03-25,2026-04-09,Resolved,Delta Construction Group,0
+SNG-00174,HAN-0076,MER-P1-B3-01749,Flooring,Major,2026-02-28,2026-03-30,,In Progress,Nile Engineering Contractors,0
+SNG-00175,HAN-0076,MER-P1-B3-01749,Paint & Finishing,Moderate,2026-02-25,2026-03-11,,Open,Nile Engineering Contractors,0
+SNG-00176,HAN-0076,MER-P1-B3-01749,Plumbing,Major,2026-02-14,2026-03-16,2026-04-07,Resolved,Cairo Structural Works,0
+SNG-00177,HAN-0076,MER-P1-B3-01749,Plumbing,Major,2026-03-03,2026-04-02,,Open,Nile Engineering Contractors,0
+SNG-00178,HAN-0077,MER-P1-B3-01750,Flooring,Major,2026-01-09,2026-02-08,2026-02-05,Resolved,Prime MEP Solutions,0
+SNG-00179,HAN-0077,MER-P1-B3-01750,Doors & Windows,Major,2026-01-17,2026-02-16,,Open,Prime MEP Solutions,0
+SNG-00180,HAN-0077,MER-P1-B3-01750,Doors & Windows,Major,2026-01-12,2026-02-11,2026-02-27,Resolved,Modern Facade Systems,1
+SNG-00181,HAN-0078,MER-P1-B3-01751,HVAC,Major,2026-01-16,2026-02-15,2026-02-10,Resolved,Cairo Structural Works,0
+SNG-00182,HAN-0078,MER-P1-B3-01751,Doors & Windows,Moderate,2026-01-05,2026-01-19,,In Progress,Prime MEP Solutions,0
+SNG-00183,HAN-0078,MER-P1-B3-01751,Electrical,Major,2026-01-19,2026-02-18,,Open,Horizon Build Partners,0
+SNG-00184,HAN-0078,MER-P1-B3-01751,Plumbing,Minor,2026-01-09,2026-01-16,,Open,Modern Facade Systems,0
+SNG-00185,HAN-0078,MER-P1-B3-01751,Paint & Finishing,Moderate,2026-01-24,2026-02-07,,Open,Modern Facade Systems,0
+SNG-00186,HAN-0078,MER-P1-B3-01751,Flooring,Moderate,2026-01-23,2026-02-06,,Open,Cairo Structural Works,0
+SNG-00187,HAN-0078,MER-P1-B3-01751,Flooring,Major,2026-01-16,2026-02-15,,Open,Prime MEP Solutions,0
+SNG-00188,HAN-0079,MER-P1-B3-01752,HVAC,Major,2026-03-21,2026-04-20,,In Progress,Horizon Build Partners,0
+SNG-00189,HAN-0079,MER-P1-B3-01752,Flooring,Major,2026-03-23,2026-04-22,2026-04-21,Resolved,Delta Construction Group,0
+SNG-00190,HAN-0079,MER-P1-B3-01752,Paint & Finishing,Moderate,2026-03-04,2026-03-18,,Open,Modern Facade Systems,0
+SNG-00191,HAN-0079,MER-P1-B3-01752,Plumbing,Minor,2026-03-21,2026-03-28,,In Progress,Prime MEP Solutions,0
+SNG-00192,HAN-0079,MER-P1-B3-01752,Structural,Minor,2026-03-21,2026-03-28,2026-03-31,Resolved,Prime MEP Solutions,0
+SNG-00193,HAN-0079,MER-P1-B3-01752,HVAC,Minor,2026-03-13,2026-03-20,2026-03-23,Resolved,Modern Facade Systems,0
+SNG-00194,HAN-0079,MER-P1-B3-01752,Plumbing,Moderate,2026-03-21,2026-04-04,,Open,Modern Facade Systems,0
+SNG-00195,HAN-0079,MER-P1-B3-01752,Flooring,Minor,2026-03-12,2026-03-19,2026-03-18,Resolved,Delta Construction Group,1
+SNG-00196,HAN-0080,MER-P1-B3-01753,HVAC,Moderate,2026-01-23,2026-02-06,2026-02-13,Resolved,Prime MEP Solutions,0
+SNG-00197,HAN-0080,MER-P1-B3-01753,HVAC,Minor,2026-02-01,2026-02-08,2026-02-06,Resolved,Horizon Build Partners,0
+SNG-00198,HAN-0080,MER-P1-B3-01753,HVAC,Major,2026-01-27,2026-02-26,2026-03-11,Resolved,Delta Construction Group,0
+SNG-00199,HAN-0080,MER-P1-B3-01753,Flooring,Minor,2026-01-28,2026-02-04,,Open,Cairo Structural Works,0
+SNG-00200,HAN-0080,MER-P1-B3-01753,Electrical,Major,2026-01-25,2026-02-24,,Open,Cairo Structural Works,0
+SNG-00201,HAN-0080,MER-P1-B3-01753,Plumbing,Minor,2026-02-05,2026-02-12,2026-02-16,Resolved,Prime MEP Solutions,0
+SNG-00202,HAN-0081,MER-P1-B3-01754,Doors & Windows,Major,2026-02-18,2026-03-20,2026-03-29,Resolved,Delta Construction Group,0
+SNG-00203,HAN-0081,MER-P1-B3-01754,Structural,Moderate,2026-02-17,2026-03-03,2026-02-27,Resolved,Cairo Structural Works,0
+SNG-00204,HAN-0081,MER-P1-B3-01754,Plumbing,Major,2026-02-19,2026-03-21,,In Progress,Nile Engineering Contractors,0
+SNG-00205,HAN-0081,MER-P1-B3-01754,HVAC,Minor,2026-02-21,2026-02-28,,Open,Prime MEP Solutions,0
+SNG-00206,HAN-0082,MER-P1-B3-01755,Flooring,Moderate,2026-03-01,2026-03-15,,Open,Delta Construction Group,0
+SNG-00207,HAN-0082,MER-P1-B3-01755,Structural,Major,2026-02-23,2026-03-25,2026-03-20,Resolved,Nile Engineering Contractors,1
+SNG-00208,HAN-0082,MER-P1-B3-01755,Plumbing,Major,2026-02-19,2026-03-21,,Open,Modern Facade Systems,0
+SNG-00209,HAN-0082,MER-P1-B3-01755,Structural,Moderate,2026-03-06,2026-03-20,,Open,Cairo Structural Works,0
+SNG-00210,HAN-0082,MER-P1-B3-01755,HVAC,Moderate,2026-03-09,2026-03-23,2026-03-23,Resolved,Modern Facade Systems,0
+SNG-00211,HAN-0082,MER-P1-B3-01755,Paint & Finishing,Moderate,2026-03-03,2026-03-17,2026-03-24,Resolved,Cairo Structural Works,0
+SNG-00212,HAN-0082,MER-P1-B3-01755,Paint & Finishing,Minor,2026-03-03,2026-03-10,,In Progress,Delta Construction Group,0
+SNG-00213,HAN-0083,MER-P1-B3-01756,Structural,Major,2025-12-16,2026-01-15,,In Progress,Horizon Build Partners,0
+SNG-00214,HAN-0083,MER-P1-B3-01756,Structural,Moderate,2025-12-17,2025-12-31,2025-12-30,Resolved,Modern Facade Systems,0
+SNG-00215,HAN-0083,MER-P1-B3-01756,Structural,Major,2025-12-15,2026-01-14,2026-01-21,Resolved,Cairo Structural Works,0
+SNG-00216,HAN-0083,MER-P1-B3-01756,Paint & Finishing,Major,2025-12-11,2026-01-10,2026-01-18,Resolved,Modern Facade Systems,1
+SNG-00217,HAN-0083,MER-P1-B3-01756,Plumbing,Major,2025-12-06,2026-01-05,,Open,Cairo Structural Works,0
+SNG-00218,HAN-0083,MER-P1-B3-01756,Plumbing,Minor,2025-12-11,2025-12-18,2025-12-18,Resolved,Prime MEP Solutions,0
+SNG-00219,HAN-0083,MER-P1-B3-01756,Plumbing,Moderate,2025-12-19,2026-01-02,2026-01-10,Resolved,Nile Engineering Contractors,0
+SNG-00220,HAN-0084,MER-P1-B3-01757,Flooring,Major,2026-03-09,2026-04-08,,In Progress,Delta Construction Group,0
+SNG-00221,HAN-0084,MER-P1-B3-01757,Doors & Windows,Moderate,2026-03-09,2026-03-23,,In Progress,Prime MEP Solutions,0
+SNG-00222,HAN-0084,MER-P1-B3-01757,Plumbing,Major,2026-03-14,2026-04-13,2026-04-15,Resolved,Delta Construction Group,1
+SNG-00223,HAN-0084,MER-P1-B3-01757,Doors & Windows,Moderate,2026-03-21,2026-04-04,,In Progress,Prime MEP Solutions,0
+SNG-00224,HAN-0084,MER-P1-B3-01757,Structural,Minor,2026-03-16,2026-03-23,,Open,Prime MEP Solutions,0
+SNG-00225,HAN-0084,MER-P1-B3-01757,Paint & Finishing,Minor,2026-03-23,2026-03-30,,Open,Nile Engineering Contractors,0
+SNG-00226,HAN-0084,MER-P1-B3-01757,Doors & Windows,Moderate,2026-03-18,2026-04-01,2026-03-28,Resolved,Delta Construction Group,0
+SNG-00227,HAN-0084,MER-P1-B3-01757,HVAC,Major,2026-03-09,2026-04-08,,In Progress,Delta Construction Group,0
+SNG-00228,HAN-0085,MER-P1-B3-01758,HVAC,Major,2026-03-02,2026-04-01,,Open,Delta Construction Group,0
+SNG-00229,HAN-0085,MER-P1-B3-01758,Structural,Minor,2026-03-02,2026-03-09,,Open,Horizon Build Partners,0
+SNG-00230,HAN-0085,MER-P1-B3-01758,Paint & Finishing,Moderate,2026-03-05,2026-03-19,2026-03-27,Resolved,Modern Facade Systems,0
+SNG-00231,HAN-0085,MER-P1-B3-01758,Structural,Major,2026-03-04,2026-04-03,2026-04-22,Resolved,Delta Construction Group,0
+SNG-00232,HAN-0086,MER-P1-B3-01759,Doors & Windows,Moderate,2026-01-12,2026-01-26,,Open,Nile Engineering Contractors,0
+SNG-00233,HAN-0086,MER-P1-B3-01759,Doors & Windows,Major,2026-01-16,2026-02-15,,Open,Prime MEP Solutions,0
+SNG-00234,HAN-0086,MER-P1-B3-01759,Structural,Moderate,2026-01-15,2026-01-29,,In Progress,Horizon Build Partners,0
+SNG-00235,HAN-0086,MER-P1-B3-01759,Flooring,Major,2026-01-18,2026-02-17,2026-02-18,Resolved,Modern Facade Systems,0
+SNG-00236,HAN-0086,MER-P1-B3-01759,Plumbing,Moderate,2026-01-11,2026-01-25,,Open,Delta Construction Group,0
+SNG-00237,HAN-0086,MER-P1-B3-01759,HVAC,Major,2026-01-19,2026-02-18,2026-02-27,Resolved,Prime MEP Solutions,0
+SNG-00238,HAN-0087,MER-P1-B3-01760,Structural,Moderate,2026-03-04,2026-03-18,,Open,Nile Engineering Contractors,0
+SNG-00239,HAN-0087,MER-P1-B3-01760,Paint & Finishing,Major,2026-03-13,2026-04-12,,In Progress,Delta Construction Group,0
+SNG-00240,HAN-0087,MER-P1-B3-01760,HVAC,Major,2026-03-08,2026-04-07,2026-04-15,Resolved,Modern Facade Systems,0
+SNG-00241,HAN-0088,MER-P1-B3-01762,Structural,Minor,2026-02-13,2026-02-20,2026-02-21,Resolved,Cairo Structural Works,0
+SNG-00242,HAN-0088,MER-P1-B3-01762,HVAC,Minor,2026-01-27,2026-02-03,,Open,Delta Construction Group,0
+SNG-00243,HAN-0088,MER-P1-B3-01762,Electrical,Major,2026-02-06,2026-03-08,,In Progress,Nile Engineering Contractors,0
+SNG-00244,HAN-0089,MER-P1-B3-01763,Structural,Minor,2026-02-14,2026-02-21,,Open,Delta Construction Group,0
+SNG-00245,HAN-0089,MER-P1-B3-01763,HVAC,Moderate,2026-02-09,2026-02-23,,In Progress,Nile Engineering Contractors,0
+SNG-00246,HAN-0089,MER-P1-B3-01763,Paint & Finishing,Moderate,2026-01-31,2026-02-14,,In Progress,Prime MEP Solutions,0
+SNG-00247,HAN-0089,MER-P1-B3-01763,Plumbing,Moderate,2026-02-17,2026-03-03,,Open,Horizon Build Partners,0
+SNG-00248,HAN-0089,MER-P1-B3-01763,HVAC,Major,2026-02-02,2026-03-04,,Open,Cairo Structural Works,0
+SNG-00249,HAN-0089,MER-P1-B3-01763,Electrical,Major,2026-02-05,2026-03-07,2026-03-10,Resolved,Nile Engineering Contractors,0
+SNG-00250,HAN-0090,MER-P1-B4-01764,Structural,Major,2026-02-12,2026-03-14,,In Progress,Prime MEP Solutions,0
+SNG-00251,HAN-0090,MER-P1-B4-01764,Paint & Finishing,Major,2026-01-30,2026-03-01,2026-03-03,Resolved,Modern Facade Systems,1
+SNG-00252,HAN-0090,MER-P1-B4-01764,Plumbing,Moderate,2026-02-17,2026-03-03,,Open,Cairo Structural Works,0
+SNG-00253,HAN-0090,MER-P1-B4-01764,Paint & Finishing,Minor,2026-02-10,2026-02-17,2026-02-14,Resolved,Cairo Structural Works,0
+SNG-00254,HAN-0091,MER-P1-B4-01765,HVAC,Major,2026-01-07,2026-02-06,2026-01-28,Resolved,Prime MEP Solutions,0
+SNG-00255,HAN-0091,MER-P1-B4-01765,Plumbing,Major,2026-01-10,2026-02-09,2026-02-11,Resolved,Delta Construction Group,0
+SNG-00256,HAN-0091,MER-P1-B4-01765,Doors & Windows,Major,2026-01-19,2026-02-18,2026-02-24,Resolved,Prime MEP Solutions,0
+SNG-00257,HAN-0091,MER-P1-B4-01765,Flooring,Moderate,2026-01-18,2026-02-01,,Open,Delta Construction Group,0
+SNG-00258,HAN-0092,MER-P1-B4-01766,Flooring,Major,2026-03-09,2026-04-08,,Open,Delta Construction Group,0
+SNG-00259,HAN-0092,MER-P1-B4-01766,Plumbing,Major,2026-03-07,2026-04-06,2026-04-16,Resolved,Horizon Build Partners,0
+SNG-00260,HAN-0092,MER-P1-B4-01766,Electrical,Moderate,2026-03-05,2026-03-19,2026-03-21,Resolved,Modern Facade Systems,0
+SNG-00261,HAN-0092,MER-P1-B4-01766,Paint & Finishing,Moderate,2026-03-07,2026-03-21,,In Progress,Modern Facade Systems,0
+SNG-00262,HAN-0092,MER-P1-B4-01766,Structural,Major,2026-03-07,2026-04-06,2026-04-06,Resolved,Cairo Structural Works,0
+SNG-00263,HAN-0092,MER-P1-B4-01766,HVAC,Moderate,2026-03-04,2026-03-18,,Open,Cairo Structural Works,0
+SNG-00264,HAN-0093,MER-P1-B4-01768,Flooring,Minor,2026-02-13,2026-02-20,,Open,Cairo Structural Works,0
+SNG-00265,HAN-0093,MER-P1-B4-01768,Paint & Finishing,Moderate,2026-02-08,2026-02-22,,Open,Modern Facade Systems,0
+SNG-00266,HAN-0093,MER-P1-B4-01768,Paint & Finishing,Moderate,2026-02-12,2026-02-26,2026-03-06,Resolved,Modern Facade Systems,0
+SNG-00267,HAN-0094,MER-P1-B4-01769,Doors & Windows,Moderate,2026-03-02,2026-03-16,,Open,Delta Construction Group,0
+SNG-00268,HAN-0094,MER-P1-B4-01769,Doors & Windows,Moderate,2026-03-08,2026-03-22,,Open,Delta Construction Group,0
+SNG-00269,HAN-0094,MER-P1-B4-01769,Electrical,Major,2026-03-06,2026-04-05,2026-03-25,Resolved,Delta Construction Group,1
+SNG-00270,HAN-0094,MER-P1-B4-01769,Flooring,Major,2026-03-05,2026-04-04,2026-04-24,Resolved,Delta Construction Group,0
+SNG-00271,HAN-0095,MER-P1-B4-01770,Flooring,Minor,2026-01-29,2026-02-05,,In Progress,Delta Construction Group,0
+SNG-00272,HAN-0095,MER-P1-B4-01770,Structural,Moderate,2026-02-06,2026-02-20,2026-02-24,Resolved,Horizon Build Partners,0
+SNG-00273,HAN-0095,MER-P1-B4-01770,Plumbing,Major,2026-02-05,2026-03-07,,Open,Delta Construction Group,0
+SNG-00274,HAN-0095,MER-P1-B4-01770,HVAC,Moderate,2026-02-07,2026-02-21,,Open,Delta Construction Group,0
+SNG-00275,HAN-0095,MER-P1-B4-01770,Paint & Finishing,Minor,2026-01-20,2026-01-27,2026-01-27,Resolved,Prime MEP Solutions,0
+SNG-00276,HAN-0095,MER-P1-B4-01770,Electrical,Minor,2026-02-06,2026-02-13,,Open,Nile Engineering Contractors,0
+SNG-00277,HAN-0095,MER-P1-B4-01770,Flooring,Moderate,2026-02-03,2026-02-17,2026-02-23,Resolved,Modern Facade Systems,0
+SNG-00278,HAN-0095,MER-P1-B4-01770,Plumbing,Major,2026-02-04,2026-03-06,,Open,Modern Facade Systems,0
+SNG-00279,HAN-0096,MER-P1-B4-01772,Electrical,Minor,2026-01-29,2026-02-05,,In Progress,Delta Construction Group,0
+SNG-00280,HAN-0096,MER-P1-B4-01772,HVAC,Major,2026-02-15,2026-03-17,,Open,Delta Construction Group,0
+SNG-00281,HAN-0096,MER-P1-B4-01772,HVAC,Moderate,2026-02-11,2026-02-25,,Open,Delta Construction Group,0
+SNG-00282,HAN-0096,MER-P1-B4-01772,Electrical,Major,2026-02-12,2026-03-14,2026-03-14,Resolved,Cairo Structural Works,0
+SNG-00283,HAN-0097,MER-P1-B4-01773,Paint & Finishing,Major,2026-02-03,2026-03-05,2026-03-12,Resolved,Modern Facade Systems,0
+SNG-00284,HAN-0097,MER-P1-B4-01773,Paint & Finishing,Moderate,2026-01-23,2026-02-06,2026-02-15,Resolved,Cairo Structural Works,0
+SNG-00285,HAN-0097,MER-P1-B4-01773,Paint & Finishing,Moderate,2026-01-18,2026-02-01,,In Progress,Prime MEP Solutions,0
+SNG-00286,HAN-0097,MER-P1-B4-01773,Doors & Windows,Major,2026-01-16,2026-02-15,2026-02-23,Resolved,Modern Facade Systems,0
+SNG-00287,HAN-0098,MER-P1-B4-01774,Flooring,Moderate,2025-12-29,2026-01-12,,In Progress,Prime MEP Solutions,0
+SNG-00288,HAN-0098,MER-P1-B4-01774,Doors & Windows,Moderate,2025-12-30,2026-01-13,2026-01-13,Resolved,Nile Engineering Contractors,0
+SNG-00289,HAN-0098,MER-P1-B4-01774,Plumbing,Major,2025-12-28,2026-01-27,,Open,Cairo Structural Works,0
+SNG-00290,HAN-0098,MER-P1-B4-01774,Plumbing,Major,2026-01-06,2026-02-05,,In Progress,Delta Construction Group,0
+SNG-00291,HAN-0098,MER-P1-B4-01774,Flooring,Major,2026-01-07,2026-02-06,,Open,Cairo Structural Works,0
+SNG-00292,HAN-0099,MER-P1-B4-01775,Electrical,Moderate,2026-03-01,2026-03-15,,In Progress,Modern Facade Systems,0
+SNG-00293,HAN-0099,MER-P1-B4-01775,Paint & Finishing,Major,2026-03-15,2026-04-14,2026-04-22,Resolved,Horizon Build Partners,1
+SNG-00294,HAN-0099,MER-P1-B4-01775,HVAC,Major,2026-03-15,2026-04-14,2026-04-03,Resolved,Horizon Build Partners,0
+SNG-00295,HAN-0099,MER-P1-B4-01775,Paint & Finishing,Major,2026-03-10,2026-04-09,2026-04-03,Resolved,Prime MEP Solutions,0
+SNG-00296,HAN-0099,MER-P1-B4-01775,Flooring,Moderate,2026-03-10,2026-03-24,2026-03-19,Resolved,Delta Construction Group,0
+SNG-00297,HAN-0099,MER-P1-B4-01775,Plumbing,Moderate,2026-03-08,2026-03-22,,Open,Modern Facade Systems,0
+SNG-00298,HAN-0099,MER-P1-B4-01775,Plumbing,Moderate,2026-03-13,2026-03-27,,Open,Horizon Build Partners,0
+SNG-00299,HAN-0099,MER-P1-B4-01775,Flooring,Moderate,2026-03-03,2026-03-17,2026-03-17,Resolved,Delta Construction Group,0
+SNG-00300,HAN-0100,MER-P1-B4-01776,Electrical,Major,2026-02-20,2026-03-22,2026-03-13,Resolved,Prime MEP Solutions,1
+SNG-00301,HAN-0100,MER-P1-B4-01776,Electrical,Moderate,2026-02-27,2026-03-13,,In Progress,Modern Facade Systems,0
+SNG-00302,HAN-0100,MER-P1-B4-01776,Structural,Minor,2026-02-20,2026-02-27,2026-02-28,Resolved,Cairo Structural Works,0
+SNG-00303,HAN-0100,MER-P1-B4-01776,HVAC,Major,2026-02-17,2026-03-19,,Open,Prime MEP Solutions,0
+SNG-00304,HAN-0100,MER-P1-B4-01776,Doors & Windows,Major,2026-02-16,2026-03-18,2026-03-30,Resolved,Cairo Structural Works,0
+SNG-00305,HAN-0101,MER-P1-B4-01778,Structural,Moderate,2026-01-31,2026-02-14,,Open,Delta Construction Group,0
+SNG-00306,HAN-0101,MER-P1-B4-01778,Structural,Major,2026-01-28,2026-02-27,2026-03-16,Resolved,Horizon Build Partners,0
+SNG-00307,HAN-0101,MER-P1-B4-01778,Doors & Windows,Moderate,2026-02-14,2026-02-28,2026-03-07,Resolved,Nile Engineering Contractors,0
+SNG-00308,HAN-0101,MER-P1-B4-01778,Flooring,Moderate,2026-02-13,2026-02-27,,Open,Prime MEP Solutions,0
+SNG-00309,HAN-0101,MER-P1-B4-01778,HVAC,Major,2026-02-08,2026-03-10,2026-03-14,Resolved,Modern Facade Systems,0
+SNG-00310,HAN-0102,MER-P1-B4-01779,Flooring,Major,2026-03-03,2026-04-02,2026-04-20,Resolved,Horizon Build Partners,0
+SNG-00311,HAN-0102,MER-P1-B4-01779,Flooring,Moderate,2026-03-17,2026-03-31,,In Progress,Nile Engineering Contractors,0
+SNG-00312,HAN-0102,MER-P1-B4-01779,Structural,Moderate,2026-03-15,2026-03-29,,Open,Cairo Structural Works,0
+SNG-00313,HAN-0102,MER-P1-B4-01779,Plumbing,Moderate,2026-03-02,2026-03-16,,In Progress,Delta Construction Group,0
+SNG-00314,HAN-0102,MER-P1-B4-01779,Plumbing,Major,2026-02-28,2026-03-30,2026-03-18,Resolved,Prime MEP Solutions,0
+SNG-00315,HAN-0103,MER-P1-B4-01781,Plumbing,Moderate,2026-02-13,2026-02-27,,Open,Nile Engineering Contractors,0
+SNG-00316,HAN-0103,MER-P1-B4-01781,Doors & Windows,Minor,2026-02-28,2026-03-07,,In Progress,Prime MEP Solutions,0
+SNG-00317,HAN-0103,MER-P1-B4-01781,Paint & Finishing,Major,2026-02-27,2026-03-29,,In Progress,Cairo Structural Works,0
+SNG-00318,HAN-0103,MER-P1-B4-01781,Doors & Windows,Moderate,2026-02-13,2026-02-27,,Open,Modern Facade Systems,0
+SNG-00319,HAN-0103,MER-P1-B4-01781,Doors & Windows,Major,2026-02-15,2026-03-17,2026-03-12,Resolved,Modern Facade Systems,0
+SNG-00320,HAN-0103,MER-P1-B4-01781,Paint & Finishing,Minor,2026-02-13,2026-02-20,,In Progress,Cairo Structural Works,0
+SNG-00321,HAN-0103,MER-P1-B4-01781,Structural,Minor,2026-02-28,2026-03-07,2026-03-09,Resolved,Cairo Structural Works,0
+SNG-00322,HAN-0103,MER-P1-B4-01781,Flooring,Major,2026-02-25,2026-03-27,,Open,Nile Engineering Contractors,0
+SNG-00323,HAN-0104,MER-P1-B4-01782,Structural,Moderate,2026-01-27,2026-02-10,,Open,Modern Facade Systems,0
+SNG-00324,HAN-0104,MER-P1-B4-01782,Electrical,Major,2026-01-24,2026-02-23,,Open,Prime MEP Solutions,0
+SNG-00325,HAN-0104,MER-P1-B4-01782,Flooring,Minor,2026-01-11,2026-01-18,2026-01-21,Resolved,Modern Facade Systems,1
+SNG-00326,HAN-0104,MER-P1-B4-01782,Plumbing,Major,2026-01-10,2026-02-09,,Open,Modern Facade Systems,0
+SNG-00327,HAN-0105,MER-P1-B4-01783,Paint & Finishing,Major,2026-01-18,2026-02-17,,In Progress,Modern Facade Systems,0
+SNG-00328,HAN-0105,MER-P1-B4-01783,Paint & Finishing,Moderate,2026-01-18,2026-02-01,2026-02-08,Resolved,Cairo Structural Works,1
+SNG-00329,HAN-0105,MER-P1-B4-01783,Plumbing,Major,2026-02-01,2026-03-03,2026-03-02,Resolved,Cairo Structural Works,0
+SNG-00330,HAN-0105,MER-P1-B4-01783,Paint & Finishing,Major,2026-01-31,2026-03-02,,In Progress,Cairo Structural Works,0
+SNG-00331,HAN-0106,MER-P1-B4-01786,Flooring,Minor,2026-02-28,2026-03-07,2026-03-07,Resolved,Horizon Build Partners,0
+SNG-00332,HAN-0106,MER-P1-B4-01786,Electrical,Minor,2026-02-28,2026-03-07,2026-03-06,Resolved,Horizon Build Partners,0
+SNG-00333,HAN-0106,MER-P1-B4-01786,Flooring,Major,2026-03-01,2026-03-31,,Open,Horizon Build Partners,0
+SNG-00334,HAN-0106,MER-P1-B4-01786,Paint & Finishing,Minor,2026-02-28,2026-03-07,2026-03-12,Resolved,Delta Construction Group,0
+SNG-00335,HAN-0106,MER-P1-B4-01786,Flooring,Moderate,2026-02-22,2026-03-08,,Open,Delta Construction Group,0
+SNG-00336,HAN-0106,MER-P1-B4-01786,Doors & Windows,Moderate,2026-02-28,2026-03-14,,In Progress,Nile Engineering Contractors,0
+SNG-00337,HAN-0106,MER-P1-B4-01786,Plumbing,Minor,2026-02-26,2026-03-05,,Open,Delta Construction Group,0
+SNG-00338,HAN-0107,MER-P1-B4-01787,Structural,Minor,2026-03-16,2026-03-23,,Open,Delta Construction Group,0
+SNG-00339,HAN-0107,MER-P1-B4-01787,Doors & Windows,Major,2026-03-03,2026-04-02,2026-04-23,Resolved,Nile Engineering Contractors,0
+SNG-00340,HAN-0107,MER-P1-B4-01787,HVAC,Major,2026-03-15,2026-04-14,,Open,Modern Facade Systems,0
+SNG-00341,HAN-0107,MER-P1-B4-01787,Flooring,Major,2026-03-10,2026-04-09,2026-04-03,Resolved,Prime MEP Solutions,0
+SNG-00342,HAN-0107,MER-P1-B4-01787,Electrical,Minor,2026-03-01,2026-03-08,,Open,Delta Construction Group,0
+SNG-00343,HAN-0108,MER-P1-B4-01788,Electrical,Moderate,2026-03-26,2026-04-09,2026-04-12,Resolved,Cairo Structural Works,1
+SNG-00344,HAN-0108,MER-P1-B4-01788,HVAC,Moderate,2026-03-21,2026-04-04,,Open,Modern Facade Systems,0
+SNG-00345,HAN-0108,MER-P1-B4-01788,Paint & Finishing,Moderate,2026-03-13,2026-03-27,2026-04-06,Resolved,Modern Facade Systems,0
+SNG-00346,HAN-0109,MER-P1-B4-01789,Electrical,Moderate,2026-03-14,2026-03-28,,Open,Nile Engineering Contractors,0
+SNG-00347,HAN-0109,MER-P1-B4-01789,Flooring,Major,2026-03-07,2026-04-06,2026-04-01,Resolved,Horizon Build Partners,0
+SNG-00348,HAN-0109,MER-P1-B4-01789,Electrical,Major,2026-03-22,2026-04-21,2026-04-22,Resolved,Nile Engineering Contractors,0
+SNG-00349,HAN-0109,MER-P1-B4-01789,Electrical,Moderate,2026-03-12,2026-03-26,2026-03-24,Resolved,Nile Engineering Contractors,0
+SNG-00350,HAN-0109,MER-P1-B4-01789,Structural,Major,2026-03-13,2026-04-12,,Open,Horizon Build Partners,0
+SNG-00351,HAN-0109,MER-P1-B4-01789,Flooring,Minor,2026-03-06,2026-03-13,2026-03-10,Resolved,Horizon Build Partners,0
+SNG-00352,HAN-0109,MER-P1-B4-01789,Paint & Finishing,Moderate,2026-03-11,2026-03-25,,Open,Prime MEP Solutions,0
+SNG-00353,HAN-0109,MER-P1-B4-01789,Doors & Windows,Minor,2026-03-08,2026-03-15,2026-03-16,Resolved,Delta Construction Group,0
+SNG-00354,HAN-0110,MER-P1-B4-01790,Paint & Finishing,Major,2025-12-24,2026-01-23,,Open,Delta Construction Group,0
+SNG-00355,HAN-0110,MER-P1-B4-01790,Paint & Finishing,Minor,2025-12-27,2026-01-03,,Open,Prime MEP Solutions,0
+SNG-00356,HAN-0110,MER-P1-B4-01790,HVAC,Major,2025-12-14,2026-01-13,,Open,Nile Engineering Contractors,0
+SNG-00357,HAN-0110,MER-P1-B4-01790,HVAC,Major,2025-12-22,2026-01-21,,Open,Cairo Structural Works,0
+SNG-00358,HAN-0110,MER-P1-B4-01790,Flooring,Moderate,2025-12-13,2025-12-27,,Open,Modern Facade Systems,0
+SNG-00359,HAN-0110,MER-P1-B4-01790,Doors & Windows,Minor,2025-12-21,2025-12-28,2025-12-30,Resolved,Horizon Build Partners,0
+SNG-00360,HAN-0110,MER-P1-B4-01790,Paint & Finishing,Major,2025-12-30,2026-01-29,2026-02-19,Resolved,Cairo Structural Works,1
+SNG-00361,HAN-0111,MER-P1-B4-01791,Electrical,Moderate,2026-02-01,2026-02-15,,Open,Nile Engineering Contractors,0
+SNG-00362,HAN-0111,MER-P1-B4-01791,Flooring,Major,2026-02-05,2026-03-07,,In Progress,Cairo Structural Works,0
+SNG-00363,HAN-0111,MER-P1-B4-01791,Paint & Finishing,Moderate,2026-01-22,2026-02-05,,In Progress,Horizon Build Partners,0
+SNG-00364,HAN-0111,MER-P1-B4-01791,Paint & Finishing,Moderate,2026-02-06,2026-02-20,2026-02-26,Resolved,Delta Construction Group,0
+SNG-00365,HAN-0111,MER-P1-B4-01791,Doors & Windows,Minor,2026-02-01,2026-02-08,2026-02-12,Resolved,Horizon Build Partners,0
+SNG-00366,HAN-0111,MER-P1-B4-01791,Doors & Windows,Major,2026-01-30,2026-03-01,,Open,Cairo Structural Works,0
+SNG-00367,HAN-0111,MER-P1-B4-01791,Flooring,Major,2026-01-27,2026-02-26,,Open,Cairo Structural Works,0
+SNG-00368,HAN-0112,MER-P1-B4-01792,Structural,Minor,2026-01-21,2026-01-28,,In Progress,Nile Engineering Contractors,0
+SNG-00369,HAN-0112,MER-P1-B4-01792,Plumbing,Major,2026-01-21,2026-02-20,,Open,Cairo Structural Works,0
+SNG-00370,HAN-0112,MER-P1-B4-01792,Plumbing,Major,2026-01-18,2026-02-17,,In Progress,Prime MEP Solutions,0
+SNG-00371,HAN-0112,MER-P1-B4-01792,Plumbing,Moderate,2026-01-14,2026-01-28,2026-01-26,Resolved,Modern Facade Systems,0
+SNG-00372,HAN-0112,MER-P1-B4-01792,Flooring,Moderate,2026-01-27,2026-02-10,2026-02-16,Resolved,Horizon Build Partners,0
+SNG-00373,HAN-0113,MER-P1-B4-01793,Structural,Major,2026-02-13,2026-03-15,2026-03-10,Resolved,Nile Engineering Contractors,1
+SNG-00374,HAN-0113,MER-P1-B4-01793,Electrical,Major,2026-02-18,2026-03-20,,Open,Modern Facade Systems,0
+SNG-00375,HAN-0113,MER-P1-B4-01793,Electrical,Moderate,2026-02-13,2026-02-27,,Open,Prime MEP Solutions,0
+SNG-00376,HAN-0114,MER-P1-B4-01794,Flooring,Moderate,2026-02-07,2026-02-21,2026-02-16,Resolved,Prime MEP Solutions,0
+SNG-00377,HAN-0114,MER-P1-B4-01794,Electrical,Moderate,2026-01-30,2026-02-13,2026-02-15,Resolved,Prime MEP Solutions,0
+SNG-00378,HAN-0114,MER-P1-B4-01794,Electrical,Minor,2026-02-01,2026-02-08,,In Progress,Horizon Build Partners,0
+SNG-00379,HAN-0115,MER-P1-B4-01795,Doors & Windows,Major,2026-03-18,2026-04-17,,Open,Prime MEP Solutions,0
+SNG-00380,HAN-0115,MER-P1-B4-01795,HVAC,Major,2026-03-11,2026-04-10,2026-05-01,Resolved,Delta Construction Group,0
+SNG-00381,HAN-0115,MER-P1-B4-01795,Plumbing,Minor,2026-03-21,2026-03-28,2026-03-26,Resolved,Nile Engineering Contractors,0
+SNG-00382,HAN-0115,MER-P1-B4-01795,Flooring,Major,2026-03-11,2026-04-10,,Open,Nile Engineering Contractors,0
+SNG-00383,HAN-0115,MER-P1-B4-01795,Structural,Moderate,2026-03-09,2026-03-23,2026-03-18,Resolved,Prime MEP Solutions,0
+SNG-00384,HAN-0115,MER-P1-B4-01795,Plumbing,Moderate,2026-03-07,2026-03-21,2026-03-28,Resolved,Horizon Build Partners,1
+SNG-00385,HAN-0115,MER-P1-B4-01795,HVAC,Moderate,2026-03-14,2026-03-28,,Open,Delta Construction Group,0
+SNG-00386,HAN-0116,MER-P1-B4-01796,Doors & Windows,Major,2025-12-20,2026-01-19,2026-01-13,Resolved,Delta Construction Group,0
+SNG-00387,HAN-0116,MER-P1-B4-01796,Paint & Finishing,Minor,2025-12-12,2025-12-19,,In Progress,Cairo Structural Works,0
+SNG-00388,HAN-0116,MER-P1-B4-01796,Doors & Windows,Moderate,2025-12-13,2025-12-27,,Open,Cairo Structural Works,0
+SNG-00389,HAN-0116,MER-P1-B4-01796,Plumbing,Moderate,2025-12-17,2025-12-31,,Open,Horizon Build Partners,0
+SNG-00390,HAN-0116,MER-P1-B4-01796,Flooring,Moderate,2025-12-26,2026-01-09,2026-01-03,Resolved,Cairo Structural Works,0
+SNG-00391,HAN-0116,MER-P1-B4-01796,Plumbing,Minor,2025-12-14,2025-12-21,2025-12-22,Resolved,Cairo Structural Works,0
+SNG-00392,HAN-0116,MER-P1-B4-01796,Structural,Minor,2025-12-19,2025-12-26,,Open,Prime MEP Solutions,0
+SNG-00393,HAN-0117,MER-P1-B4-01798,Doors & Windows,Major,2026-02-25,2026-03-27,,Open,Cairo Structural Works,0
+SNG-00394,HAN-0117,MER-P1-B4-01798,Flooring,Moderate,2026-03-02,2026-03-16,,Open,Cairo Structural Works,0
+SNG-00395,HAN-0117,MER-P1-B4-01798,HVAC,Moderate,2026-02-26,2026-03-12,2026-03-08,Resolved,Modern Facade Systems,0
+SNG-00396,HAN-0117,MER-P1-B4-01798,Doors & Windows,Moderate,2026-02-25,2026-03-11,,Open,Prime MEP Solutions,0
+SNG-00397,HAN-0117,MER-P1-B4-01798,Flooring,Major,2026-03-10,2026-04-09,,In Progress,Modern Facade Systems,0
+SNG-00398,HAN-0117,MER-P1-B4-01798,Plumbing,Minor,2026-03-10,2026-03-17,,Open,Nile Engineering Contractors,0
+SNG-00399,HAN-0117,MER-P1-B4-01798,Paint & Finishing,Minor,2026-02-25,2026-03-04,2026-03-03,Resolved,Cairo Structural Works,0
+SNG-00400,HAN-0118,MER-P1-B4-01800,Flooring,Moderate,2026-03-24,2026-04-07,2026-04-07,Resolved,Cairo Structural Works,0
+SNG-00401,HAN-0118,MER-P1-B4-01800,Plumbing,Major,2026-03-19,2026-04-18,2026-04-16,Resolved,Prime MEP Solutions,0
+SNG-00402,HAN-0118,MER-P1-B4-01800,Electrical,Moderate,2026-03-18,2026-04-01,,Open,Nile Engineering Contractors,0
+SNG-00403,HAN-0119,MER-P2-B1-01801,Flooring,Moderate,2025-10-29,2025-11-12,2025-11-09,Resolved,Delta Construction Group,0
+SNG-00404,HAN-0119,MER-P2-B1-01801,Structural,Moderate,2025-10-24,2025-11-07,,Open,Modern Facade Systems,0
+SNG-00405,HAN-0119,MER-P2-B1-01801,Doors & Windows,Minor,2025-10-26,2025-11-02,2025-11-03,Resolved,Prime MEP Solutions,0
+SNG-00406,HAN-0121,MER-P2-B1-01804,Paint & Finishing,Minor,2025-10-06,2025-10-13,2025-10-12,Resolved,Horizon Build Partners,0
+SNG-00407,HAN-0121,MER-P2-B1-01804,Structural,Major,2025-10-21,2025-11-20,,Open,Cairo Structural Works,0
+SNG-00408,HAN-0121,MER-P2-B1-01804,Electrical,Major,2025-10-23,2025-11-22,,Open,Cairo Structural Works,0
+SNG-00409,HAN-0122,MER-P2-B1-01805,Paint & Finishing,Minor,2025-10-28,2025-11-04,2025-11-05,Resolved,Nile Engineering Contractors,0
+SNG-00410,HAN-0122,MER-P2-B1-01805,Structural,Minor,2025-10-27,2025-11-03,2025-11-02,Resolved,Delta Construction Group,0
+SNG-00411,HAN-0122,MER-P2-B1-01805,Paint & Finishing,Major,2025-10-22,2025-11-21,2025-11-16,Resolved,Delta Construction Group,0
+SNG-00412,HAN-0123,MER-P2-B1-01806,HVAC,Moderate,2025-10-26,2025-11-09,2025-11-13,Resolved,Delta Construction Group,0
+SNG-00413,HAN-0124,MER-P2-B1-01808,Plumbing,Minor,2025-11-05,2025-11-12,2025-11-16,Resolved,Delta Construction Group,0
+SNG-00414,HAN-0124,MER-P2-B1-01808,HVAC,Moderate,2025-11-10,2025-11-24,,Open,Prime MEP Solutions,0
+SNG-00415,HAN-0126,MER-P2-B1-01810,Paint & Finishing,Minor,2025-10-18,2025-10-25,2025-10-24,Resolved,Modern Facade Systems,0
+SNG-00416,HAN-0126,MER-P2-B1-01810,Plumbing,Moderate,2025-10-19,2025-11-02,,In Progress,Delta Construction Group,0
+SNG-00417,HAN-0128,MER-P2-B1-01812,Structural,Moderate,2025-10-13,2025-10-27,2025-11-05,Resolved,Nile Engineering Contractors,0
+SNG-00418,HAN-0128,MER-P2-B1-01812,Structural,Major,2025-10-31,2025-11-30,,In Progress,Modern Facade Systems,0
+SNG-00419,HAN-0128,MER-P2-B1-01812,Structural,Minor,2025-10-25,2025-11-01,2025-11-05,Resolved,Delta Construction Group,0
+SNG-00420,HAN-0129,MER-P2-B1-01813,Structural,Major,2025-10-26,2025-11-25,2025-12-16,Resolved,Prime MEP Solutions,0
+SNG-00421,HAN-0130,MER-P2-B1-01815,HVAC,Minor,2025-10-22,2025-10-29,2025-10-31,Resolved,Delta Construction Group,0
+SNG-00422,HAN-0131,MER-P2-B1-01816,Plumbing,Minor,2025-10-19,2025-10-26,2025-10-26,Resolved,Delta Construction Group,0
+SNG-00423,HAN-0132,MER-P2-B1-01817,Flooring,Moderate,2025-10-24,2025-11-07,,Open,Nile Engineering Contractors,0
+SNG-00424,HAN-0132,MER-P2-B1-01817,Flooring,Minor,2025-10-12,2025-10-19,2025-10-20,Resolved,Cairo Structural Works,0
+SNG-00425,HAN-0132,MER-P2-B1-01817,Plumbing,Minor,2025-10-24,2025-10-31,2025-10-31,Resolved,Modern Facade Systems,0
+SNG-00426,HAN-0133,MER-P2-B1-01818,Flooring,Moderate,2025-10-22,2025-11-05,2025-10-31,Resolved,Modern Facade Systems,0
+SNG-00427,HAN-0133,MER-P2-B1-01818,Doors & Windows,Moderate,2025-10-11,2025-10-25,2025-10-20,Resolved,Nile Engineering Contractors,0
+SNG-00428,HAN-0133,MER-P2-B1-01818,Doors & Windows,Minor,2025-10-20,2025-10-27,2025-10-25,Resolved,Cairo Structural Works,0
+SNG-00429,HAN-0135,MER-P2-B1-01820,Doors & Windows,Moderate,2025-10-24,2025-11-07,2025-11-09,Resolved,Prime MEP Solutions,0
+SNG-00430,HAN-0136,MER-P2-B1-01821,Paint & Finishing,Minor,2025-11-01,2025-11-08,,Open,Modern Facade Systems,0
+SNG-00431,HAN-0136,MER-P2-B1-01821,Doors & Windows,Major,2025-10-17,2025-11-16,2025-12-07,Resolved,Cairo Structural Works,0
+SNG-00432,HAN-0136,MER-P2-B1-01821,Structural,Minor,2025-11-02,2025-11-09,2025-11-14,Resolved,Horizon Build Partners,0
+SNG-00433,HAN-0137,MER-P2-B1-01823,Plumbing,Minor,2025-10-22,2025-10-29,,Open,Delta Construction Group,0
+SNG-00434,HAN-0138,MER-P2-B1-01826,Flooring,Major,2025-10-24,2025-11-23,2025-11-16,Resolved,Delta Construction Group,0
+SNG-00435,HAN-0140,MER-P2-B1-01829,Electrical,Major,2025-10-21,2025-11-20,2025-11-20,Resolved,Delta Construction Group,0
+SNG-00436,HAN-0140,MER-P2-B1-01829,Paint & Finishing,Major,2025-10-25,2025-11-24,2025-11-30,Resolved,Modern Facade Systems,0
+SNG-00437,HAN-0140,MER-P2-B1-01829,Electrical,Moderate,2025-10-25,2025-11-08,2025-11-10,Resolved,Horizon Build Partners,0
+SNG-00438,HAN-0141,MER-P2-B1-01830,Electrical,Moderate,2025-10-20,2025-11-03,2025-11-04,Resolved,Delta Construction Group,0
+SNG-00439,HAN-0141,MER-P2-B1-01830,HVAC,Minor,2025-10-13,2025-10-20,2025-10-22,Resolved,Cairo Structural Works,0
+SNG-00440,HAN-0142,MER-P2-B1-01831,Doors & Windows,Moderate,2025-10-21,2025-11-04,2025-10-30,Resolved,Prime MEP Solutions,0
+SNG-00441,HAN-0142,MER-P2-B1-01831,Flooring,Moderate,2025-11-02,2025-11-16,2025-11-10,Resolved,Cairo Structural Works,0
+SNG-00442,HAN-0142,MER-P2-B1-01831,Doors & Windows,Moderate,2025-10-20,2025-11-03,2025-11-06,Resolved,Delta Construction Group,0
+SNG-00443,HAN-0143,MER-P2-B1-01835,Structural,Moderate,2025-11-11,2025-11-25,2025-12-01,Resolved,Modern Facade Systems,0
+SNG-00444,HAN-0143,MER-P2-B1-01835,Structural,Moderate,2025-11-09,2025-11-23,2025-11-22,Resolved,Delta Construction Group,1
+SNG-00445,HAN-0143,MER-P2-B1-01835,Doors & Windows,Minor,2025-11-07,2025-11-14,2025-11-19,Resolved,Cairo Structural Works,0
+SNG-00446,HAN-0144,MER-P2-B1-01837,HVAC,Moderate,2025-10-23,2025-11-06,2025-11-10,Resolved,Cairo Structural Works,0
+SNG-00447,HAN-0146,MER-P2-B2-01841,HVAC,Major,2025-10-19,2025-11-18,2025-12-02,Resolved,Nile Engineering Contractors,0
+SNG-00448,HAN-0146,MER-P2-B2-01841,Flooring,Moderate,2025-10-21,2025-11-04,,Open,Nile Engineering Contractors,0
+SNG-00449,HAN-0146,MER-P2-B2-01841,Electrical,Moderate,2025-10-13,2025-10-27,2025-11-03,Resolved,Modern Facade Systems,0
+SNG-00450,HAN-0147,MER-P2-B2-01842,Paint & Finishing,Major,2025-10-16,2025-11-15,2025-11-12,Resolved,Delta Construction Group,0
+SNG-00451,HAN-0148,MER-P2-B2-01843,Flooring,Moderate,2025-10-29,2025-11-12,2025-11-08,Resolved,Cairo Structural Works,0
+SNG-00452,HAN-0149,MER-P2-B2-01844,Plumbing,Moderate,2025-10-27,2025-11-10,2025-11-14,Resolved,Delta Construction Group,0
+SNG-00453,HAN-0149,MER-P2-B2-01844,HVAC,Major,2025-10-17,2025-11-16,,Open,Modern Facade Systems,0
+SNG-00454,HAN-0149,MER-P2-B2-01844,Doors & Windows,Moderate,2025-10-23,2025-11-06,,In Progress,Prime MEP Solutions,0
+SNG-00455,HAN-0150,MER-P2-B2-01845,Electrical,Minor,2025-10-27,2025-11-03,,Open,Cairo Structural Works,0
+SNG-00456,HAN-0150,MER-P2-B2-01845,Paint & Finishing,Minor,2025-10-29,2025-11-05,2025-11-05,Resolved,Modern Facade Systems,0
+SNG-00457,HAN-0153,MER-P2-B2-01848,Structural,Moderate,2025-10-26,2025-11-09,,Open,Horizon Build Partners,0
+SNG-00458,HAN-0154,MER-P2-B2-01849,Structural,Minor,2025-10-30,2025-11-06,,Open,Prime MEP Solutions,0
+SNG-00459,HAN-0154,MER-P2-B2-01849,Plumbing,Moderate,2025-10-24,2025-11-07,2025-11-09,Resolved,Prime MEP Solutions,0
+SNG-00460,HAN-0155,MER-P2-B2-01850,Doors & Windows,Moderate,2025-10-07,2025-10-21,,Open,Nile Engineering Contractors,0
+SNG-00461,HAN-0155,MER-P2-B2-01850,HVAC,Minor,2025-10-12,2025-10-19,,Open,Prime MEP Solutions,0
+SNG-00462,HAN-0156,MER-P2-B2-01851,Plumbing,Minor,2025-10-22,2025-10-29,2025-10-26,Resolved,Nile Engineering Contractors,0
+SNG-00463,HAN-0156,MER-P2-B2-01851,Structural,Minor,2025-10-18,2025-10-25,2025-10-29,Resolved,Modern Facade Systems,0
+SNG-00464,HAN-0156,MER-P2-B2-01851,Structural,Moderate,2025-11-05,2025-11-19,2025-11-18,Resolved,Cairo Structural Works,0
+SNG-00465,HAN-0157,MER-P2-B2-01852,Doors & Windows,Minor,2025-11-01,2025-11-08,2025-11-09,Resolved,Modern Facade Systems,0
+SNG-00466,HAN-0159,MER-P2-B2-01855,Electrical,Minor,2025-10-18,2025-10-25,2025-10-23,Resolved,Delta Construction Group,0
+SNG-00467,HAN-0159,MER-P2-B2-01855,Electrical,Minor,2025-10-20,2025-10-27,2025-10-27,Resolved,Cairo Structural Works,0
+SNG-00468,HAN-0159,MER-P2-B2-01855,Electrical,Minor,2025-10-11,2025-10-18,2025-10-19,Resolved,Prime MEP Solutions,0
+SNG-00469,HAN-0160,MER-P2-B2-01857,Flooring,Minor,2025-10-30,2025-11-06,,In Progress,Cairo Structural Works,0
+SNG-00470,HAN-0160,MER-P2-B2-01857,HVAC,Major,2025-10-28,2025-11-27,,Open,Cairo Structural Works,0
+SNG-00471,HAN-0161,MER-P2-B2-01858,Flooring,Moderate,2025-10-28,2025-11-11,2025-11-20,Resolved,Cairo Structural Works,0
+SNG-00472,HAN-0161,MER-P2-B2-01858,Flooring,Minor,2025-10-14,2025-10-21,2025-10-23,Resolved,Cairo Structural Works,0
+SNG-00473,HAN-0161,MER-P2-B2-01858,Paint & Finishing,Minor,2025-10-19,2025-10-26,2025-10-31,Resolved,Horizon Build Partners,0
+SNG-00474,HAN-0162,MER-P2-B2-01859,Paint & Finishing,Minor,2025-11-09,2025-11-16,2025-11-17,Resolved,Prime MEP Solutions,0
+SNG-00475,HAN-0163,MER-P2-B2-01860,Doors & Windows,Major,2025-10-28,2025-11-27,2025-12-03,Resolved,Delta Construction Group,0
+SNG-00476,HAN-0163,MER-P2-B2-01860,Doors & Windows,Minor,2025-11-05,2025-11-12,,Open,Modern Facade Systems,0
+SNG-00477,HAN-0163,MER-P2-B2-01860,Electrical,Minor,2025-10-23,2025-10-30,2025-11-02,Resolved,Horizon Build Partners,0
+SNG-00478,HAN-0164,MER-P2-B2-01861,Paint & Finishing,Minor,2025-11-04,2025-11-11,2025-11-11,Resolved,Modern Facade Systems,0
+SNG-00479,HAN-0164,MER-P2-B2-01861,HVAC,Minor,2025-11-04,2025-11-11,2025-11-12,Resolved,Cairo Structural Works,0
+SNG-00480,HAN-0164,MER-P2-B2-01861,Plumbing,Minor,2025-11-10,2025-11-17,2025-11-21,Resolved,Delta Construction Group,0
+SNG-00481,HAN-0165,MER-P2-B2-01862,Doors & Windows,Moderate,2025-10-15,2025-10-29,,Open,Prime MEP Solutions,0
+SNG-00482,HAN-0167,MER-P2-B2-01865,Paint & Finishing,Minor,2025-10-23,2025-10-30,,Open,Delta Construction Group,0
+SNG-00483,HAN-0167,MER-P2-B2-01865,Doors & Windows,Minor,2025-10-20,2025-10-27,,Open,Nile Engineering Contractors,0
+SNG-00484,HAN-0167,MER-P2-B2-01865,Plumbing,Minor,2025-10-17,2025-10-24,2025-10-26,Resolved,Prime MEP Solutions,0
+SNG-00485,HAN-0168,MER-P2-B2-01867,Doors & Windows,Moderate,2025-10-30,2025-11-13,,Open,Nile Engineering Contractors,0
+SNG-00486,HAN-0169,MER-P2-B2-01872,Structural,Moderate,2025-10-29,2025-11-12,2025-11-15,Resolved,Delta Construction Group,0
+SNG-00487,HAN-0169,MER-P2-B2-01872,Doors & Windows,Minor,2025-11-08,2025-11-15,2025-11-19,Resolved,Nile Engineering Contractors,0
+SNG-00488,HAN-0169,MER-P2-B2-01872,Plumbing,Moderate,2025-11-10,2025-11-24,2025-11-23,Resolved,Horizon Build Partners,0
+SNG-00489,HAN-0170,MER-P2-B2-01873,Paint & Finishing,Minor,2025-11-03,2025-11-10,2025-11-11,Resolved,Modern Facade Systems,0
+SNG-00490,HAN-0170,MER-P2-B2-01873,Doors & Windows,Moderate,2025-10-24,2025-11-07,2025-11-01,Resolved,Prime MEP Solutions,0
+SNG-00491,HAN-0171,MER-P2-B3-01875,Doors & Windows,Moderate,2026-01-02,2026-01-16,2026-01-17,Resolved,Nile Engineering Contractors,1
+SNG-00492,HAN-0171,MER-P2-B3-01875,Structural,Major,2025-12-24,2026-01-23,,In Progress,Cairo Structural Works,0
+SNG-00493,HAN-0171,MER-P2-B3-01875,HVAC,Moderate,2025-12-22,2026-01-05,2026-01-06,Resolved,Modern Facade Systems,0
+SNG-00494,HAN-0171,MER-P2-B3-01875,Electrical,Moderate,2025-12-26,2026-01-09,2026-01-17,Resolved,Prime MEP Solutions,0
+SNG-00495,HAN-0171,MER-P2-B3-01875,Electrical,Major,2025-12-25,2026-01-24,,In Progress,Cairo Structural Works,0
+SNG-00496,HAN-0171,MER-P2-B3-01875,Electrical,Moderate,2025-12-14,2025-12-28,2025-12-29,Resolved,Delta Construction Group,0
+SNG-00497,HAN-0171,MER-P2-B3-01875,Paint & Finishing,Minor,2026-01-02,2026-01-09,2026-01-09,Resolved,Prime MEP Solutions,0
+SNG-00498,HAN-0172,MER-P2-B3-01876,Electrical,Minor,2026-03-07,2026-03-14,,Open,Prime MEP Solutions,0
+SNG-00499,HAN-0172,MER-P2-B3-01876,Plumbing,Moderate,2026-02-27,2026-03-13,,Open,Modern Facade Systems,0
+SNG-00500,HAN-0172,MER-P2-B3-01876,HVAC,Major,2026-03-15,2026-04-14,,In Progress,Nile Engineering Contractors,0
+SNG-00501,HAN-0172,MER-P2-B3-01876,Electrical,Moderate,2026-03-13,2026-03-27,,In Progress,Prime MEP Solutions,0
+SNG-00502,HAN-0172,MER-P2-B3-01876,Structural,Minor,2026-02-26,2026-03-05,2026-03-09,Resolved,Nile Engineering Contractors,0
+SNG-00503,HAN-0172,MER-P2-B3-01876,Doors & Windows,Moderate,2026-03-09,2026-03-23,,Open,Delta Construction Group,0
+SNG-00504,HAN-0172,MER-P2-B3-01876,Plumbing,Moderate,2026-03-14,2026-03-28,,Open,Cairo Structural Works,0
+SNG-00505,HAN-0173,MER-P2-B3-01877,Structural,Moderate,2026-02-16,2026-03-02,,Open,Prime MEP Solutions,0
+SNG-00506,HAN-0173,MER-P2-B3-01877,Flooring,Major,2026-02-03,2026-03-05,2026-03-01,Resolved,Modern Facade Systems,0
+SNG-00507,HAN-0173,MER-P2-B3-01877,Plumbing,Moderate,2026-02-10,2026-02-24,,Open,Cairo Structural Works,0
+SNG-00508,HAN-0173,MER-P2-B3-01877,Electrical,Major,2026-02-10,2026-03-12,,In Progress,Delta Construction Group,0
+SNG-00509,HAN-0173,MER-P2-B3-01877,Paint & Finishing,Minor,2026-02-03,2026-02-10,2026-02-07,Resolved,Nile Engineering Contractors,1
+SNG-00510,HAN-0174,MER-P2-B3-01879,Electrical,Minor,2026-02-04,2026-02-11,2026-02-11,Resolved,Cairo Structural Works,0
+SNG-00511,HAN-0174,MER-P2-B3-01879,Plumbing,Moderate,2026-02-04,2026-02-18,,In Progress,Delta Construction Group,0
+SNG-00512,HAN-0174,MER-P2-B3-01879,Paint & Finishing,Moderate,2026-02-02,2026-02-16,2026-02-12,Resolved,Modern Facade Systems,0
+SNG-00513,HAN-0174,MER-P2-B3-01879,Plumbing,Moderate,2026-02-01,2026-02-15,,In Progress,Horizon Build Partners,0
+SNG-00514,HAN-0175,MER-P2-B3-01880,HVAC,Moderate,2026-03-02,2026-03-16,2026-03-13,Resolved,Horizon Build Partners,1
+SNG-00515,HAN-0175,MER-P2-B3-01880,Flooring,Minor,2026-03-06,2026-03-13,,Open,Horizon Build Partners,0
+SNG-00516,HAN-0175,MER-P2-B3-01880,HVAC,Moderate,2026-03-08,2026-03-22,,In Progress,Nile Engineering Contractors,0
+SNG-00517,HAN-0175,MER-P2-B3-01880,Paint & Finishing,Minor,2026-03-07,2026-03-14,,In Progress,Cairo Structural Works,0
+SNG-00518,HAN-0175,MER-P2-B3-01880,Plumbing,Moderate,2026-03-06,2026-03-20,,Open,Prime MEP Solutions,0
+SNG-00519,HAN-0176,MER-P2-B3-01884,Doors & Windows,Minor,2026-01-26,2026-02-02,,Open,Prime MEP Solutions,0
+SNG-00520,HAN-0176,MER-P2-B3-01884,Electrical,Moderate,2026-01-25,2026-02-08,,Open,Nile Engineering Contractors,0
+SNG-00521,HAN-0176,MER-P2-B3-01884,HVAC,Major,2026-01-28,2026-02-27,,Open,Modern Facade Systems,0
+SNG-00522,HAN-0176,MER-P2-B3-01884,Paint & Finishing,Moderate,2026-01-27,2026-02-10,2026-02-10,Resolved,Delta Construction Group,0
+SNG-00523,HAN-0176,MER-P2-B3-01884,Doors & Windows,Moderate,2026-01-19,2026-02-02,,Open,Nile Engineering Contractors,0
+SNG-00524,HAN-0177,MER-P2-B3-01885,Flooring,Minor,2026-02-09,2026-02-16,,Open,Nile Engineering Contractors,0
+SNG-00525,HAN-0177,MER-P2-B3-01885,Paint & Finishing,Major,2026-02-06,2026-03-08,2026-03-25,Resolved,Nile Engineering Contractors,0
+SNG-00526,HAN-0177,MER-P2-B3-01885,Plumbing,Major,2026-02-10,2026-03-12,,Open,Cairo Structural Works,0
+SNG-00527,HAN-0177,MER-P2-B3-01885,Structural,Minor,2026-02-08,2026-02-15,2026-02-18,Resolved,Modern Facade Systems,0
+SNG-00528,HAN-0177,MER-P2-B3-01885,Doors & Windows,Major,2026-02-09,2026-03-11,,Open,Horizon Build Partners,0
+SNG-00529,HAN-0177,MER-P2-B3-01885,Electrical,Moderate,2026-02-14,2026-02-28,,Open,Modern Facade Systems,0
+SNG-00530,HAN-0177,MER-P2-B3-01885,Structural,Minor,2026-02-03,2026-02-10,,Open,Horizon Build Partners,0
+SNG-00531,HAN-0178,MER-P2-B3-01886,Flooring,Moderate,2026-01-06,2026-01-20,,Open,Delta Construction Group,0
+SNG-00532,HAN-0178,MER-P2-B3-01886,Plumbing,Minor,2026-01-05,2026-01-12,2026-01-11,Resolved,Cairo Structural Works,1
+SNG-00533,HAN-0178,MER-P2-B3-01886,Doors & Windows,Moderate,2026-01-05,2026-01-19,2026-01-27,Resolved,Cairo Structural Works,0
+SNG-00534,HAN-0178,MER-P2-B3-01886,Electrical,Moderate,2026-01-09,2026-01-23,2026-01-20,Resolved,Delta Construction Group,0
+SNG-00535,HAN-0178,MER-P2-B3-01886,Paint & Finishing,Minor,2026-01-04,2026-01-11,,In Progress,Horizon Build Partners,0
+SNG-00536,HAN-0178,MER-P2-B3-01886,Plumbing,Moderate,2025-12-31,2026-01-14,,Open,Nile Engineering Contractors,0
+SNG-00537,HAN-0179,MER-P2-B3-01887,Doors & Windows,Moderate,2026-01-20,2026-02-03,,In Progress,Cairo Structural Works,0
+SNG-00538,HAN-0179,MER-P2-B3-01887,Electrical,Moderate,2026-01-31,2026-02-14,2026-02-15,Resolved,Cairo Structural Works,0
+SNG-00539,HAN-0179,MER-P2-B3-01887,HVAC,Moderate,2026-01-31,2026-02-14,,Open,Horizon Build Partners,0
+SNG-00540,HAN-0179,MER-P2-B3-01887,Electrical,Moderate,2026-01-27,2026-02-10,2026-02-11,Resolved,Modern Facade Systems,0
+SNG-00541,HAN-0179,MER-P2-B3-01887,Flooring,Moderate,2026-01-20,2026-02-03,,Open,Nile Engineering Contractors,0
+SNG-00542,HAN-0180,MER-P2-B3-01888,Plumbing,Major,2026-03-01,2026-03-31,,In Progress,Modern Facade Systems,0
+SNG-00543,HAN-0180,MER-P2-B3-01888,Doors & Windows,Moderate,2026-03-02,2026-03-16,2026-03-14,Resolved,Nile Engineering Contractors,1
+SNG-00544,HAN-0180,MER-P2-B3-01888,Structural,Moderate,2026-02-12,2026-02-26,,Open,Horizon Build Partners,0
+SNG-00545,HAN-0180,MER-P2-B3-01888,Electrical,Major,2026-03-02,2026-04-01,,Open,Prime MEP Solutions,0
+SNG-00546,HAN-0180,MER-P2-B3-01888,Paint & Finishing,Moderate,2026-02-24,2026-03-10,,Open,Horizon Build Partners,0
+SNG-00547,HAN-0181,MER-P2-B3-01892,Paint & Finishing,Moderate,2025-12-28,2026-01-11,,In Progress,Horizon Build Partners,0
+SNG-00548,HAN-0181,MER-P2-B3-01892,HVAC,Minor,2026-01-03,2026-01-10,,In Progress,Cairo Structural Works,0
+SNG-00549,HAN-0181,MER-P2-B3-01892,Paint & Finishing,Major,2026-01-08,2026-02-07,2026-02-09,Resolved,Nile Engineering Contractors,0
+SNG-00550,HAN-0182,MER-P2-B3-01893,Structural,Minor,2026-01-20,2026-01-27,,Open,Modern Facade Systems,0
+SNG-00551,HAN-0182,MER-P2-B3-01893,Electrical,Moderate,2026-01-20,2026-02-03,2026-01-29,Resolved,Nile Engineering Contractors,1
+SNG-00552,HAN-0182,MER-P2-B3-01893,Doors & Windows,Moderate,2026-01-23,2026-02-06,,Open,Delta Construction Group,0
+SNG-00553,HAN-0182,MER-P2-B3-01893,Plumbing,Moderate,2026-01-28,2026-02-11,,Open,Horizon Build Partners,0
+SNG-00554,HAN-0182,MER-P2-B3-01893,HVAC,Moderate,2026-01-30,2026-02-13,2026-02-12,Resolved,Prime MEP Solutions,1
+SNG-00555,HAN-0183,MER-P2-B3-01894,Plumbing,Moderate,2026-03-10,2026-03-24,,In Progress,Horizon Build Partners,0
+SNG-00556,HAN-0183,MER-P2-B3-01894,HVAC,Moderate,2026-03-18,2026-04-01,2026-04-07,Resolved,Modern Facade Systems,0
+SNG-00557,HAN-0183,MER-P2-B3-01894,Doors & Windows,Minor,2026-03-20,2026-03-27,,Open,Prime MEP Solutions,0
+SNG-00558,HAN-0184,MER-P2-B3-01895,Flooring,Minor,2026-01-29,2026-02-05,2026-02-07,Resolved,Nile Engineering Contractors,0
+SNG-00559,HAN-0184,MER-P2-B3-01895,Plumbing,Major,2026-01-12,2026-02-11,,Open,Cairo Structural Works,0
+SNG-00560,HAN-0184,MER-P2-B3-01895,Flooring,Moderate,2026-01-13,2026-01-27,,Open,Cairo Structural Works,0
+SNG-00561,HAN-0184,MER-P2-B3-01895,Paint & Finishing,Major,2026-01-28,2026-02-27,2026-02-21,Resolved,Modern Facade Systems,0
+SNG-00562,HAN-0184,MER-P2-B3-01895,HVAC,Moderate,2026-01-13,2026-01-27,2026-02-02,Resolved,Delta Construction Group,0
+SNG-00563,HAN-0184,MER-P2-B3-01895,Paint & Finishing,Moderate,2026-01-17,2026-01-31,,Open,Horizon Build Partners,0
+SNG-00564,HAN-0184,MER-P2-B3-01895,Flooring,Moderate,2026-01-28,2026-02-11,2026-02-06,Resolved,Nile Engineering Contractors,0
+SNG-00565,HAN-0184,MER-P2-B3-01895,Plumbing,Major,2026-01-21,2026-02-20,2026-03-06,Resolved,Nile Engineering Contractors,0
+SNG-00566,HAN-0185,MER-P2-B3-01896,Paint & Finishing,Minor,2026-03-12,2026-03-19,2026-03-23,Resolved,Nile Engineering Contractors,0
+SNG-00567,HAN-0185,MER-P2-B3-01896,Doors & Windows,Minor,2026-03-07,2026-03-14,,Open,Delta Construction Group,0
+SNG-00568,HAN-0185,MER-P2-B3-01896,HVAC,Major,2026-03-07,2026-04-06,,Open,Horizon Build Partners,0
+SNG-00569,HAN-0186,MER-P2-B3-01897,Flooring,Moderate,2026-02-23,2026-03-09,2026-03-13,Resolved,Nile Engineering Contractors,0
+SNG-00570,HAN-0186,MER-P2-B3-01897,Electrical,Moderate,2026-03-03,2026-03-17,2026-03-22,Resolved,Modern Facade Systems,1
+SNG-00571,HAN-0186,MER-P2-B3-01897,Structural,Major,2026-02-16,2026-03-18,2026-03-09,Resolved,Nile Engineering Contractors,0
+SNG-00572,HAN-0186,MER-P2-B3-01897,HVAC,Major,2026-02-25,2026-03-27,2026-04-08,Resolved,Prime MEP Solutions,0
+SNG-00573,HAN-0186,MER-P2-B3-01897,Electrical,Major,2026-02-27,2026-03-29,,Open,Cairo Structural Works,0
+SNG-00574,HAN-0186,MER-P2-B3-01897,Electrical,Major,2026-02-28,2026-03-30,,In Progress,Modern Facade Systems,0
+SNG-00575,HAN-0186,MER-P2-B3-01897,Plumbing,Major,2026-03-01,2026-03-31,,In Progress,Cairo Structural Works,0
+SNG-00576,HAN-0186,MER-P2-B3-01897,Doors & Windows,Moderate,2026-02-16,2026-03-02,,Open,Nile Engineering Contractors,0
+SNG-00577,HAN-0187,MER-P2-B3-01899,Paint & Finishing,Minor,2026-02-10,2026-02-17,,Open,Nile Engineering Contractors,0
+SNG-00578,HAN-0187,MER-P2-B3-01899,Paint & Finishing,Moderate,2026-02-14,2026-02-28,,Open,Delta Construction Group,0
+SNG-00579,HAN-0187,MER-P2-B3-01899,Electrical,Minor,2026-02-20,2026-02-27,2026-03-02,Resolved,Horizon Build Partners,0
+SNG-00580,HAN-0187,MER-P2-B3-01899,Electrical,Moderate,2026-02-20,2026-03-06,,Open,Modern Facade Systems,0
+SNG-00581,HAN-0187,MER-P2-B3-01899,Paint & Finishing,Major,2026-02-09,2026-03-11,,In Progress,Cairo Structural Works,0
+SNG-00582,HAN-0187,MER-P2-B3-01899,Flooring,Moderate,2026-02-21,2026-03-07,2026-03-05,Resolved,Cairo Structural Works,0
+SNG-00583,HAN-0187,MER-P2-B3-01899,HVAC,Major,2026-02-09,2026-03-11,2026-03-31,Resolved,Prime MEP Solutions,1
+SNG-00584,HAN-0187,MER-P2-B3-01899,Paint & Finishing,Major,2026-02-20,2026-03-22,,Open,Nile Engineering Contractors,0
+SNG-00585,HAN-0188,MER-P2-B3-01900,Plumbing,Minor,2026-02-01,2026-02-08,,Open,Nile Engineering Contractors,0
+SNG-00586,HAN-0188,MER-P2-B3-01900,Paint & Finishing,Moderate,2026-02-06,2026-02-20,,In Progress,Cairo Structural Works,0
+SNG-00587,HAN-0188,MER-P2-B3-01900,Doors & Windows,Moderate,2026-02-13,2026-02-27,,Open,Cairo Structural Works,0
+SNG-00588,HAN-0188,MER-P2-B3-01900,Structural,Major,2026-02-03,2026-03-05,2026-03-03,Resolved,Nile Engineering Contractors,1
+SNG-00589,HAN-0188,MER-P2-B3-01900,Electrical,Major,2026-01-28,2026-02-27,,Open,Modern Facade Systems,0
+SNG-00590,HAN-0188,MER-P2-B3-01900,Doors & Windows,Major,2026-01-27,2026-02-26,2026-03-13,Resolved,Delta Construction Group,0
+SNG-00591,HAN-0188,MER-P2-B3-01900,HVAC,Major,2026-01-29,2026-02-28,2026-02-28,Resolved,Prime MEP Solutions,0
+SNG-00592,HAN-0188,MER-P2-B3-01900,Structural,Minor,2026-01-27,2026-02-03,2026-02-07,Resolved,Cairo Structural Works,0
+SNG-00593,HAN-0189,MER-P2-B3-01902,Paint & Finishing,Moderate,2026-02-19,2026-03-05,2026-03-14,Resolved,Delta Construction Group,0
+SNG-00594,HAN-0189,MER-P2-B3-01902,Structural,Moderate,2026-03-07,2026-03-21,,In Progress,Horizon Build Partners,0
+SNG-00595,HAN-0189,MER-P2-B3-01902,Plumbing,Moderate,2026-03-06,2026-03-20,2026-03-16,Resolved,Nile Engineering Contractors,0
+SNG-00596,HAN-0189,MER-P2-B3-01902,Electrical,Minor,2026-03-08,2026-03-15,2026-03-14,Resolved,Modern Facade Systems,0
+SNG-00597,HAN-0189,MER-P2-B3-01902,Structural,Moderate,2026-02-21,2026-03-07,,Open,Delta Construction Group,0
+SNG-00598,HAN-0190,MER-P2-B3-01903,Electrical,Moderate,2026-01-12,2026-01-26,2026-02-02,Resolved,Modern Facade Systems,0
+SNG-00599,HAN-0190,MER-P2-B3-01903,Structural,Major,2026-01-11,2026-02-10,,Open,Cairo Structural Works,0
+SNG-00600,HAN-0190,MER-P2-B3-01903,Flooring,Moderate,2026-01-17,2026-01-31,,Open,Nile Engineering Contractors,0
+SNG-00601,HAN-0190,MER-P2-B3-01903,HVAC,Minor,2026-01-18,2026-01-25,2026-01-27,Resolved,Horizon Build Partners,0
+SNG-00602,HAN-0191,MER-P2-B3-01904,Electrical,Minor,2026-03-05,2026-03-12,2026-03-12,Resolved,Nile Engineering Contractors,0
+SNG-00603,HAN-0191,MER-P2-B3-01904,Plumbing,Moderate,2026-03-18,2026-04-01,2026-04-03,Resolved,Nile Engineering Contractors,0
+SNG-00604,HAN-0191,MER-P2-B3-01904,Structural,Moderate,2026-03-09,2026-03-23,,In Progress,Cairo Structural Works,0
+SNG-00605,HAN-0191,MER-P2-B3-01904,Doors & Windows,Moderate,2026-03-13,2026-03-27,2026-04-01,Resolved,Horizon Build Partners,0
+SNG-00606,HAN-0191,MER-P2-B3-01904,HVAC,Moderate,2026-03-01,2026-03-15,2026-03-19,Resolved,Prime MEP Solutions,0
+SNG-00607,HAN-0192,MER-P2-B3-01906,Structural,Major,2026-02-05,2026-03-07,,Open,Horizon Build Partners,0
+SNG-00608,HAN-0192,MER-P2-B3-01906,Doors & Windows,Moderate,2026-02-04,2026-02-18,2026-02-14,Resolved,Modern Facade Systems,0
+SNG-00609,HAN-0192,MER-P2-B3-01906,Flooring,Minor,2026-01-24,2026-01-31,2026-01-30,Resolved,Nile Engineering Contractors,0
+SNG-00610,HAN-0192,MER-P2-B3-01906,HVAC,Minor,2026-01-22,2026-01-29,,Open,Nile Engineering Contractors,0
+SNG-00611,HAN-0192,MER-P2-B3-01906,Doors & Windows,Major,2026-01-22,2026-02-21,,Open,Horizon Build Partners,0
+SNG-00612,HAN-0192,MER-P2-B3-01906,Electrical,Major,2026-02-03,2026-03-05,2026-03-19,Resolved,Prime MEP Solutions,0
+SNG-00613,HAN-0193,MER-P2-B3-01907,Structural,Moderate,2025-12-22,2026-01-05,,Open,Prime MEP Solutions,0
+SNG-00614,HAN-0193,MER-P2-B3-01907,Paint & Finishing,Minor,2025-12-09,2025-12-16,,In Progress,Horizon Build Partners,0
+SNG-00615,HAN-0193,MER-P2-B3-01907,Paint & Finishing,Major,2025-12-20,2026-01-19,2026-01-15,Resolved,Modern Facade Systems,0
+SNG-00616,HAN-0193,MER-P2-B3-01907,HVAC,Minor,2025-12-15,2025-12-22,2025-12-24,Resolved,Modern Facade Systems,1
+SNG-00617,HAN-0194,MER-P2-B3-01908,Flooring,Major,2026-03-28,2026-04-27,,Open,Prime MEP Solutions,0
+SNG-00618,HAN-0194,MER-P2-B3-01908,Flooring,Moderate,2026-03-10,2026-03-24,,Open,Delta Construction Group,0
+SNG-00619,HAN-0194,MER-P2-B3-01908,HVAC,Moderate,2026-03-22,2026-04-05,2026-04-07,Resolved,Cairo Structural Works,0
+SNG-00620,HAN-0194,MER-P2-B3-01908,Doors & Windows,Major,2026-03-20,2026-04-19,,Open,Modern Facade Systems,0
+SNG-00621,HAN-0194,MER-P2-B3-01908,Paint & Finishing,Minor,2026-03-12,2026-03-19,,Open,Nile Engineering Contractors,0
+SNG-00622,HAN-0194,MER-P2-B3-01908,Structural,Moderate,2026-03-16,2026-03-30,,In Progress,Horizon Build Partners,0
+SNG-00623,HAN-0194,MER-P2-B3-01908,Electrical,Major,2026-03-18,2026-04-17,2026-04-27,Resolved,Delta Construction Group,0
+SNG-00624,HAN-0195,MER-P2-B3-01910,Doors & Windows,Major,2026-01-15,2026-02-14,2026-03-02,Resolved,Modern Facade Systems,0
+SNG-00625,HAN-0195,MER-P2-B3-01910,Paint & Finishing,Moderate,2026-01-17,2026-01-31,2026-02-06,Resolved,Prime MEP Solutions,0
+SNG-00626,HAN-0195,MER-P2-B3-01910,Electrical,Major,2026-01-06,2026-02-05,,Open,Cairo Structural Works,0
+SNG-00627,HAN-0195,MER-P2-B3-01910,Flooring,Major,2026-01-15,2026-02-14,2026-02-07,Resolved,Modern Facade Systems,0
+SNG-00628,HAN-0195,MER-P2-B3-01910,Doors & Windows,Major,2025-12-31,2026-01-30,,Open,Nile Engineering Contractors,0
+SNG-00629,HAN-0196,MER-P2-B3-01911,Paint & Finishing,Minor,2026-01-12,2026-01-19,2026-01-22,Resolved,Modern Facade Systems,0
+SNG-00630,HAN-0196,MER-P2-B3-01911,Plumbing,Major,2026-01-18,2026-02-17,,In Progress,Cairo Structural Works,0
+SNG-00631,HAN-0196,MER-P2-B3-01911,HVAC,Major,2026-01-12,2026-02-11,,Open,Delta Construction Group,0
+SNG-00632,HAN-0196,MER-P2-B3-01911,HVAC,Moderate,2026-01-10,2026-01-24,2026-01-28,Resolved,Prime MEP Solutions,0
+SNG-00633,HAN-0197,MER-P2-B4-01912,HVAC,Major,2026-01-01,2026-01-31,,Open,Prime MEP Solutions,0
+SNG-00634,HAN-0197,MER-P2-B4-01912,Flooring,Major,2026-01-04,2026-02-03,2026-02-10,Resolved,Nile Engineering Contractors,0
+SNG-00635,HAN-0197,MER-P2-B4-01912,Paint & Finishing,Moderate,2026-01-01,2026-01-15,,Open,Prime MEP Solutions,0
+SNG-00636,HAN-0198,MER-P2-B4-01913,Plumbing,Major,2025-12-23,2026-01-22,,Open,Modern Facade Systems,0
+SNG-00637,HAN-0198,MER-P2-B4-01913,Structural,Moderate,2025-12-17,2025-12-31,,Open,Delta Construction Group,0
+SNG-00638,HAN-0198,MER-P2-B4-01913,Paint & Finishing,Minor,2025-12-25,2026-01-01,2025-12-29,Resolved,Modern Facade Systems,1
+SNG-00639,HAN-0198,MER-P2-B4-01913,Doors & Windows,Major,2025-12-25,2026-01-24,,Open,Nile Engineering Contractors,0
+SNG-00640,HAN-0198,MER-P2-B4-01913,Plumbing,Minor,2025-12-19,2025-12-26,2025-12-31,Resolved,Nile Engineering Contractors,0
+SNG-00641,HAN-0199,MER-P2-B4-01914,Paint & Finishing,Moderate,2026-02-09,2026-02-23,2026-03-03,Resolved,Nile Engineering Contractors,0
+SNG-00642,HAN-0199,MER-P2-B4-01914,Electrical,Moderate,2026-02-09,2026-02-23,,In Progress,Delta Construction Group,0
+SNG-00643,HAN-0199,MER-P2-B4-01914,HVAC,Minor,2026-02-03,2026-02-10,,In Progress,Horizon Build Partners,0
+SNG-00644,HAN-0199,MER-P2-B4-01914,Structural,Minor,2026-02-06,2026-02-13,,Open,Modern Facade Systems,0
+SNG-00645,HAN-0199,MER-P2-B4-01914,Paint & Finishing,Minor,2026-02-09,2026-02-16,2026-02-18,Resolved,Modern Facade Systems,0
+SNG-00646,HAN-0199,MER-P2-B4-01914,Electrical,Minor,2026-01-29,2026-02-05,2026-02-08,Resolved,Delta Construction Group,0
+SNG-00647,HAN-0199,MER-P2-B4-01914,Electrical,Moderate,2026-01-24,2026-02-07,,In Progress,Delta Construction Group,0
+SNG-00648,HAN-0199,MER-P2-B4-01914,Paint & Finishing,Moderate,2026-01-28,2026-02-11,2026-02-06,Resolved,Horizon Build Partners,0
+SNG-00649,HAN-0200,MER-P2-B4-01915,Paint & Finishing,Moderate,2026-03-13,2026-03-27,,In Progress,Cairo Structural Works,0
+SNG-00650,HAN-0200,MER-P2-B4-01915,Electrical,Moderate,2026-02-28,2026-03-14,,Open,Nile Engineering Contractors,0
+SNG-00651,HAN-0200,MER-P2-B4-01915,Paint & Finishing,Minor,2026-03-07,2026-03-14,2026-03-15,Resolved,Modern Facade Systems,0
+SNG-00652,HAN-0201,MER-P2-B4-01916,Structural,Moderate,2025-12-30,2026-01-13,,In Progress,Cairo Structural Works,0
+SNG-00653,HAN-0201,MER-P2-B4-01916,Flooring,Moderate,2026-01-06,2026-01-20,2026-01-20,Resolved,Prime MEP Solutions,0
+SNG-00654,HAN-0201,MER-P2-B4-01916,HVAC,Major,2026-01-06,2026-02-05,,Open,Modern Facade Systems,0
+SNG-00655,HAN-0201,MER-P2-B4-01916,HVAC,Minor,2026-01-13,2026-01-20,2026-01-19,Resolved,Prime MEP Solutions,1
+SNG-00656,HAN-0201,MER-P2-B4-01916,Plumbing,Major,2026-01-11,2026-02-10,2026-02-24,Resolved,Nile Engineering Contractors,0
+SNG-00657,HAN-0201,MER-P2-B4-01916,Plumbing,Major,2026-01-08,2026-02-07,,Open,Modern Facade Systems,0
+SNG-00658,HAN-0201,MER-P2-B4-01916,Doors & Windows,Moderate,2026-01-13,2026-01-27,2026-01-21,Resolved,Cairo Structural Works,0
+SNG-00659,HAN-0201,MER-P2-B4-01916,Flooring,Moderate,2025-12-29,2026-01-12,2026-01-11,Resolved,Cairo Structural Works,0
+SNG-00660,HAN-0202,MER-P2-B4-01917,Plumbing,Moderate,2026-03-10,2026-03-24,,In Progress,Modern Facade Systems,0
+SNG-00661,HAN-0202,MER-P2-B4-01917,HVAC,Minor,2026-03-15,2026-03-22,2026-03-19,Resolved,Delta Construction Group,0
+SNG-00662,HAN-0202,MER-P2-B4-01917,Flooring,Moderate,2026-03-04,2026-03-18,,In Progress,Nile Engineering Contractors,0
+SNG-00663,HAN-0202,MER-P2-B4-01917,Paint & Finishing,Minor,2026-03-10,2026-03-17,,Open,Cairo Structural Works,0
+SNG-00664,HAN-0203,MER-P2-B4-01918,Electrical,Major,2026-02-07,2026-03-09,2026-03-03,Resolved,Delta Construction Group,0
+SNG-00665,HAN-0203,MER-P2-B4-01918,Paint & Finishing,Moderate,2026-02-02,2026-02-16,,Open,Prime MEP Solutions,0
+SNG-00666,HAN-0203,MER-P2-B4-01918,HVAC,Minor,2026-01-26,2026-02-02,,Open,Nile Engineering Contractors,0
+SNG-00667,HAN-0204,MER-P2-B4-01919,Plumbing,Major,2025-12-26,2026-01-25,2026-02-02,Resolved,Cairo Structural Works,0
+SNG-00668,HAN-0204,MER-P2-B4-01919,Paint & Finishing,Minor,2026-01-01,2026-01-08,,In Progress,Delta Construction Group,0
+SNG-00669,HAN-0204,MER-P2-B4-01919,Flooring,Major,2026-01-09,2026-02-08,,Open,Prime MEP Solutions,0
+SNG-00670,HAN-0204,MER-P2-B4-01919,Paint & Finishing,Moderate,2026-01-08,2026-01-22,2026-01-31,Resolved,Delta Construction Group,0
+SNG-00671,HAN-0204,MER-P2-B4-01919,Flooring,Major,2026-01-11,2026-02-10,2026-01-29,Resolved,Prime MEP Solutions,0
+SNG-00672,HAN-0204,MER-P2-B4-01919,Electrical,Moderate,2026-01-09,2026-01-23,,Open,Cairo Structural Works,0
+SNG-00673,HAN-0205,MER-P2-B4-01920,HVAC,Major,2026-01-26,2026-02-25,,Open,Prime MEP Solutions,0
+SNG-00674,HAN-0205,MER-P2-B4-01920,HVAC,Major,2026-01-27,2026-02-26,,Open,Cairo Structural Works,0
+SNG-00675,HAN-0205,MER-P2-B4-01920,Paint & Finishing,Major,2026-02-01,2026-03-03,,Open,Nile Engineering Contractors,0
+SNG-00676,HAN-0205,MER-P2-B4-01920,Doors & Windows,Moderate,2026-02-06,2026-02-20,,Open,Modern Facade Systems,0
+SNG-00677,HAN-0205,MER-P2-B4-01920,Electrical,Minor,2026-01-23,2026-01-30,,Open,Modern Facade Systems,0
+SNG-00678,HAN-0205,MER-P2-B4-01920,Plumbing,Major,2026-02-08,2026-03-10,2026-02-27,Resolved,Nile Engineering Contractors,0
+SNG-00679,HAN-0206,MER-P2-B4-01921,Paint & Finishing,Minor,2026-01-29,2026-02-05,2026-02-06,Resolved,Nile Engineering Contractors,0
+SNG-00680,HAN-0206,MER-P2-B4-01921,Plumbing,Minor,2026-02-02,2026-02-09,2026-02-14,Resolved,Cairo Structural Works,1
+SNG-00681,HAN-0206,MER-P2-B4-01921,Doors & Windows,Moderate,2026-01-26,2026-02-09,2026-02-05,Resolved,Horizon Build Partners,0
+SNG-00682,HAN-0206,MER-P2-B4-01921,Flooring,Moderate,2026-01-30,2026-02-13,,Open,Modern Facade Systems,0
+SNG-00683,HAN-0206,MER-P2-B4-01921,Paint & Finishing,Moderate,2026-01-24,2026-02-07,,Open,Modern Facade Systems,0
+SNG-00684,HAN-0206,MER-P2-B4-01921,Electrical,Moderate,2026-01-21,2026-02-04,,Open,Prime MEP Solutions,0
+SNG-00685,HAN-0206,MER-P2-B4-01921,Flooring,Major,2026-01-26,2026-02-25,2026-02-18,Resolved,Horizon Build Partners,0
+SNG-00686,HAN-0206,MER-P2-B4-01921,Flooring,Minor,2026-01-23,2026-01-30,,In Progress,Delta Construction Group,0
+SNG-00687,HAN-0207,MER-P2-B4-01922,Flooring,Major,2025-12-30,2026-01-29,,Open,Nile Engineering Contractors,0
+SNG-00688,HAN-0207,MER-P2-B4-01922,Structural,Moderate,2025-12-21,2026-01-04,,Open,Horizon Build Partners,0
+SNG-00689,HAN-0207,MER-P2-B4-01922,Flooring,Moderate,2026-01-02,2026-01-16,,Open,Nile Engineering Contractors,0
+SNG-00690,HAN-0207,MER-P2-B4-01922,HVAC,Minor,2026-01-03,2026-01-10,,Open,Modern Facade Systems,0
+SNG-00691,HAN-0207,MER-P2-B4-01922,Paint & Finishing,Minor,2026-01-03,2026-01-10,2026-01-13,Resolved,Cairo Structural Works,0
+SNG-00692,HAN-0207,MER-P2-B4-01922,Paint & Finishing,Minor,2025-12-29,2026-01-05,2026-01-10,Resolved,Horizon Build Partners,0
+SNG-00693,HAN-0207,MER-P2-B4-01922,Paint & Finishing,Moderate,2025-12-22,2026-01-05,2026-01-13,Resolved,Horizon Build Partners,0
+SNG-00694,HAN-0207,MER-P2-B4-01922,Paint & Finishing,Major,2025-12-23,2026-01-22,2026-01-26,Resolved,Delta Construction Group,0
+SNG-00695,HAN-0208,MER-P2-B4-01924,Plumbing,Moderate,2026-03-28,2026-04-11,,Open,Prime MEP Solutions,0
+SNG-00696,HAN-0208,MER-P2-B4-01924,HVAC,Moderate,2026-03-17,2026-03-31,2026-04-05,Resolved,Cairo Structural Works,0
+SNG-00697,HAN-0208,MER-P2-B4-01924,Electrical,Minor,2026-03-14,2026-03-21,,Open,Delta Construction Group,0
+SNG-00698,HAN-0208,MER-P2-B4-01924,Doors & Windows,Moderate,2026-03-23,2026-04-06,2026-04-17,Resolved,Modern Facade Systems,0
+SNG-00699,HAN-0208,MER-P2-B4-01924,HVAC,Minor,2026-03-10,2026-03-17,,In Progress,Horizon Build Partners,0
+SNG-00700,HAN-0209,MER-P2-B4-01925,Flooring,Moderate,2026-02-01,2026-02-15,,Open,Modern Facade Systems,0
+SNG-00701,HAN-0209,MER-P2-B4-01925,Structural,Major,2026-01-25,2026-02-24,2026-02-24,Resolved,Horizon Build Partners,0
+SNG-00702,HAN-0209,MER-P2-B4-01925,Plumbing,Major,2026-01-23,2026-02-22,,In Progress,Horizon Build Partners,0
+SNG-00703,HAN-0209,MER-P2-B4-01925,HVAC,Moderate,2026-01-22,2026-02-05,2026-02-14,Resolved,Horizon Build Partners,1
+SNG-00704,HAN-0210,MER-P2-B4-01926,Structural,Major,2026-01-17,2026-02-16,2026-02-14,Resolved,Modern Facade Systems,0
+SNG-00705,HAN-0210,MER-P2-B4-01926,Electrical,Minor,2026-01-24,2026-01-31,,Open,Prime MEP Solutions,0
+SNG-00706,HAN-0210,MER-P2-B4-01926,Structural,Major,2026-01-22,2026-02-21,,In Progress,Prime MEP Solutions,0
+SNG-00707,HAN-0210,MER-P2-B4-01926,Doors & Windows,Major,2026-01-13,2026-02-12,2026-02-06,Resolved,Cairo Structural Works,0
+SNG-00708,HAN-0210,MER-P2-B4-01926,Structural,Moderate,2026-01-23,2026-02-06,,Open,Prime MEP Solutions,0
+SNG-00709,HAN-0210,MER-P2-B4-01926,Flooring,Moderate,2026-01-19,2026-02-02,,Open,Horizon Build Partners,0
+SNG-00710,HAN-0211,MER-P2-B4-01927,Electrical,Moderate,2026-02-27,2026-03-13,,Open,Prime MEP Solutions,0
+SNG-00711,HAN-0211,MER-P2-B4-01927,Doors & Windows,Minor,2026-02-10,2026-02-17,,Open,Modern Facade Systems,0
+SNG-00712,HAN-0211,MER-P2-B4-01927,Electrical,Moderate,2026-02-13,2026-02-27,,Open,Cairo Structural Works,0
+SNG-00713,HAN-0211,MER-P2-B4-01927,Electrical,Minor,2026-02-26,2026-03-05,2026-03-05,Resolved,Nile Engineering Contractors,0
+SNG-00714,HAN-0212,MER-P2-B4-01928,HVAC,Minor,2025-12-23,2025-12-30,,Open,Nile Engineering Contractors,0
+SNG-00715,HAN-0212,MER-P2-B4-01928,HVAC,Major,2026-01-04,2026-02-03,2026-01-24,Resolved,Nile Engineering Contractors,0
+SNG-00716,HAN-0212,MER-P2-B4-01928,Electrical,Moderate,2025-12-28,2026-01-11,,Open,Prime MEP Solutions,0
+SNG-00717,HAN-0212,MER-P2-B4-01928,Electrical,Major,2026-01-05,2026-02-04,,Open,Horizon Build Partners,0
+SNG-00718,HAN-0212,MER-P2-B4-01928,Electrical,Major,2025-12-23,2026-01-22,,In Progress,Cairo Structural Works,0
+SNG-00719,HAN-0212,MER-P2-B4-01928,Paint & Finishing,Major,2025-12-22,2026-01-21,2026-02-04,Resolved,Horizon Build Partners,0
+SNG-00720,HAN-0212,MER-P2-B4-01928,HVAC,Major,2025-12-22,2026-01-21,2026-01-31,Resolved,Delta Construction Group,0
+SNG-00721,HAN-0213,MER-P2-B4-01929,Electrical,Minor,2026-01-05,2026-01-12,,In Progress,Modern Facade Systems,0
+SNG-00722,HAN-0213,MER-P2-B4-01929,Doors & Windows,Moderate,2026-01-04,2026-01-18,,In Progress,Delta Construction Group,0
+SNG-00723,HAN-0213,MER-P2-B4-01929,Doors & Windows,Moderate,2025-12-19,2026-01-02,,Open,Prime MEP Solutions,0
+SNG-00724,HAN-0213,MER-P2-B4-01929,Structural,Minor,2026-01-05,2026-01-12,2026-01-15,Resolved,Nile Engineering Contractors,0
+SNG-00725,HAN-0213,MER-P2-B4-01929,HVAC,Moderate,2025-12-28,2026-01-11,,In Progress,Delta Construction Group,0
+SNG-00726,HAN-0213,MER-P2-B4-01929,Flooring,Minor,2026-01-05,2026-01-12,2026-01-11,Resolved,Prime MEP Solutions,0
+SNG-00727,HAN-0213,MER-P2-B4-01929,Electrical,Moderate,2025-12-19,2026-01-02,,In Progress,Modern Facade Systems,0
+SNG-00728,HAN-0213,MER-P2-B4-01929,Structural,Major,2026-01-03,2026-02-02,,Open,Modern Facade Systems,0
+SNG-00729,HAN-0214,MER-P2-B4-01930,Plumbing,Moderate,2026-01-20,2026-02-03,,Open,Cairo Structural Works,0
+SNG-00730,HAN-0214,MER-P2-B4-01930,Plumbing,Minor,2026-01-17,2026-01-24,,In Progress,Horizon Build Partners,0
+SNG-00731,HAN-0214,MER-P2-B4-01930,Doors & Windows,Minor,2026-01-16,2026-01-23,,Open,Nile Engineering Contractors,0
+SNG-00732,HAN-0214,MER-P2-B4-01930,Doors & Windows,Major,2026-01-21,2026-02-20,2026-03-09,Resolved,Delta Construction Group,0
+SNG-00733,HAN-0214,MER-P2-B4-01930,Plumbing,Moderate,2026-01-20,2026-02-03,,Open,Horizon Build Partners,0
+SNG-00734,HAN-0215,MER-P2-B4-01931,Paint & Finishing,Major,2026-01-02,2026-02-01,,Open,Horizon Build Partners,0
+SNG-00735,HAN-0215,MER-P2-B4-01931,Plumbing,Minor,2025-12-28,2026-01-04,,Open,Delta Construction Group,0
+SNG-00736,HAN-0215,MER-P2-B4-01931,Doors & Windows,Moderate,2026-01-15,2026-01-29,2026-01-31,Resolved,Prime MEP Solutions,0
+SNG-00737,HAN-0215,MER-P2-B4-01931,Plumbing,Major,2026-01-12,2026-02-11,2026-02-21,Resolved,Horizon Build Partners,0
+SNG-00738,HAN-0215,MER-P2-B4-01931,Structural,Minor,2026-01-16,2026-01-23,,Open,Prime MEP Solutions,0
+SNG-00739,HAN-0216,MER-P2-B4-01932,Electrical,Major,2026-01-09,2026-02-08,2026-01-29,Resolved,Horizon Build Partners,0
+SNG-00740,HAN-0216,MER-P2-B4-01932,HVAC,Major,2025-12-25,2026-01-24,,Open,Cairo Structural Works,0
+SNG-00741,HAN-0216,MER-P2-B4-01932,Doors & Windows,Minor,2025-12-29,2026-01-05,2026-01-10,Resolved,Delta Construction Group,0
+SNG-00742,HAN-0216,MER-P2-B4-01932,Doors & Windows,Moderate,2025-12-25,2026-01-08,2026-01-13,Resolved,Horizon Build Partners,0
+SNG-00743,HAN-0216,MER-P2-B4-01932,Flooring,Major,2025-12-31,2026-01-30,,Open,Horizon Build Partners,0
+SNG-00744,HAN-0216,MER-P2-B4-01932,Plumbing,Major,2026-01-01,2026-01-31,,Open,Prime MEP Solutions,0
+SNG-00745,HAN-0216,MER-P2-B4-01932,Flooring,Major,2026-01-06,2026-02-05,2026-02-13,Resolved,Modern Facade Systems,0
+SNG-00746,HAN-0216,MER-P2-B4-01932,HVAC,Major,2026-01-07,2026-02-06,,Open,Cairo Structural Works,0
+SNG-00747,HAN-0217,MER-P2-B4-01933,Paint & Finishing,Minor,2026-02-25,2026-03-04,,In Progress,Delta Construction Group,0
+SNG-00748,HAN-0217,MER-P2-B4-01933,Plumbing,Minor,2026-02-25,2026-03-04,,Open,Prime MEP Solutions,0
+SNG-00749,HAN-0217,MER-P2-B4-01933,Plumbing,Major,2026-03-09,2026-04-08,,Open,Horizon Build Partners,0
+SNG-00750,HAN-0217,MER-P2-B4-01933,Plumbing,Major,2026-03-05,2026-04-04,,Open,Delta Construction Group,0
+SNG-00751,HAN-0217,MER-P2-B4-01933,HVAC,Moderate,2026-03-04,2026-03-18,,Open,Nile Engineering Contractors,0
+SNG-00752,HAN-0218,MER-P2-B4-01934,Paint & Finishing,Major,2026-03-09,2026-04-08,,Open,Modern Facade Systems,0
+SNG-00753,HAN-0218,MER-P2-B4-01934,Flooring,Moderate,2026-03-08,2026-03-22,2026-03-24,Resolved,Modern Facade Systems,1
+SNG-00754,HAN-0218,MER-P2-B4-01934,Plumbing,Major,2026-03-14,2026-04-13,2026-05-01,Resolved,Prime MEP Solutions,0
+SNG-00755,HAN-0218,MER-P2-B4-01934,Structural,Moderate,2026-03-15,2026-03-29,2026-03-23,Resolved,Prime MEP Solutions,0
+SNG-00756,HAN-0218,MER-P2-B4-01934,Structural,Major,2026-02-26,2026-03-28,,Open,Delta Construction Group,0
+SNG-00757,HAN-0218,MER-P2-B4-01934,Electrical,Moderate,2026-02-27,2026-03-13,2026-03-19,Resolved,Modern Facade Systems,0
+SNG-00758,HAN-0218,MER-P2-B4-01934,Electrical,Moderate,2026-02-25,2026-03-11,2026-03-06,Resolved,Delta Construction Group,0
+SNG-00759,HAN-0218,MER-P2-B4-01934,Doors & Windows,Major,2026-02-27,2026-03-29,,Open,Nile Engineering Contractors,0
+SNG-00760,HAN-0219,MER-P2-B4-01936,Structural,Moderate,2026-02-14,2026-02-28,,Open,Horizon Build Partners,0
+SNG-00761,HAN-0219,MER-P2-B4-01936,Structural,Moderate,2026-02-24,2026-03-10,,Open,Delta Construction Group,0
+SNG-00762,HAN-0219,MER-P2-B4-01936,Paint & Finishing,Moderate,2026-02-15,2026-03-01,,Open,Horizon Build Partners,0
+SNG-00763,HAN-0219,MER-P2-B4-01936,Electrical,Minor,2026-02-14,2026-02-21,,Open,Delta Construction Group,0
+SNG-00764,HAN-0219,MER-P2-B4-01936,Paint & Finishing,Moderate,2026-02-21,2026-03-07,2026-03-17,Resolved,Prime MEP Solutions,0
+SNG-00765,HAN-0219,MER-P2-B4-01936,Flooring,Minor,2026-02-10,2026-02-17,,Open,Nile Engineering Contractors,0
+SNG-00766,HAN-0220,MER-P2-B4-01938,Paint & Finishing,Major,2026-03-18,2026-04-17,2026-05-02,Resolved,Modern Facade Systems,0
+SNG-00767,HAN-0220,MER-P2-B4-01938,Flooring,Moderate,2026-03-01,2026-03-15,,In Progress,Horizon Build Partners,0
+SNG-00768,HAN-0220,MER-P2-B4-01938,Paint & Finishing,Major,2026-03-12,2026-04-11,2026-04-12,Resolved,Prime MEP Solutions,0
+SNG-00769,HAN-0221,MER-P2-B4-01939,Doors & Windows,Moderate,2026-01-12,2026-01-26,2026-01-31,Resolved,Horizon Build Partners,0
+SNG-00770,HAN-0221,MER-P2-B4-01939,Plumbing,Minor,2026-01-09,2026-01-16,,Open,Prime MEP Solutions,0
+SNG-00771,HAN-0221,MER-P2-B4-01939,Structural,Minor,2025-12-24,2025-12-31,2026-01-03,Resolved,Delta Construction Group,0
+SNG-00772,HAN-0221,MER-P2-B4-01939,Flooring,Moderate,2025-12-31,2026-01-14,,Open,Prime MEP Solutions,0
+SNG-00773,HAN-0221,MER-P2-B4-01939,Doors & Windows,Minor,2026-01-11,2026-01-18,2026-01-16,Resolved,Delta Construction Group,0
+SNG-00774,HAN-0222,MER-P2-B4-01943,Plumbing,Moderate,2026-03-07,2026-03-21,2026-03-27,Resolved,Delta Construction Group,0
+SNG-00775,HAN-0222,MER-P2-B4-01943,Electrical,Moderate,2026-03-02,2026-03-16,2026-03-22,Resolved,Nile Engineering Contractors,1
+SNG-00776,HAN-0222,MER-P2-B4-01943,Doors & Windows,Moderate,2026-02-23,2026-03-09,2026-03-16,Resolved,Prime MEP Solutions,0
+SNG-00777,HAN-0222,MER-P2-B4-01943,Electrical,Moderate,2026-02-23,2026-03-09,2026-03-07,Resolved,Nile Engineering Contractors,0
+SNG-00778,HAN-0222,MER-P2-B4-01943,Plumbing,Major,2026-02-23,2026-03-25,,In Progress,Nile Engineering Contractors,0
+SNG-00779,HAN-0222,MER-P2-B4-01943,Doors & Windows,Moderate,2026-03-04,2026-03-18,,Open,Cairo Structural Works,0
+SNG-00780,HAN-0222,MER-P2-B4-01943,Plumbing,Major,2026-03-05,2026-04-04,2026-04-20,Resolved,Modern Facade Systems,0
+SNG-00781,HAN-0222,MER-P2-B4-01943,Plumbing,Major,2026-03-07,2026-04-06,,In Progress,Horizon Build Partners,0
+SNG-00782,HAN-0223,MER-P2-B4-01944,Electrical,Major,2025-12-16,2026-01-15,2026-01-28,Resolved,Delta Construction Group,0
+SNG-00783,HAN-0223,MER-P2-B4-01944,Doors & Windows,Major,2025-12-15,2026-01-14,2026-01-17,Resolved,Prime MEP Solutions,0
+SNG-00784,HAN-0223,MER-P2-B4-01944,Paint & Finishing,Moderate,2025-12-29,2026-01-12,,In Progress,Delta Construction Group,0
+SNG-00785,HAN-0223,MER-P2-B4-01944,Electrical,Minor,2025-12-17,2025-12-24,,In Progress,Cairo Structural Works,0
+SNG-00786,HAN-0223,MER-P2-B4-01944,Electrical,Moderate,2025-12-24,2026-01-07,,Open,Nile Engineering Contractors,0
+SNG-00787,HAN-0223,MER-P2-B4-01944,Plumbing,Major,2025-12-15,2026-01-14,,In Progress,Modern Facade Systems,0
+SNG-00788,HAN-0224,MER-P2-B4-01945,Doors & Windows,Minor,2026-01-21,2026-01-28,,Open,Horizon Build Partners,0
+SNG-00789,HAN-0224,MER-P2-B4-01945,Structural,Major,2026-02-09,2026-03-11,,In Progress,Nile Engineering Contractors,0
+SNG-00790,HAN-0224,MER-P2-B4-01945,Structural,Moderate,2026-01-31,2026-02-14,2026-02-16,Resolved,Cairo Structural Works,0
+SNG-00791,HAN-0224,MER-P2-B4-01945,Electrical,Moderate,2026-02-01,2026-02-15,2026-02-24,Resolved,Cairo Structural Works,1
+SNG-00792,HAN-0225,MER-P2-B4-01947,Electrical,Major,2025-12-22,2026-01-21,,In Progress,Cairo Structural Works,0
+SNG-00793,HAN-0225,MER-P2-B4-01947,Plumbing,Moderate,2025-12-26,2026-01-09,,Open,Prime MEP Solutions,0
+SNG-00794,HAN-0225,MER-P2-B4-01947,Structural,Moderate,2025-12-24,2026-01-07,2026-01-07,Resolved,Nile Engineering Contractors,1
+SNG-00795,HAN-0225,MER-P2-B4-01947,Paint & Finishing,Major,2025-12-31,2026-01-30,2026-02-10,Resolved,Horizon Build Partners,0
+SNG-00796,HAN-0225,MER-P2-B4-01947,Doors & Windows,Moderate,2026-01-08,2026-01-22,2026-01-22,Resolved,Modern Facade Systems,1
+SNG-00797,HAN-0226,MER-P2-B4-01948,HVAC,Major,2026-02-22,2026-03-24,,Open,Cairo Structural Works,0
+SNG-00798,HAN-0226,MER-P2-B4-01948,Plumbing,Minor,2026-02-20,2026-02-27,2026-02-24,Resolved,Prime MEP Solutions,1
+SNG-00799,HAN-0226,MER-P2-B4-01948,Paint & Finishing,Minor,2026-02-04,2026-02-11,2026-02-12,Resolved,Modern Facade Systems,1

@@ -1,4 +1,4 @@
-"""Client-facing HTML rendering for the executive report.
+"""Client-facing HTML rendering for the Real Estate Executive Intelligence Report.
 
 This module owns exactly one job: turn the final report dict --
 already fully computed and validated by ai/report_generator.py -- into
@@ -6,35 +6,32 @@ a single self-contained HTML document. It performs no analytics, no
 scoring, and no narrative generation; every value on the page is read
 directly from the report dict, the same source of truth the JSON and
 Markdown outputs are built from. If a value isn't already in `report`,
-it doesn't appear on the page -- charts included: every chart here is
-a plain HTML/CSS rendering of numbers analysis/*.py already computed
-(delivery on-time rate per warehouse, the complaints engine's negative-
-sentiment percentage, root-cause confidence, etc.), never a new
-statistic and never an invented one.
+it doesn't appear on the page.
 
-The document is designed document-first, not website-first: a single
-portrait content column, a dark cover panel followed by a light
-editorial body, and a typographic/spacing scale built for A4 print
-(see ai/pdf_report_renderer.py for how it is printed). It is still a
-plain self-contained HTML file with all CSS inlined and no external
-fonts/scripts/CDNs, so it opens correctly from disk with no internet
-connection and reads reasonably in a browser -- but the print
-rendering in @media print is the primary target this design is built
-for, not a secondary override of a desktop layout.
+The document is document-first (a single portrait content column,
+print typography, an A4-shaped content width), a dark title-panel
+cover followed by a light editorial body -- the same design system
+built for this platform's original operations report, carried forward
+unchanged (colors, spacing scale, typography scale, print pagination
+rules) and extended with two new primitives real estate's richer,
+more tabular data needs: `_data_table` (compact ranking/comparison
+tables) and `_fmt_currency` (EGP 8.4M / EGP 1.26B style compact
+currency formatting).
 
 All dynamic text is passed through `html.escape` before being placed
-in the document -- the report contains free-text narrative from an LLM
-and evidence strings copied from source data, neither of which is
-trusted to be free of `<`, `&`, or `"` characters.
+in the document.
 
-Layout is organized as one builder function per section: cover
-(branding + title + executive alert, dark), dashboard (KPI cards),
-performance charts, executive summary, business risks, root causes,
-if-no-action, action plan, expected impact, department breakdown,
-appendix, executive conclusion, closing footer. A small set of
-chart/component primitives (`_hbar_row`, `_donut_html`, `_badge_html`,
-`_meta_row`, `_info_row`, ...) are shared across those builders so no
-section reimplements its own bar, badge, or label/value row markup.
+Layout mirrors the report's own 19-section structure: cover, executive
+dashboard, business health overview, nine domain sections (commercial
+performance, lead funnel, inventory & pricing, marketing, sales team &
+broker, collections, cancellations, construction & handover, customer
+experience), cross-functional root causes, financial exposure, 90-day
+action plan, department accountability, forecast & outlook, executive
+conclusion, appendix, closing footer. Only the report-wide narrative
+layer (headline, summary, per-domain one-liners, root-cause/action
+rationale, department briefings, forecast commentary) is AI-written;
+every domain section's tables, rankings, and charts are rendered
+directly from the report dict's own Python-computed data.
 """
 
 from __future__ import annotations
@@ -49,38 +46,28 @@ from typing import Any
 
 
 class HTMLRenderError(Exception):
-    """The report dict was missing a field this renderer requires.
-
-    Raised instead of letting a bare KeyError/TypeError escape, so a
-    caller (or a future standalone re-render of an old JSON file) gets
-    a message that names the report shape problem instead of a raw
-    traceback into string-formatting code.
-    """
+    """The report dict was missing a field this renderer requires."""
 
 
 # --------------------------------------------------------------------------
 # Presentation vocabulary
 # --------------------------------------------------------------------------
-# These map values the analytics/orchestration layers already computed
-# (a status string, a severity string) to a CSS class name. They select
-# a look, never a number -- no score, confidence, or ranking is decided
-# here.
 
-STATUS_CLASS = {"Healthy": "status-healthy", "At Risk": "status-at-risk", "Critical": "status-critical"}
+STATUS_CLASS = {"Healthy": "status-healthy", "Watch": "status-watch", "At Risk": "status-at-risk", "Critical": "status-critical"}
 SEVERITY_CLASS = {"HIGH": "severity-high", "MEDIUM": "severity-medium", "LOW": "severity-low"}
 DEFAULT_STATUS_CLASS = "status-unknown"
 DEFAULT_SEVERITY_CLASS = "severity-low"
 
-# The only three horizon labels report_generator._action_horizon can ever
-# produce, in chronological display order. Not imported from
-# report_generator.py to avoid a circular import (that module imports
-# render_html from this one); if that vocabulary ever changes, update it
-# in both places.
-ACTION_HORIZON_ORDER = ("Immediate (0-30 Days)", "Near-Term (30-60 Days)", "Strategic (60-120 Days)")
+DOMAIN_ORDER = [
+    "commercial_health", "sales_funnel_health", "inventory_health", "marketing_efficiency_health",
+    "collections_health", "cancellations_health", "construction_delivery_health",
+    "handover_readiness_health", "customer_experience_health",
+]
+
+ACTION_HORIZON_ORDER = ("Immediate (0-30 Days)", "Near-Term (30-60 Days)", "Strategic (60-120 Days)", "Longer-Term (120-365 Days)")
 ACTION_HORIZON_CLASS = {
-    "Immediate (0-30 Days)": "phase-immediate",
-    "Near-Term (30-60 Days)": "phase-near-term",
-    "Strategic (60-120 Days)": "phase-strategic",
+    "Immediate (0-30 Days)": "phase-immediate", "Near-Term (30-60 Days)": "phase-near-term",
+    "Strategic (60-120 Days)": "phase-strategic", "Longer-Term (120-365 Days)": "phase-longer-term",
 }
 
 
@@ -90,14 +77,12 @@ ACTION_HORIZON_CLASS = {
 
 
 def _esc(value: Any) -> str:
-    """Escape a value for safe inclusion in HTML text content or an attribute."""
     if value is None:
         return ""
     return escape(str(value), quote=True)
 
 
 def _label(key: str) -> str:
-    """"customer_experience" -> "Customer Experience"."""
     return key.replace("_", " ").title()
 
 
@@ -106,7 +91,6 @@ def _fmt_score(score: float | None) -> str:
 
 
 def _percent(value: float | None, of: float = 100.0) -> float:
-    """Clamp a value onto a 0-100 CSS-safe percentage width."""
     if value is None:
         return 0.0
     return max(0.0, min(100.0, float(value) / of * 100))
@@ -116,15 +100,27 @@ def _fmt_confidence(value: float | None) -> str:
     return "N/A" if value is None else f"{value:.0%}"
 
 
-def _fmt_datetime(value: str | None) -> str:
-    """An ISO-8601 timestamp -> "24 Jul 2026, 09:15 UTC".
+def _fmt_pct(value: float | None) -> str:
+    return "N/A" if value is None else f"{value:.1f}%"
 
-    Pure presentation of the existing metadata.generated_at value
-    (always produced by `datetime.now(timezone.utc).isoformat()`
-    upstream) -- never a new value. Falls back to the raw string if it
-    can't be parsed, so a future change to how the timestamp is
-    produced degrades gracefully instead of raising.
-    """
+
+def _fmt_currency(value: float | None, currency: str = "EGP") -> str:
+    """8_400_000 -> "EGP 8.4M"; 1_260_000_000 -> "EGP 1.26B". Never exposes excessive decimals."""
+    if value is None:
+        return "N/A"
+    value = float(value)
+    sign = "-" if value < 0 else ""
+    value = abs(value)
+    if value >= 1_000_000_000:
+        return f"{sign}{currency} {value / 1_000_000_000:.2f}B"
+    if value >= 1_000_000:
+        return f"{sign}{currency} {value / 1_000_000:.1f}M"
+    if value >= 1_000:
+        return f"{sign}{currency} {value / 1_000:.0f}K"
+    return f"{sign}{currency} {value:,.0f}"
+
+
+def _fmt_datetime(value: str | None) -> str:
     if not value:
         return ""
     try:
@@ -138,13 +134,6 @@ def _fmt_datetime(value: str | None) -> str:
 
 
 def _brand_lockup(platform: str | None) -> tuple[str, str]:
-    """Split "Solven Operations Intelligence Platform" into ("SOLVEN", "Operations Intelligence").
-
-    Pure string derivation of the existing metadata.platform value --
-    no new copy is introduced. First word becomes the wordmark; the
-    interior words (excluding a trailing "Platform"-style suffix)
-    become the sub-brand line. Degrades gracefully for shorter strings.
-    """
     words = (platform or "").split()
     if not words:
         return "", ""
@@ -155,7 +144,6 @@ def _brand_lockup(platform: str | None) -> tuple[str, str]:
 
 
 def _paragraphs_html(text: str, css_class: str = "") -> str:
-    """Split narrative text on blank lines into separate escaped <p> blocks."""
     blocks = [block.strip() for block in (text or "").split("\n\n") if block.strip()]
     class_attr = f' class="{css_class}"' if css_class else ""
     if not blocks:
@@ -183,33 +171,25 @@ def _badge_html(text: Any, css_class: str = "") -> str:
 
 
 def _meta_row(pairs: list[tuple[str, Any]]) -> str:
-    """A compact row of small label/value chips (Owner, Difficulty, Timeline, Confidence, ...).
-
-    Skips any pair whose value is empty/None so an incomplete action or
-    root cause never renders a blank chip.
-    """
     items = "".join(
-        f'<div class="meta-item"><span class="meta-k">{_esc(key)}</span><span class="meta-v">{_esc(value)}</span></div>'
-        for key, value in pairs
-        if value not in (None, "")
+        f'<div class="meta-item"><span class="meta-k">{_esc(k)}</span><span class="meta-v">{_esc(v)}</span></div>'
+        for k, v in pairs if v not in (None, "")
     )
     return f'<div class="meta-row">{items}</div>' if items else ""
 
 
 def _info_row(label: str, value: Any) -> str:
-    """A single labeled row (e.g. "Evidence" / "Business Impact") -- no inline bold-prefix prose."""
     if value in (None, ""):
         return ""
     return f'<div class="info-row"><span class="info-label">{_esc(label)}</span><span class="info-value">{_esc(value)}</span></div>'
 
 
 # --------------------------------------------------------------------------
-# Chart primitives (pure HTML/CSS -- no canvas, no SVG library, no JS)
+# Chart / table primitives
 # --------------------------------------------------------------------------
 
 
 def _hbar_row(label: str, percent: float, display_value: str, bar_class: str = "", meta_html: str = "") -> str:
-    """One labeled horizontal bar row, used by every bar-style chart on the page."""
     return f"""
     <div class="hbar-row">
       <div class="hbar-row-head">
@@ -222,7 +202,6 @@ def _hbar_row(label: str, percent: float, display_value: str, bar_class: str = "
 
 
 def _donut_html(primary_percent: float, primary_label: str, secondary_label: str, center_caption: str) -> str:
-    """A two-segment donut built from a single CSS conic-gradient -- no SVG, no JS."""
     primary_percent = max(0.0, min(100.0, primary_percent))
     return f"""
     <div class="donut-wrap">
@@ -239,8 +218,26 @@ def _donut_html(primary_percent: float, primary_label: str, secondary_label: str
     </div>""".strip()
 
 
+def _data_table(columns: list[tuple[str, str]], rows: list[dict[str, Any]], max_rows: int = 8) -> str:
+    """A compact print-safe table. `columns` is [(field_key, header_label), ...]."""
+    if not rows:
+        return '<p class="empty-state">No data available for this period.</p>'
+    head = "".join(f"<th>{_esc(label)}</th>" for _key, label in columns)
+    body_rows = []
+    for row in rows[:max_rows]:
+        cells = "".join(f"<td>{_esc(row.get(key, ''))}</td>" for key, _label in columns)
+        body_rows.append(f"<tr>{cells}</tr>")
+    return f"""
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr>{head}</tr></thead>
+        <tbody>{''.join(body_rows)}</tbody>
+      </table>
+    </div>""".strip()
+
+
 # --------------------------------------------------------------------------
-# Cover (branding + title + executive alert, dark panel, page 1 only)
+# Cover
 # --------------------------------------------------------------------------
 
 
@@ -250,10 +247,7 @@ def _render_cover(report: dict[str, Any]) -> str:
     monogram = _esc(brand[:1]) if brand else ""
     tagline_html = f'<p class="cover-tagline">{_esc(tagline)}</p>' if tagline else ""
 
-    top_action_title = report.get("highest_priority_initiative")
-    top_action = next(
-        (action for action in report.get("recommended_actions", []) if action.get("title") == top_action_title), None
-    )
+    top_action = report.get("recommended_actions", [{}])[0] if report.get("recommended_actions") else None
     top_priority_html = ""
     if top_action:
         top_priority_html = f"""
@@ -288,35 +282,47 @@ def _render_cover(report: dict[str, Any]) -> str:
 
 
 # --------------------------------------------------------------------------
-# Executive Dashboard (KPI cards)
+# Executive Dashboard
 # --------------------------------------------------------------------------
 
 
-def _render_kpi_card(domain: str, block: dict[str, Any]) -> str:
+def _render_kpi_card(card: dict[str, Any], overall_business_health: dict[str, Any], currency: str) -> str:
+    unit = card.get("unit")
+    value = card.get("value")
+    if unit == "currency":
+        display_value = _fmt_currency(value, currency)
+    elif unit == "percent":
+        display_value = _fmt_pct(value)
+    else:
+        display_value = _fmt_score(value)
+
+    status_ref = card.get("status_ref")
+    block = overall_business_health.get(status_ref, {}) if status_ref else {}
     status = block.get("status") or "Unknown"
     status_class = STATUS_CLASS.get(status, DEFAULT_STATUS_CLASS)
-    score = block.get("score")
-    score_unit_html = '<span class="kpi-score-unit"> / 100</span>' if score is not None else ""
-    insight_html = f'<p class="kpi-insight">{_esc(block["narrative"])}</p>' if block.get("narrative") else ""
+    target = card.get("target")
+    target_html = ""
+    if target is not None:
+        target_display = _fmt_currency(target, currency) if unit == "currency" else f"{target}%"
+        target_html = f'<p class="kpi-target">Target: {_esc(target_display)}</p>'
+
     return f"""
     <div class="card kpi-card">
-      <p class="kpi-label">{_esc(_label(domain))}</p>
-      <p class="kpi-score">{_esc(_fmt_score(score))}{score_unit_html}</p>
-      <div class="hbar-track kpi-track"><div class="hbar-fill {status_class}" style="width:{_percent(score)}%"></div></div>
+      <p class="kpi-label">{_esc(card.get('label'))}</p>
+      <p class="kpi-score">{_esc(display_value)}</p>
+      {target_html}
       <div class="kpi-meta-row">
         {_badge_html(status, status_class)}
         {_trend_html(block.get('trend', {}), compact=True)}
       </div>
-      {insight_html}
     </div>""".strip()
 
 
 def _render_dashboard(report: dict[str, Any]) -> str:
-    kpi_cards = "\n".join(
-        _render_kpi_card(domain, block) for domain, block in report.get("overall_business_health", {}).items()
-    )
-    highest_risk_location = report.get("highest_risk_location") or "Not identified this period."
-    highest_priority_initiative = report.get("highest_priority_initiative") or "No priority initiative identified this period."
+    currency = report["metadata"].get("currency", "EGP")
+    overall_business_health = report.get("overall_business_health", {})
+    kpi_cards = "\n".join(_render_kpi_card(card, overall_business_health, currency) for card in report.get("kpi_dashboard", []))
+
     return f"""
 <section class="section">
   <h2 class="section-title">Executive Dashboard</h2>
@@ -325,12 +331,16 @@ def _render_dashboard(report: dict[str, Any]) -> str:
   </div>
   <div class="fact-grid">
     <div class="card fact-card">
-      <p class="fact-label">Highest Risk Location</p>
-      <p class="fact-value">{_esc(highest_risk_location)}</p>
+      <p class="fact-label">Highest Risk Project</p>
+      <p class="fact-value">{_esc(report.get('highest_risk_project') or 'Not identified this period.')}</p>
+    </div>
+    <div class="card fact-card">
+      <p class="fact-label">Strongest Performing Project</p>
+      <p class="fact-value">{_esc(report.get('strongest_project') or 'Not identified this period.')}</p>
     </div>
     <div class="card fact-card">
       <p class="fact-label">Highest Priority Initiative</p>
-      <p class="fact-value">{_esc(highest_priority_initiative)}</p>
+      <p class="fact-value">{_esc(report.get('highest_priority_initiative') or 'None identified this period.')}</p>
     </div>
   </div>
 </section>
@@ -338,131 +348,35 @@ def _render_dashboard(report: dict[str, Any]) -> str:
 
 
 # --------------------------------------------------------------------------
-# Performance charts
+# Business Health Overview
 # --------------------------------------------------------------------------
 
 
-def _render_business_health_chart(overall_business_health: dict[str, Any]) -> str:
-    if not overall_business_health:
-        return ""
+def _render_business_health_overview(report: dict[str, Any]) -> str:
+    health = report.get("overall_business_health", {})
     rows = "\n".join(
         _hbar_row(
-            _label(domain), _percent(block.get("score")), _fmt_score(block.get("score")),
-            bar_class=STATUS_CLASS.get(block.get("status"), DEFAULT_STATUS_CLASS),
-            meta_html=f'<div class="hbar-meta">{_trend_html(block.get("trend", {}), compact=True)}</div>',
+            _label(domain), _percent(health[domain].get("score")), _fmt_score(health[domain].get("score")),
+            bar_class=STATUS_CLASS.get(health[domain].get("status"), DEFAULT_STATUS_CLASS),
+            meta_html=f'<div class="hbar-meta">{_trend_html(health[domain].get("trend", {}), compact=True)}</div>',
         )
-        for domain, block in overall_business_health.items()
+        for domain in DOMAIN_ORDER if domain in health
     )
-    return f"""
-  <div class="card chart-card">
-    <p class="chart-title">Business Health Comparison</p>
-    {rows}
-  </div>""".strip()
-
-
-def _render_warehouse_chart(warehouse_performance: list[dict[str, Any]], highest_risk_location: str | None) -> str:
-    if not warehouse_performance:
-        return ""
-    rows = []
-    for row in warehouse_performance:
-        warehouse = row.get("warehouse")
-        rate = row.get("on_time_rate_percentage")
-        is_highest_risk = warehouse is not None and warehouse == highest_risk_location
-        bar_class = "hbar-flag" if is_highest_risk else "hbar-neutral"
-        meta_html = '<div class="hbar-meta"><span class="hbar-flag-label">Highest risk location</span></div>' if is_highest_risk else ""
-        rows.append(_hbar_row(warehouse, _percent(rate), "N/A" if rate is None else f"{rate}%", bar_class, meta_html))
-    return f"""
-  <div class="card chart-card">
-    <p class="chart-title">Warehouse On-Time Delivery Rate</p>
-    {chr(10).join(rows)}
-  </div>""".strip()
-
-
-def _render_sentiment_chart(customer_sentiment: dict[str, Any]) -> str:
-    negative = customer_sentiment.get("negative_percentage") if customer_sentiment else None
-    non_negative = customer_sentiment.get("non_negative_percentage") if customer_sentiment else None
-    if negative is None or non_negative is None:
-        return ""
-    donut = _donut_html(negative, f"Negative · {negative}%", f"Non-negative · {non_negative}%", "Negative")
-    return f"""
-  <div class="card chart-card">
-    <p class="chart-title">Customer Sentiment</p>
-    {donut}
-  </div>""".strip()
-
-
-def _render_root_cause_confidence_chart(root_causes: list[dict[str, Any]]) -> str:
-    if not root_causes:
-        return ""
-    rows = "\n".join(
-        _hbar_row(root_cause.get("title", ""), _percent((root_cause.get("confidence") or 0) * 100), _fmt_confidence(root_cause.get("confidence")))
-        for root_cause in root_causes
-    )
-    return f"""
-  <div class="card chart-card">
-    <p class="chart-title">Root Cause Confidence</p>
-    {rows}
-  </div>""".strip()
-
-
-def _render_risk_severity_chart(risks: list[dict[str, Any]]) -> str:
-    if not risks:
-        return ""
-    total = len(risks)
-    counts: dict[str, int] = {}
-    for risk in risks:
-        severity = risk.get("severity") or "LOW"
-        counts[severity] = counts.get(severity, 0) + 1
-    rows = "\n".join(
-        _hbar_row(severity.title(), _percent(count, of=total), f"{count} of {total}", SEVERITY_CLASS.get(severity, DEFAULT_SEVERITY_CLASS))
-        for severity, count in counts.items()
-    )
-    return f"""
-  <div class="card chart-card">
-    <p class="chart-title">Top Risks by Severity</p>
-    {rows}
-  </div>""".strip()
-
-
-def _render_charts(report: dict[str, Any]) -> str:
-    charts = report.get("charts", {})
-    panels = [
-        _render_business_health_chart(report.get("overall_business_health", {})),
-        _render_warehouse_chart(charts.get("warehouse_performance", []), report.get("highest_risk_location")),
-        _render_sentiment_chart(charts.get("customer_sentiment", {})),
-        _render_root_cause_confidence_chart(report.get("root_causes", [])),
-        _render_risk_severity_chart(report.get("top_business_risks", [])),
-    ]
-    panels = [panel for panel in panels if panel]
-    if not panels:
-        return ""
-    return f"""
-<section class="section">
-  <h2 class="section-title">Performance Overview</h2>
-  <div class="chart-grid">
-{chr(10).join(panels)}
-  </div>
-</section>
-""".strip()
-
-
-# --------------------------------------------------------------------------
-# Executive Summary
-# --------------------------------------------------------------------------
-
-
-def _render_summary(report: dict[str, Any]) -> str:
     narrative_rows = "\n".join(
         f'    <div class="summary-row"><span class="summary-domain">{_esc(_label(domain))}</span>'
-        f'<span class="summary-text">{_esc(block.get("narrative"))}</span></div>'
-        for domain, block in report.get("overall_business_health", {}).items()
-        if block.get("narrative")
+        f'<span class="summary-text">{_esc(health[domain].get("narrative"))}</span></div>'
+        for domain in DOMAIN_ORDER if domain in health and health[domain].get("narrative")
     )
+    overall = health.get("overall", {})
     return f"""
 <section class="section">
   <h2 class="section-title">Executive Summary</h2>
   <div class="card card-prose">
     {_paragraphs_html(report.get('executive_summary', ''), css_class="prose lead")}
+  </div>
+  <div class="card chart-card chart-card-full">
+    <p class="chart-title">Business Health by Domain &middot; Overall {_esc(_fmt_score(overall.get('score')))}/100 ({_esc(overall.get('status'))})</p>
+    {rows}
   </div>
   <div class="summary-grid">
 {narrative_rows}
@@ -472,44 +386,279 @@ def _render_summary(report: dict[str, Any]) -> str:
 
 
 # --------------------------------------------------------------------------
-# Top Business Risks
+# Domain section builder (shared shape for the nine domain sections)
 # --------------------------------------------------------------------------
 
 
-def _render_risks(risks: list[dict[str, Any]]) -> str:
-    if not risks:
-        body = '<p class="empty-state">No significant business risks were identified this period.</p>'
-    else:
-        cards = []
-        for risk in risks:
-            severity = risk.get("severity") or "LOW"
-            severity_class = SEVERITY_CLASS.get(severity, DEFAULT_SEVERITY_CLASS)
-            cards.append(f"""
-    <div class="card risk-card">
-      <div class="risk-header">
-        <span class="risk-rank">{_esc(risk.get('rank'))}</span>
-        <span class="risk-title">{_esc(risk.get('title'))}</span>
-        <div class="risk-badges">
-          {_badge_html(severity, severity_class)}
-          {_badge_html(risk.get('urgency'), 'badge-outline')}
-        </div>
-      </div>
-      <div class="info-stack">
-        {_info_row("Evidence", risk.get('evidence'))}
-        {_info_row("Business Impact", risk.get('business_impact'))}
-      </div>
-    </div>""".strip())
-        body = "\n".join(cards)
+def _domain_section(title: str, intro_stat: str, body_html: str) -> str:
+    intro_html = f'<p class="section-intro">{_esc(intro_stat)}</p>' if intro_stat else ""
     return f"""
 <section class="section">
-  <h2 class="section-title">Top Business Risks</h2>
-  {body}
+  <h2 class="section-title">{_esc(title)}</h2>
+  {intro_html}
+  {body_html}
 </section>
 """.strip()
 
 
+def _render_commercial_performance(report: dict[str, Any]) -> str:
+    domain = report["domains"]["commercial_performance"]
+    currency = report["metadata"].get("currency", "EGP")
+    summary = domain.get("summary", {})
+    by_project = domain.get("rankings", {}).get("by_project", [])
+
+    intro = (
+        f"Net contracted sales of {_fmt_currency(summary.get('net_contracted_sales_value'), currency)} across "
+        f"{summary.get('units_sold_net')} units, at a {_fmt_pct(summary.get('gross_to_net_realization_pct'))} "
+        "gross-to-net realization rate."
+    )
+    rows = [
+        {"project_id": r["project_id"], "units_sold": r["units_sold"],
+         "net_sales_value": _fmt_currency(r["net_sales_value"], currency),
+         "avg_discount_pct": _fmt_pct(r["avg_discount_pct"]),
+         "avg_price_per_sqm": _fmt_currency(r["avg_price_per_sqm"], currency)}
+        for r in by_project
+    ]
+    table = _data_table(
+        [("project_id", "Project"), ("units_sold", "Units"), ("net_sales_value", "Net Sales Value"),
+         ("avg_discount_pct", "Avg Discount"), ("avg_price_per_sqm", "Avg EGP/sqm")],
+        rows,
+    )
+    meta = _meta_row([
+        ("Reservation to Contract", _fmt_pct(summary.get("reservation_to_contract_conversion_pct"))),
+        ("Cancellation Rate", _fmt_pct(summary.get("contract_cancellation_rate_pct"))),
+        ("Avg Discount", _fmt_pct(summary.get("average_discount_pct"))),
+    ])
+    body = f'<div class="card">{table}{meta}</div>'
+    return _domain_section("Commercial Performance", intro, body)
+
+
+def _render_lead_funnel(report: dict[str, Any]) -> str:
+    domain = report["domains"]["lead_funnel"]
+    summary = domain.get("summary", {})
+    waterfall = domain.get("kpis", {}).get("funnel_waterfall", [])
+
+    intro = (
+        f"{summary.get('total_leads', 0):,} leads generated {summary.get('leads_converted_to_sale')} sales "
+        f"({_fmt_pct(summary.get('lead_to_reservation_conversion_pct'))} conversion), with "
+        f"{_fmt_pct(summary.get('response_sla_attainment_pct'))} of leads first-responded-to within SLA."
+    )
+    rows = "\n".join(
+        _hbar_row(stage["stage"], _percent(stage["pct_of_total"]), f"{stage['count']:,} ({_fmt_pct(stage['step_conversion_pct'])} of prior stage)")
+        for stage in waterfall
+    )
+    by_project = domain.get("rankings", {}).get("by_project", [])
+    table_rows = [
+        {"project_id": r["project_id"], "leads": r["leads"], "avg_response_minutes": f"{r['avg_response_minutes']:.0f} min" if r.get("avg_response_minutes") is not None else "N/A",
+         "lead_to_contract_conversion_pct": _fmt_pct(r["lead_to_contract_conversion_pct"])}
+        for r in by_project
+    ]
+    table = _data_table(
+        [("project_id", "Project"), ("leads", "Leads"), ("avg_response_minutes", "Avg Response"), ("lead_to_contract_conversion_pct", "Lead to Contract")],
+        table_rows,
+    )
+    body = f'<div class="card chart-card chart-card-full">{rows}</div><div class="card">{table}</div>'
+    return _domain_section("Lead Funnel & Sales Capacity", intro, body)
+
+
+def _render_inventory_pricing(report: dict[str, Any]) -> str:
+    domain = report["domains"]["inventory_pricing"]
+    currency = report["metadata"].get("currency", "EGP")
+    summary = domain.get("summary", {})
+    aging = domain.get("kpis", {}).get("aging", {}).get("aging_distribution", [])
+    absorption = domain.get("kpis", {}).get("absorption", {}).get("by_project", [])
+
+    intro = (
+        f"{summary.get('available_units')} available units worth {_fmt_currency(summary.get('available_inventory_value'), currency)}; "
+        f"{_fmt_pct(summary.get('stale_units_pct_of_available'))} of available inventory has been on the market 180+ days."
+    )
+    rows = "\n".join(_hbar_row(b["bucket"], _percent(b["percentage"]), f"{b['count']} units ({_fmt_pct(b['percentage'])})") for b in aging)
+    table_rows = [
+        {"project_id": r["project_id"], "absorption_pct": _fmt_pct(r["absorption_pct"]),
+         "available_units": r["available_units"],
+         "months_of_supply": f"{r['months_of_supply']:.1f} months" if r.get("months_of_supply") is not None else "N/A"}
+        for r in absorption
+    ]
+    table = _data_table(
+        [("project_id", "Project"), ("absorption_pct", "Absorption"), ("available_units", "Available Units"), ("months_of_supply", "Months of Supply")],
+        table_rows,
+    )
+    body = f'<div class="card chart-card chart-card-full"><p class="chart-title">Available Inventory Aging</p>{rows}</div><div class="card">{table}</div>'
+    return _domain_section("Inventory & Pricing", intro, body)
+
+
+def _render_marketing_performance(report: dict[str, Any]) -> str:
+    domain = report["domains"]["marketing_performance"]
+    currency = report["metadata"].get("currency", "EGP")
+    summary = domain.get("summary", {})
+    by_channel = domain.get("rankings", {}).get("by_channel", [])
+
+    intro = (
+        f"{_fmt_currency(summary.get('total_spend'), currency)} in spend generated "
+        f"{summary.get('total_leads', 0):,} leads and {summary.get('total_contracts')} contracts, a "
+        f"{summary.get('overall_marketing_efficiency_ratio')}x attributed-revenue-to-spend ratio."
+    )
+    table_rows = [
+        {"channel": r["channel"], "spend": _fmt_currency(r["spend"], currency),
+         "cost_per_lead": _fmt_currency(r["cost_per_lead"], currency) if r.get("cost_per_lead") else "N/A",
+         "lead_to_contract_pct": _fmt_pct(r["lead_to_contract_pct"]),
+         "marketing_efficiency_ratio": f"{r['marketing_efficiency_ratio']}x" if r.get("marketing_efficiency_ratio") else "N/A"}
+        for r in by_channel
+    ]
+    table = _data_table(
+        [("channel", "Channel"), ("spend", "Spend"), ("cost_per_lead", "Cost / Lead"),
+         ("lead_to_contract_pct", "Lead to Contract"), ("marketing_efficiency_ratio", "Efficiency Ratio")],
+        table_rows, max_rows=10,
+    )
+    body = f'<div class="card">{table}</div>'
+    return _domain_section("Marketing Performance", intro, body)
+
+
+def _render_sales_team_broker(report: dict[str, Any]) -> str:
+    domain = report["domains"]["sales_team_broker"]
+    currency = report["metadata"].get("currency", "EGP")
+    summary = domain.get("summary", {})
+    teams = domain.get("rankings", {}).get("teams", [])
+    brokers = domain.get("rankings", {}).get("brokers", [])
+
+    intro = (
+        f"Brokers source {_fmt_pct(summary.get('broker_share_of_reservations_pct'))} of reservations at "
+        f"{_fmt_pct(summary.get('commission_as_pct_of_net_sales'))} of net sales value in commission."
+    )
+    team_rows = [
+        {"team_id": r["team_id"], "project_id": r["project_id"], "reservations": r["reservations"],
+         "reservation_to_contract_pct": _fmt_pct(r["reservation_to_contract_pct"]),
+         "cancellation_rate_pct": _fmt_pct(r["cancellation_rate_pct"])}
+        for r in teams
+    ]
+    team_table = _data_table(
+        [("team_id", "Sales Team"), ("project_id", "Project"), ("reservations", "Reservations"),
+         ("reservation_to_contract_pct", "Reservation to Contract"), ("cancellation_rate_pct", "Cancellation Rate")],
+        team_rows,
+    )
+    broker_rows = [
+        {"broker_name": r["broker_name"], "reservation_count": r["reservation_count"],
+         "cancellation_rate_pct": _fmt_pct(r["cancellation_rate_pct"]),
+         "average_discount_pct": _fmt_pct(r["average_discount_pct"]),
+         "estimated_net_contribution": _fmt_currency(r["estimated_net_contribution"], currency)}
+        for r in brokers
+    ]
+    broker_table = _data_table(
+        [("broker_name", "Broker"), ("reservation_count", "Reservations"), ("cancellation_rate_pct", "Cancellation Rate"),
+         ("average_discount_pct", "Avg Discount"), ("estimated_net_contribution", "Est. Net Contribution")],
+        broker_rows,
+    )
+    body = (
+        f'<div class="card"><p class="chart-title">Sales Teams</p>{team_table}</div>'
+        f'<div class="card"><p class="chart-title">Brokers</p>{broker_table}</div>'
+    )
+    return _domain_section("Sales Team & Broker Performance", intro, body)
+
+
+def _render_collections_risk(report: dict[str, Any]) -> str:
+    domain = report["domains"]["collections_risk"]
+    currency = report["metadata"].get("currency", "EGP")
+    summary = domain.get("summary", {})
+    aging = domain.get("kpis", {}).get("aging", {}).get("aging_buckets", [])
+    forward = domain.get("kpis", {}).get("forward_obligations", {})
+
+    intro = (
+        f"{_fmt_currency(summary.get('total_overdue_amount'), currency)} overdue "
+        f"({_fmt_pct(summary.get('overdue_amount_pct_of_due'))} of amount due), at a "
+        f"{_fmt_pct(summary.get('collection_rate_pct'))} overall collection rate."
+    )
+    overdue_buckets = [b for b in aging if b["aging_bucket"] != "Current" and b["amount"]]
+    max_amount = max((b["amount"] for b in overdue_buckets), default=1) or 1
+    rows = "\n".join(
+        _hbar_row(b["aging_bucket"], _percent(b["amount"], of=max_amount), _fmt_currency(b["amount"], currency))
+        for b in overdue_buckets
+    )
+    meta = _meta_row([
+        ("Next 30 Days Due", _fmt_currency(forward.get("next_30_days"), currency)),
+        ("Next 60 Days Due", _fmt_currency(forward.get("next_60_days"), currency)),
+        ("Next 90 Days Due", _fmt_currency(forward.get("next_90_days"), currency)),
+    ])
+    body = f'<div class="card chart-card chart-card-full"><p class="chart-title">Overdue Receivables Aging</p>{rows}</div><div class="card">{meta}</div>'
+    return _domain_section("Collections & Receivables Risk", intro, body)
+
+
+def _render_cancellations(report: dict[str, Any]) -> str:
+    domain = report["domains"]["cancellations"]
+    currency = report["metadata"].get("currency", "EGP")
+    summary = domain.get("summary", {})
+    reasons = domain.get("kpis", {}).get("reasons", [])[:5]
+    timing = domain.get("kpis", {}).get("timing", {})
+
+    intro = (
+        f"{summary.get('total_cancellations')} cancellations ({_fmt_pct(summary.get('contract_cancellation_rate_pct'))} "
+        f"of contracts) worth {_fmt_currency(summary.get('cancelled_gross_value'), currency)}, peaking "
+        f"{timing.get('peak_window', 'N/A')} after reservation."
+    )
+    reason_rows = [{"reason": r["reason"], "count": r["count"], "value": _fmt_currency(r["value"], currency)} for r in reasons]
+    table = _data_table([("reason", "Cancellation Reason"), ("count", "Count"), ("value", "Value")], reason_rows)
+    timing_rows = "\n".join(
+        _hbar_row(w["window"], _percent(w["percentage"]), f"{w['count']} ({_fmt_pct(w['percentage'])})")
+        for w in timing.get("distribution", [])
+    )
+    body = f'<div class="card">{table}</div><div class="card chart-card chart-card-full"><p class="chart-title">Cancellation Timing (Days Since Reservation)</p>{timing_rows}</div>'
+    return _domain_section("Cancellations & Revenue Leakage", intro, body)
+
+
+def _render_construction_handover(report: dict[str, Any]) -> str:
+    domain = report["domains"]["construction_handover"]
+    currency = report["metadata"].get("currency", "EGP")
+    summary = domain.get("summary", {})
+    by_building = domain.get("kpis", {}).get("delay_concentration", {}).get("by_building", [])[:8]
+    exposure = domain.get("kpis", {}).get("delay_exposure", {})
+
+    intro = (
+        f"{summary.get('handovers_delayed')} of {summary.get('total_handovers_scheduled')} scheduled handovers "
+        f"are delayed ({_fmt_pct(summary.get('handover_delay_rate_pct'))}), exposing "
+        f"{_fmt_currency(exposure.get('contracted_value_exposed'), currency)} in contracted value."
+    )
+    rows = [
+        {"project_id": r["project_id"], "building": r["building"],
+         "avg_variance_days": f"{r['avg_variance_days']:.0f} days" if r.get("avg_variance_days") is not None else "N/A",
+         "high_severity_issues": r["high_severity_issues"]}
+        for r in by_building
+    ]
+    table = _data_table(
+        [("project_id", "Project"), ("building", "Building"), ("avg_variance_days", "Avg Schedule Variance"), ("high_severity_issues", "High-Severity Issues")],
+        rows,
+    )
+    meta = _meta_row([
+        ("Units Exposed", exposure.get("units_exposed_to_delay")),
+        ("Customers Exposed", exposure.get("customers_exposed")),
+        ("Already Collected on Delayed Units", _fmt_currency(exposure.get("amount_already_collected_on_delayed_units"), currency)),
+    ])
+    body = f'<div class="card">{table}{meta}</div>'
+    return _domain_section("Construction & Handover Risk", intro, body)
+
+
+def _render_customer_experience(report: dict[str, Any]) -> str:
+    domain = report["domains"]["customer_experience"]
+    summary = domain.get("summary", {})
+    by_category = domain.get("kpis", {}).get("by_category", [])[:6]
+
+    intro = (
+        f"{summary.get('total_cases')} cases this period, {_fmt_pct(summary.get('negative_sentiment_pct'))} negative "
+        f"sentiment, {_fmt_pct(summary.get('resolution_sla_attainment_pct'))} SLA attainment."
+    )
+    rows = [
+        {"category": c["category"], "cases": c["cases"], "share_of_total_pct": _fmt_pct(c["share_of_total_pct"]),
+         "negative_sentiment_pct": _fmt_pct(c["negative_sentiment_pct"])}
+        for c in by_category
+    ]
+    table = _data_table(
+        [("category", "Case Category"), ("cases", "Cases"), ("share_of_total_pct", "Share"), ("negative_sentiment_pct", "Negative Sentiment")],
+        rows,
+    )
+    body = f'<div class="card">{table}</div>'
+    return _domain_section("Customer Experience", intro, body)
+
+
 # --------------------------------------------------------------------------
-# Root Cause Analysis
+# Cross-Functional Root Causes
 # --------------------------------------------------------------------------
 
 
@@ -518,54 +667,59 @@ def _render_root_causes(root_causes: list[dict[str, Any]]) -> str:
         body = '<p class="empty-state">No cross-domain root cause met the platform&rsquo;s evidence threshold this period.</p>'
     else:
         cards = []
-        for root_cause in root_causes:
-            evidence_items = root_cause.get("evidence") or []
+        for index, rc in enumerate(root_causes, start=1):
+            evidence_items = (rc.get("statistical_evidence") or []) + (rc.get("operational_evidence") or [])
             evidence_html = (
                 "<ul class=\"evidence-list\">" + "".join(f"<li>{_esc(item)}</li>" for item in evidence_items) + "</ul>"
                 if evidence_items else ""
             )
-            note_html = (
-                f'<p class="root-cause-note">{_esc(root_cause.get("executive_note"))}</p>'
-                if root_cause.get("executive_note") else ""
-            )
-            priority_badge = _badge_html(f"P{root_cause['priority']}", "badge-priority") if root_cause.get("priority") else ""
-            meta_html = _meta_row([("Owner", root_cause.get("owner")), ("Confidence", _fmt_confidence(root_cause.get("confidence")))])
+            note_html = f'<p class="root-cause-note">{_esc(rc.get("executive_note"))}</p>' if rc.get("executive_note") else ""
+            meta = _meta_row([("Owner", rc.get("owner")), ("Horizon", rc.get("horizon")), ("Confidence", _fmt_confidence(rc.get("confidence")))])
             cards.append(f"""
     <div class="card root-cause-card">
       <div class="root-cause-header">
         <div class="root-cause-heading">
-          {priority_badge}
-          <span class="risk-title">{_esc(root_cause.get('title'))}</span>
+          {_badge_html(f"P{index}", "badge-priority")}
+          <span class="risk-title">{_esc(rc.get('title'))}</span>
         </div>
       </div>
-      <div class="hbar-track confidence-track"><div class="hbar-fill hbar-confidence" style="width:{_percent((root_cause.get('confidence') or 0) * 100)}%"></div></div>
+      <div class="hbar-track confidence-track"><div class="hbar-fill hbar-confidence" style="width:{_percent((rc.get('confidence') or 0) * 100)}%"></div></div>
       {note_html}
       {evidence_html}
-      <div class="info-stack">
-        {_info_row("Business Impact", root_cause.get('business_impact'))}
-      </div>
-      {meta_html}
+      {meta}
     </div>""".strip())
         body = "\n".join(cards)
     return f"""
 <section class="section">
-  <h2 class="section-title">Root Cause Analysis</h2>
+  <h2 class="section-title">Cross-Functional Root Causes</h2>
   {body}
 </section>
 """.strip()
 
 
 # --------------------------------------------------------------------------
-# If No Action Is Taken
+# Financial Exposure
 # --------------------------------------------------------------------------
 
 
-def _render_no_action(report: dict[str, Any]) -> str:
+def _render_financial_exposure(financial_exposure: dict[str, Any], currency: str) -> str:
+    line_items = financial_exposure.get("line_items", [])
+    rows = "".join(
+        f'<li><span class="impact-area">{_esc(item["category"])}</span>'
+        f'<span class="impact-text">{_esc(_fmt_currency(item["amount"], currency))} &mdash; {_esc(item["description"])}</span></li>'
+        for item in line_items
+    )
+    total = financial_exposure.get("total_material_risk_exposure")
+    total_html = (
+        f'<p class="conclusion-outlook"><strong>Total Material Risk Exposure:</strong> {_esc(_fmt_currency(total, currency))}</p>'
+        if total is not None else ""
+    )
     return f"""
 <section class="section">
-  <h2 class="section-title">If No Action Is Taken</h2>
-  <div class="card card-prose no-action-card">
-    {_paragraphs_html(report.get('if_no_action_narrative', ''), css_class="prose")}
+  <h2 class="section-title">Financial Exposure</h2>
+  <div class="card">
+    <ul class="impact-list">{rows}</ul>
+    {total_html}
   </div>
 </section>
 """.strip()
@@ -576,16 +730,15 @@ def _render_no_action(report: dict[str, Any]) -> str:
 # --------------------------------------------------------------------------
 
 
-def _render_action_card(action: dict[str, Any]) -> str:
-    rationale_html = (
-        f'<p class="action-rationale">{_esc(action.get("executive_rationale"))}</p>'
-        if action.get("executive_rationale") else ""
+def _render_action_card(action: dict[str, Any], currency: str) -> str:
+    rationale_html = f'<p class="action-rationale">{_esc(action.get("executive_rationale"))}</p>' if action.get("executive_rationale") else ""
+    exposure_html = (
+        _info_row("Financial Exposure", _fmt_currency(action.get("financial_exposure"), currency))
+        if action.get("financial_exposure") is not None else ""
     )
     meta_html = _meta_row([
-        ("Owner", action.get("owner")),
-        ("Difficulty", action.get("difficulty")),
-        ("Timeline", action.get("estimated_timeframe")),
-        ("Confidence", _fmt_confidence(action.get("confidence"))),
+        ("Owner", action.get("owner")), ("Difficulty", action.get("difficulty")),
+        ("Timeline", action.get("estimated_timeframe")), ("Confidence", _fmt_confidence(action.get("confidence"))),
     ])
     return f"""
       <div class="card action-card">
@@ -594,15 +747,16 @@ def _render_action_card(action: dict[str, Any]) -> str:
           <p class="action-title">{_esc(action.get('title'))}</p>
         </div>
         {meta_html}
-        <p class="action-reason">{_esc(action.get('reason'))}</p>
+        <p class="action-reason">{_esc(action.get('business_issue'))}</p>
         {rationale_html}
         <div class="info-stack">
-          {_info_row("Expected Outcome", action.get('expected_business_impact'))}
+          {exposure_html}
+          {_info_row("Recommended Action", action.get('recommended_action'))}
         </div>
       </div>""".strip()
 
 
-def _render_action_plan(actions: list[dict[str, Any]]) -> str:
+def _render_action_plan(actions: list[dict[str, Any]], currency: str) -> str:
     if not actions:
         return """
 <section class="section">
@@ -613,10 +767,10 @@ def _render_action_plan(actions: list[dict[str, Any]]) -> str:
 
     phase_blocks = []
     for horizon_label in ACTION_HORIZON_ORDER:
-        horizon_actions = [action for action in actions if action.get("horizon") == horizon_label]
+        horizon_actions = [a for a in actions if a.get("horizon") == horizon_label]
         if not horizon_actions:
             continue
-        cards = "\n".join(_render_action_card(action) for action in horizon_actions)
+        cards = "\n".join(_render_action_card(a, currency) for a in horizon_actions)
         phase_class = ACTION_HORIZON_CLASS.get(horizon_label, "")
         phase_blocks.append(f"""
     <div class="phase-block {phase_class}">
@@ -640,31 +794,7 @@ def _render_action_plan(actions: list[dict[str, Any]]) -> str:
 
 
 # --------------------------------------------------------------------------
-# Expected Business Impact
-# --------------------------------------------------------------------------
-
-
-def _render_expected_impact(items: list[dict[str, Any]]) -> str:
-    if not items:
-        return ""
-    rows = "\n".join(
-        f'    <li><span class="impact-area">{_esc(item.get("area"))}</span><span class="impact-text">{_esc(item.get("expected_improvement"))}</span></li>'
-        for item in items
-    )
-    return f"""
-<section class="section">
-  <h2 class="section-title">Expected Business Impact</h2>
-  <div class="card">
-    <ul class="impact-list">
-{rows}
-    </ul>
-  </div>
-</section>
-""".strip()
-
-
-# --------------------------------------------------------------------------
-# Department Breakdown
+# Department Accountability
 # --------------------------------------------------------------------------
 
 
@@ -679,7 +809,7 @@ def _render_departments(department_breakdown: dict[str, str]) -> str:
     )
     return f"""
 <section class="section">
-  <h2 class="section-title">Department Breakdown</h2>
+  <h2 class="section-title">Department Accountability</h2>
   <div class="dept-grid">
 {cards}
   </div>
@@ -688,24 +818,42 @@ def _render_departments(department_breakdown: dict[str, str]) -> str:
 
 
 # --------------------------------------------------------------------------
-# Appendix
+# Forecast & Outlook
 # --------------------------------------------------------------------------
 
 
-def _render_appendix(appendix: dict[str, Any]) -> str:
-    limitations = appendix.get("data_limitations") or []
-    limitations_html = "".join(f"<li>{_esc(item)}</li>" for item in limitations)
+def _render_forecast(forecast: dict[str, Any], currency: str) -> str:
+    if not forecast.get("available"):
+        body = f'<p class="empty-state">{_esc(forecast.get("note", "Insufficient history for a forecast this period."))}</p>'
+    else:
+        rows = _meta_row([
+            ("Expected Month-End Net Sales", _fmt_currency(forecast.get("expected_month_end_net_sales"), currency)),
+            ("Projected Full-Year Net Sales", _fmt_currency(forecast.get("projected_full_year_net_sales"), currency)),
+            ("Projected Target Attainment", _fmt_pct(forecast.get("projected_full_year_target_attainment_pct"))),
+            ("Expected Next-Month Collections", _fmt_currency(forecast.get("expected_next_month_collections"), currency)),
+            ("Expected Next-Month Cancellations", forecast.get("expected_next_month_cancellations")),
+        ])
+        narrative = _paragraphs_html(forecast.get("narrative", ""), css_class="prose")
+        body = f'<div class="card">{narrative}{rows}</div>'
     return f"""
-<section class="section section-appendix">
-  <h2 class="section-title">Appendix</h2>
-  <div class="card card-prose appendix-card">
-    <h3 class="appendix-heading">Methodology</h3>
-    <p class="prose">{_esc(appendix.get('methodology_summary'))}</p>
-    <h3 class="appendix-heading">Confidence Methodology</h3>
-    <p class="prose">{_esc(appendix.get('confidence_explanation'))}</p>
-    <h3 class="appendix-heading">Data Limitations</h3>
-    <ul class="limitations-list">{limitations_html}</ul>
-    <p class="appendix-footnote">Generated by {_esc(appendix.get('generated_by'))}</p>
+<section class="section">
+  <h2 class="section-title">Forecast &amp; Outlook</h2>
+  {body}
+</section>
+""".strip()
+
+
+# --------------------------------------------------------------------------
+# If No Action Is Taken
+# --------------------------------------------------------------------------
+
+
+def _render_no_action(report: dict[str, Any]) -> str:
+    return f"""
+<section class="section">
+  <h2 class="section-title">If No Action Is Taken</h2>
+  <div class="card card-prose no-action-card">
+    {_paragraphs_html(report.get('if_no_action_narrative', ''), css_class="prose")}
   </div>
 </section>
 """.strip()
@@ -717,66 +865,50 @@ def _render_appendix(appendix: dict[str, Any]) -> str:
 
 
 def _render_conclusion(report: dict[str, Any]) -> str:
-    """Closing executive summary, assembled from fields already on `report`.
-
-    Like every other section here, this invents no new number or
-    finding -- it re-composes overall_business_health, top_business_risks,
-    root_causes, and recommended_actions (already computed and narrated
-    upstream) into a final "so what" read for a reader who only has time
-    for the first and last page.
-    """
     health = report.get("overall_business_health", {}) or {}
-    statuses = [block.get("status") for block in health.values() if block.get("status")]
+    statuses = [health[d].get("status") for d in DOMAIN_ORDER if d in health and health[d].get("status")]
     healthy = statuses.count("Healthy")
+    watch = statuses.count("Watch")
     at_risk = statuses.count("At Risk")
     critical = statuses.count("Critical")
     total = len(statuses)
 
     if total:
         health_line = (
-            f"Across {total} monitored business domain{'s' if total != 1 else ''} this period, "
-            f"{healthy} {'is' if healthy == 1 else 'are'} Healthy, {at_risk} At Risk, "
-            f"and {critical} Critical."
+            f"Across {total} monitored business domains this period, {healthy} are Healthy, {watch} on Watch, "
+            f"{at_risk} At Risk, and {critical} Critical."
         )
     else:
         health_line = "No business health domains were scored this period."
 
     findings_items = [rc.get("title") for rc in (report.get("root_causes") or [])[:3] if rc.get("title")]
-    if not findings_items:
-        findings_items = [risk.get("title") for risk in (report.get("top_business_risks") or [])[:3] if risk.get("title")]
-    findings_html = "".join(f"<li>{_esc(item)}</li>" for item in findings_items) or (
-        '<li class="empty-state">No material findings were identified this period.</li>'
-    )
+    findings_html = "".join(f"<li>{_esc(item)}</li>" for item in findings_items) or '<li class="empty-state">No material findings were identified this period.</li>'
 
-    risks = sorted(report.get("top_business_risks") or [], key=lambda risk: risk.get("rank") or 0)[:3]
+    risks = (report.get("top_business_risks") or [])[:3]
     risks_html = "".join(
-        f'<li>{_esc(risk.get("title"))} {_badge_html(risk.get("severity") or "LOW", SEVERITY_CLASS.get(risk.get("severity"), DEFAULT_SEVERITY_CLASS))}</li>'
-        for risk in risks
+        f'<li>{_esc(r.get("title"))} {_badge_html(r.get("severity") or "LOW", SEVERITY_CLASS.get(r.get("severity"), DEFAULT_SEVERITY_CLASS))}</li>'
+        for r in risks
     ) or '<li class="empty-state">No significant business risks were identified this period.</li>'
 
-    actions = sorted(report.get("recommended_actions") or [], key=lambda action: action.get("priority") or 99)[:3]
+    actions = sorted(report.get("recommended_actions") or [], key=lambda a: a.get("priority") or 99)[:3]
     actions_html = "".join(
-        f'<li><strong>{_esc(action.get("title"))}</strong> &mdash; Owner: {_esc(action.get("owner"))}</li>'
-        for action in actions
+        f'<li><strong>{_esc(a.get("title"))}</strong> &mdash; Owner: {_esc(a.get("owner"))}</li>' for a in actions
     ) or '<li class="empty-state">No priority actions were identified this period.</li>'
 
     if critical:
         outlook = (
-            f"Immediate executive attention is warranted: {critical} domain{'s' if critical != 1 else ''} "
-            f"{'is' if critical == 1 else 'are'} rated Critical this period. Executing the highest-impact "
-            "recommendations above is the primary lever to stabilize operations."
+            f"Immediate executive attention is warranted: {critical} domain{'s' if critical != 1 else ''} rated "
+            "Critical this period. Executing the highest-impact recommendations above is the primary lever to "
+            "stabilize the portfolio."
         )
     elif at_risk:
         outlook = (
-            f"Operations are broadly stable, but {at_risk} domain{'s' if at_risk != 1 else ''} "
-            f"{'requires' if at_risk == 1 else 'require'} close monitoring. Sustained execution of the "
-            "recommended actions above should keep the business on a Healthy trajectory."
+            f"The portfolio is broadly functional, but {at_risk} domain{'s' if at_risk != 1 else ''} require close "
+            "monitoring. Sustained execution of the recommended actions above should keep the business on a "
+            "Healthy trajectory."
         )
     elif total:
-        outlook = (
-            "All monitored business domains are Healthy this period. Continued execution of the "
-            "recommended actions above will help sustain this position."
-        )
+        outlook = "All monitored business domains are Healthy or on Watch this period. Continued execution of the recommended actions will help sustain this position."
     else:
         outlook = "Insufficient data was available this period to project an overall outlook."
 
@@ -803,11 +935,46 @@ def _render_conclusion(report: dict[str, Any]) -> str:
 """.strip()
 
 
+# --------------------------------------------------------------------------
+# Appendix
+# --------------------------------------------------------------------------
+
+
+def _render_appendix(report: dict[str, Any]) -> str:
+    appendix = report.get("appendix", {})
+    limitations = appendix.get("data_limitations") or []
+    limitations_html = "".join(f"<li>{_esc(item)}</li>" for item in limitations)
+    dq = appendix.get("data_quality_summary", {})
+    dq_checks = dq.get("checks_with_findings", [])
+    dq_rows = [
+        {"check": c["check"], "severity": c["severity"], "affected_pct": f"{c['affected_pct']}%"}
+        for c in dq_checks
+    ]
+    dq_table = _data_table([("check", "Check"), ("severity", "Severity"), ("affected_pct", "Affected")], dq_rows) if dq_rows else '<p class="prose">No data quality findings this period.</p>'
+
+    return f"""
+<section class="section section-appendix">
+  <h2 class="section-title">Appendix</h2>
+  <div class="card card-prose appendix-card">
+    <h3 class="appendix-heading">Methodology</h3>
+    <p class="prose">{_esc(appendix.get('methodology_summary'))}</p>
+    <h3 class="appendix-heading">Confidence Methodology</h3>
+    <p class="prose">{_esc(appendix.get('confidence_explanation'))}</p>
+    <h3 class="appendix-heading">Data Quality: {_esc(dq.get('score'))}/100 ({_esc(dq.get('status'))})</h3>
+    {dq_table}
+    <h3 class="appendix-heading">Data Limitations</h3>
+    <ul class="limitations-list">{limitations_html}</ul>
+    <p class="appendix-footnote">Generated by {_esc(appendix.get('generated_by'))}</p>
+  </div>
+</section>
+""".strip()
+
+
 def _render_footer(metadata: dict[str, Any]) -> str:
     return f"""
 <footer class="report-footer">
-  <p>{_esc(metadata.get('platform'))} &middot; AI model: {_esc(metadata.get('ai_model'))}</p>
-  <p class="confidential">Confidential &mdash; prepared for internal executive distribution.</p>
+  <p>{_esc(metadata.get('platform'))} for {_esc(metadata.get('company_name'))} &middot; AI model: {_esc(metadata.get('ai_model'))}</p>
+  <p class="confidential">Confidential &mdash; prepared for internal executive distribution. All data is synthetic demonstration data.</p>
 </footer>
 """.strip()
 
@@ -820,37 +987,39 @@ def _render_footer(metadata: dict[str, Any]) -> str:
 def render_html(report: dict[str, Any]) -> str:
     """Render the final report dict into a single self-contained HTML document.
 
-    Deterministic Python, like `_render_markdown` in report_generator.py
-    -- this is a data-transformation step over an already-validated
-    report dict, not a second AI call and not a place any new number,
-    ranking, or finding is decided.
-
     Raises:
-        HTMLRenderError: If `report` is missing a field this renderer
-            requires (e.g. it was not produced by
-            `generate_executive_report` / `_merge_narrative_into_skeleton`).
+        HTMLRenderError: If `report` is missing a field this renderer requires.
     """
     try:
         metadata = report["metadata"]
+        currency = metadata.get("currency", "EGP")
         body = "\n".join([
             _render_cover(report),
             _render_dashboard(report),
-            _render_charts(report),
-            _render_summary(report),
-            _render_risks(report.get("top_business_risks", [])),
+            _render_business_health_overview(report),
+            _render_commercial_performance(report),
+            _render_lead_funnel(report),
+            _render_inventory_pricing(report),
+            _render_marketing_performance(report),
+            _render_sales_team_broker(report),
+            _render_collections_risk(report),
+            _render_cancellations(report),
+            _render_construction_handover(report),
+            _render_customer_experience(report),
             _render_root_causes(report.get("root_causes", [])),
-            _render_no_action(report),
-            _render_action_plan(report.get("recommended_actions", [])),
-            _render_expected_impact(report.get("expected_business_impact", [])),
+            _render_financial_exposure(report.get("financial_exposure", {}), currency),
+            _render_action_plan(report.get("recommended_actions", []), currency),
             _render_departments(report.get("department_breakdown", {})),
-            _render_appendix(report.get("appendix", {})),
+            _render_forecast(report.get("forecast_outlook", {}), currency),
+            _render_no_action(report),
             _render_conclusion(report),
+            _render_appendix(report),
             _render_footer(metadata),
         ])
     except (KeyError, TypeError, AttributeError) as exc:
         raise HTMLRenderError(f"Report dict is missing a field the HTML renderer requires: {exc}") from exc
 
-    title = escape(f"{metadata.get('report_type', 'Executive Report')} - {metadata.get('platform', '')}")
+    title = escape(f"{metadata.get('report_type', 'Executive Report')} - {metadata.get('company_name', '')}")
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -874,20 +1043,17 @@ def render_html(report: dict[str, Any]) -> str:
 # Stylesheet (inlined -- no external CDN, no network dependency)
 # --------------------------------------------------------------------------
 #
-# Design system: a dark title panel (Solven black/gold) opens the
-# report; every page after it is a light editorial document (dark ink
-# on warm off-white) in the register of a McKinsey/Palantir/Stripe
-# printed report rather than a dark web app. Typography is set in `pt`
-# (an absolute, print-accurate unit) against the hierarchy: cover
-# ~30pt, section titles ~16pt, subsection/item titles ~11.5-12pt, body
-# ~10pt, labels/metadata ~7.5-9pt. Spacing sticks to a 4/8/12/16/24/32
-# px scale throughout. "Inter" is used if the viewer's OS has it,
-# falling back to the platform's native UI font stack; no font file is
-# embedded, keeping the document lightweight and fully offline.
-# Page geometry (A4 portrait, margins, footer page numbers) is owned by
-# ai/pdf_report_renderer.py's Playwright call, not by this stylesheet
-# -- this file only ever adds pagination *behavior* (break-inside,
-# widows/orphans) inside @media print, never page size or margin.
+# Same design system as this platform's original operations report: a
+# dark title panel opens the report; every page after it is a light
+# editorial document (dark ink on warm off-white). Typography in `pt`
+# against the hierarchy: cover ~30pt, section titles ~16pt,
+# subsection/item titles ~11.5-12pt, body ~10pt, labels ~7.5-9pt.
+# Spacing on a 4/8/12/16/24/32 px scale. Page geometry (A4 portrait,
+# margins, footer page numbers) is owned by ai/pdf_report_renderer.py.
+# New in this version: `.data-table` for the many project/channel/
+# agent/broker comparison tables real estate's richer domain model
+# needs, and `.section-intro` for the one Python-templated headline
+# line each domain section opens with.
 
 _CSS = """
 :root {
@@ -912,6 +1078,8 @@ _CSS = """
   --green-soft: rgba(47, 107, 63, 0.10);
   --amber: #93650F;
   --amber-soft: rgba(147, 101, 15, 0.12);
+  --blue: #2F5C8A;
+  --blue-soft: rgba(47, 92, 138, 0.10);
   --radius: 4px;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
@@ -936,7 +1104,7 @@ body {
 }
 
 .report { max-width: 760px; margin: 0 auto; padding: 32px 24px 48px; }
-.prose { max-width: 64ch; }
+.prose { max-width: 68ch; }
 
 h1, h2, h3, h4 { margin: 0; }
 
@@ -956,13 +1124,13 @@ h1, h2, h3, h4 { margin: 0; }
 }
 .cover-word { margin: 0; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.16em; color: var(--cover-gold); }
 .cover-tagline { margin: 2px 0 0; font-size: 7.5pt; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted); }
-.cover-title { font-size: 30pt; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; color: var(--cover-ink); max-width: 20ch; margin-bottom: 16px; }
+.cover-title { font-size: 27pt; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; color: var(--cover-ink); max-width: 22ch; margin-bottom: 16px; }
 .cover-meta-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
 .cover-date { font-size: 9pt; color: var(--cover-ink-muted); }
 .cover-id { font-size: 7.5pt; color: var(--cover-ink-muted); opacity: 0.85; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .cover-rule { height: 1px; background: var(--cover-line); margin-bottom: 24px; }
-.cover-headline { font-size: 15pt; font-weight: 600; line-height: 1.35; color: var(--cover-ink); max-width: 44ch; margin-bottom: 12px; }
-.cover-body { font-size: 10pt; line-height: 1.55; color: var(--cover-ink-muted); max-width: 58ch; margin-bottom: 4px; }
+.cover-headline { font-size: 14.5pt; font-weight: 600; line-height: 1.35; color: var(--cover-ink); max-width: 46ch; margin-bottom: 12px; }
+.cover-body { font-size: 10pt; line-height: 1.55; color: var(--cover-ink-muted); max-width: 60ch; margin-bottom: 4px; }
 .cover-row { display: flex; gap: 12px; padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--cover-line); font-size: 9.5pt; color: var(--cover-ink); }
 .cover-tag { flex: 0 0 auto; width: 118px; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-gold); }
 .cover-row-text { flex: 1 1 auto; }
@@ -973,6 +1141,7 @@ h1, h2, h3, h4 { margin: 0; }
   font-size: 16pt; font-weight: 600; letter-spacing: -0.005em; color: var(--ink);
   margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
 }
+.section-intro { font-size: 9.5pt; color: var(--ink-muted); margin: 0 0 12px; max-width: 72ch; }
 
 /* ---- Cards ---- */
 .card {
@@ -984,23 +1153,18 @@ h1, h2, h3, h4 { margin: 0; }
 .card p:last-child { margin-bottom: 0; }
 .card-prose { padding: 24px; }
 
-/* ---- KPI dashboard ----
-   Flexbox, not CSS Grid: Chromium's print pagination fragments a
-   wrapped flex row far more predictably than a grid row, which tends
-   to get pushed to the next page as one atomic unit even when it
-   would fit in the remaining space. */
+/* ---- KPI dashboard ---- */
 .kpi-grid { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
 .kpi-card { flex: 1 1 calc(50% - 8px); }
 .kpi-label { font-size: 8pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; }
-.kpi-score { font-size: 28pt; font-weight: 600; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: 8px; line-height: 1; }
-.kpi-score-unit { font-size: 10pt; font-weight: 500; color: var(--ink-faint); }
-.kpi-track { margin-bottom: 8px; }
+.kpi-score { font-size: 22pt; font-weight: 600; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: 4px; line-height: 1.1; }
+.kpi-target { font-size: 8.5pt; color: var(--ink-faint); margin-bottom: 8px; }
 .kpi-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.kpi-insight { font-size: 9pt; color: var(--ink-muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
 
 .hbar-track { height: 5px; background: var(--line-soft); border-radius: 2px; overflow: hidden; }
 .hbar-fill { height: 100%; border-radius: 2px; background: var(--ink-muted); }
 .hbar-fill.status-healthy { background: var(--green); }
+.hbar-fill.status-watch { background: var(--blue); }
 .hbar-fill.status-at-risk { background: var(--amber); }
 .hbar-fill.status-critical { background: var(--red); }
 .hbar-fill.status-unknown { background: var(--ink-muted); }
@@ -1018,9 +1182,8 @@ h1, h2, h3, h4 { margin: 0; }
 .fact-value { font-size: 12pt; font-weight: 600; line-height: 1.4; color: var(--ink); margin-bottom: 0; }
 
 /* ---- Charts ---- */
-.chart-grid { display: flex; flex-wrap: wrap; gap: 16px; }
-.chart-card { flex: 1 1 calc(50% - 8px); margin-bottom: 0; padding: 12px; }
-.chart-grid .chart-card:last-child:nth-child(odd) { flex-basis: 100%; }
+.chart-card { margin-bottom: 0; padding: 12px; }
+.chart-card-full { margin-bottom: 8px; }
 .chart-title { font-size: 12pt; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
 
 .hbar-row { margin-bottom: 8px; }
@@ -1043,12 +1206,24 @@ h1, h2, h3, h4 { margin: 0; }
 .legend-dot-primary { background: var(--red); }
 .legend-dot-secondary { background: var(--line-soft); border: 1px solid var(--line); }
 
+/* ---- Data tables ---- */
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+.data-table th {
+  text-align: left; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--ink-faint); padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+.data-table td { padding: 6px 8px; border-bottom: 1px solid var(--line-soft); color: var(--ink); white-space: nowrap; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table td:first-child, .data-table th:first-child { padding-left: 0; }
+
 /* ---- Badges ---- */
 .badge {
   display: inline-block; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
   padding: 3px 7px; border-radius: var(--radius); background: var(--line-soft); color: var(--ink-muted);
 }
 .badge.status-healthy { background: var(--green-soft); color: var(--green); }
+.badge.status-watch { background: var(--blue-soft); color: var(--blue); }
 .badge.status-at-risk { background: var(--amber-soft); color: var(--amber); }
 .badge.status-critical { background: var(--red-soft); color: var(--red); }
 .badge.severity-high { background: var(--red-soft); color: var(--red); }
@@ -1085,9 +1260,9 @@ h1, h2, h3, h4 { margin: 0; }
   font-size: 9.5pt; color: var(--ink-muted); vertical-align: top;
 }
 .summary-row:last-child .summary-domain, .summary-row:last-child .summary-text { border-bottom: none; }
-.summary-domain { width: 150px; padding-right: 16px; color: var(--gold); font-weight: 600; font-size: 8pt; text-transform: uppercase; letter-spacing: 0.05em; }
+.summary-domain { width: 170px; padding-right: 16px; color: var(--gold); font-weight: 600; font-size: 8pt; text-transform: uppercase; letter-spacing: 0.05em; }
 
-/* ---- Risks ---- */
+/* ---- Risks / root causes ---- */
 .risk-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
 .risk-rank {
   flex: 0 0 auto; width: 22px; height: 22px; border-radius: var(--radius); background: var(--ink);
@@ -1096,7 +1271,6 @@ h1, h2, h3, h4 { margin: 0; }
 .risk-title { font-size: 11.5pt; font-weight: 600; letter-spacing: -0.005em; flex: 1 1 auto; }
 .risk-badges { display: flex; gap: 6px; flex: 0 0 auto; }
 
-/* ---- Root causes ---- */
 .root-cause-header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
 .root-cause-heading { display: flex; align-items: center; gap: 10px; }
 .root-cause-note { font-size: 9.5pt; color: var(--ink-muted); }
@@ -1112,7 +1286,8 @@ h1, h2, h3, h4 { margin: 0; }
 .phase-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; background: var(--ink-muted); }
 .phase-immediate .phase-dot { background: var(--red); }
 .phase-near-term .phase-dot { background: var(--amber); }
-.phase-strategic .phase-dot { background: var(--gold); }
+.phase-strategic .phase-dot { background: var(--blue); }
+.phase-longer-term .phase-dot { background: var(--gold); }
 .phase-title { font-size: 12pt; font-weight: 600; color: var(--ink); margin: 0; }
 .phase-cards { display: flex; flex-direction: column; gap: 12px; }
 .action-card { margin-bottom: 0; }
@@ -1121,11 +1296,11 @@ h1, h2, h3, h4 { margin: 0; }
 .action-reason { font-size: 9.5pt; }
 .action-rationale { font-size: 9.5pt; color: var(--ink-muted); }
 
-/* ---- Expected impact ---- */
+/* ---- Financial exposure / expected impact ---- */
 .impact-list { list-style: none; margin: 0; padding: 0; }
 .impact-list li { display: flex; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line-soft); font-size: 9.5pt; }
 .impact-list li:first-child { border-top: none; padding-top: 0; }
-.impact-area { flex: 0 0 auto; width: 150px; font-weight: 600; color: var(--ink); }
+.impact-area { flex: 0 0 auto; width: 170px; font-weight: 600; color: var(--ink); }
 .impact-text { flex: 1 1 auto; color: var(--ink-muted); }
 
 /* ---- Department breakdown ---- */
@@ -1163,22 +1338,16 @@ h1, h2, h3, h4 { margin: 0; }
 .confidential { letter-spacing: 0.04em; text-transform: uppercase; font-size: 7.5pt; }
 
 /* ==========================================================
-   Responsive -- this design is single-column and print-first
-   already, so only mobile screen widths need adjustment.
+   Responsive -- single-column, print-first already; only
+   mobile screen widths need adjustment.
    ========================================================== */
 @media screen and (max-width: 560px) {
   .report { padding: 20px 16px 32px; }
-  .cover-title { font-size: 24pt; }
-  .kpi-card, .dept-card, .chart-card { flex-basis: 100%; }
+  .cover-title { font-size: 22pt; }
+  .kpi-card, .dept-card { flex-basis: 100%; }
 }
 
-/* ---- Print ----
-   Page size, margins, and the repeating footer with page numbers are
-   owned by ai/pdf_report_renderer.py's page.pdf() call, not here -- a
-   PDF-level margin (unlike the old zero-margin/`.page`-padding
-   approach this file used to require) now paints the page background
-   correctly on its own, so this block only ever adds pagination
-   *behavior*. */
+/* ---- Print ---- */
 @page {
   size: A4 portrait;
   margin: 14mm 14mm 16mm 14mm;
@@ -1194,13 +1363,6 @@ h1, h2, h3, h4 { margin: 0; }
   .section-appendix { break-before: page; page-break-before: always; }
 
   .section { break-inside: auto; }
-  /* Only small, structured cards get a hard no-split rule -- letting a
-     KPI/risk/action card break mid-card looks broken. Long prose-only
-     cards (.card-prose: the executive-summary intro, no-action,
-     appendix) are deliberately left out: forcing a multi-paragraph
-     block to stay whole is what strands the next section alone on a
-     mostly-blank page whenever that block doesn't fit in the
-     remaining space. */
   .kpi-card, .fact-card, .chart-card, .risk-card, .root-cause-card,
   .action-card, .dept-card, .conclusion-card, table, figure {
     break-inside: avoid;
@@ -1208,5 +1370,6 @@ h1, h2, h3, h4 { margin: 0; }
   }
   .summary-row { break-inside: avoid; page-break-inside: avoid; }
   .phase-head { break-after: avoid; page-break-after: avoid; }
+  .data-table tr { break-inside: avoid; page-break-inside: avoid; }
 }
 """

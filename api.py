@@ -1,5 +1,5 @@
 """Minimal HTTP API so n8n (or any HTTP caller) can trigger the existing
-operations-intelligence pipeline and retrieve its result.
+real estate intelligence pipeline and retrieve its result.
 
 This module contains no analytics, scoring, or report-generation logic
 of its own. It only calls `app.run_pipeline()` -- the same orchestration
@@ -33,7 +33,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("solven.api")
 
 app = FastAPI(
-    title="Solven Operations Intelligence API",
+    title="Solven Real Estate Intelligence API",
     description="Triggers the existing Python analytics/reporting pipeline over HTTP.",
     version="1.0.0",
 )
@@ -50,7 +50,7 @@ _pipeline_lock = threading.Lock()
 @app.get("/health")
 def health() -> dict[str, str]:
     """Liveness check -- does not touch the pipeline or any external service."""
-    return {"status": "healthy", "service": "Solven Operations Intelligence"}
+    return {"status": "healthy", "service": "Solven Real Estate Intelligence"}
 
 
 @app.post("/run-analysis")
@@ -120,13 +120,13 @@ def _success_payload(report: dict[str, Any]) -> dict[str, Any]:
 
     Every value here is read directly from the report the pipeline
     already produced -- report_id, timestamps, output paths, and the
-    three summary figures are all copied, never recomputed or guessed.
+    summary figures are all copied, never recomputed or guessed.
     """
     metadata = report["metadata"]
-    operations_overall = report.get("overall_business_health", {}).get("operations_overall", {})
+    overall = report.get("overall_business_health", {}).get("overall", {})
     return {
         "success": True,
-        "message": "Operations intelligence analysis completed",
+        "message": "Real estate intelligence analysis completed",
         "report_id": metadata.get("report_id"),
         "generated_at": metadata.get("generated_at"),
         "outputs": {
@@ -136,8 +136,8 @@ def _success_payload(report: dict[str, Any]) -> dict[str, Any]:
             "pdf": metadata.get("saved_pdf_path"),
         },
         "summary": {
-            "operations_health_score": operations_overall.get("score"),
-            "highest_risk_location": report.get("highest_risk_location"),
+            "overall_business_health_score": overall.get("score"),
+            "highest_risk_project": report.get("highest_risk_project"),
             "highest_priority_initiative": report.get("highest_priority_initiative"),
         },
     }

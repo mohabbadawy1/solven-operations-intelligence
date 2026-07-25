@@ -1,0 +1,15 @@
+broker_id,broker_name,broker_type,account_manager,onboarding_date,active_agents,commission_rate,data_quality_score,compliance_status,lead_volume,reservation_count,contract_count,cancelled_contracts,gross_sales_value,commission_paid,average_discount_pct
+BRK-01,Nile Realty Partners,Multi-Project Agency,Tarek Rashad,2022-04-04,6,0.0207,80.2,Compliant,115,20,14,2,182069484.6,3582704.4,5.6
+BRK-02,Capital Bridge Properties,Multi-Project Agency,Yasmin Fahmy,2021-12-27,17,0.0174,92.5,Compliant,109,14,10,1,145949791.2,2408987.38,5.8
+BRK-03,Coastal Key Brokers,Regional Specialist,Omar Zaki,2021-11-26,3,0.0228,82.7,Compliant,88,15,11,3,149203323.7,3224787.3,6.1
+BRK-04,Zamalek Prime Advisors,Boutique Agency,Nada Anwar,2022-11-09,20,0.0263,92.2,Compliant,113,13,10,3,129154913.9,3241874.19,5.0
+BRK-05,Horizon Investor Desk,Investor Channel,Adel Kamal,2023-05-11,18,0.0271,94.3,Compliant,89,20,16,4,157053784.8,4036993.49,6.4
+BRK-06,Vantage Commercial Realty,Commercial Specialist,Sara Reda,2022-03-09,6,0.0227,88.2,Compliant,399,62,46,12,684855520.1,13814704.31,10.7
+BRK-07,Al Fustat Property Group,Multi-Project Agency,Hassan Mansour,2023-04-21,12,0.0198,70.7,Under Review,127,15,13,4,152960978.8,2892360.22,5.1
+BRK-08,Cleopatra Homes Brokerage,Boutique Agency,Rana Sabry,2023-09-26,9,0.0154,76.8,Under Review,93,14,11,0,121300130.6,1786069.94,4.4
+BRK-09,Delta Realty Alliance,Regional Specialist,Fady Hussein,2021-09-18,3,0.0298,71.3,Compliant,102,10,8,1,89530307.6,2541168.43,5.9
+BRK-10,Skyline Investment Brokers,Investor Channel,Laila Gomaa,2022-08-14,21,0.0189,97.1,Compliant,118,19,15,1,161285625.7,2895290.97,5.7
+BRK-11,Red Sea Coastal Estates,Regional Specialist,Karim El-Sayed,2021-05-30,9,0.0297,73.5,Compliant,88,19,15,0,188969931.0,5378715.62,4.3
+BRK-12,Oasis Property Consultants,Boutique Agency,Heba Farouk,2021-11-28,18,0.021,69.0,Compliant,107,15,12,0,119256087.8,2378837.96,5.2
+BRK-13,Pyramids Gate Realty,Multi-Project Agency,Wael Nour,2020-09-02,5,0.0205,71.7,Compliant,121,20,17,4,189441093.9,3710684.6,4.9
+BRK-14,Corniche Capital Partners,Investor Channel,Dina Aziz,2023-10-13,8,0.0232,87.2,Compliant,94,17,12,1,198282676.0,4379413.99,5.3

@@ -1,0 +1,1310 @@
+collection_event_id,installment_id,event_date,collection_action,owner,contact_result,promise_to_pay_date,promise_to_pay_amount,escalation_level,recovery_status
+COL-000001,INS-0000023,2026-06-06,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000002,INS-0000071,2025-10-01,Reminder Call,Layla Anwar,No Answer,,,1,Open
+COL-000003,INS-0000072,2025-12-28,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Partially Recovered
+COL-000004,INS-0000072,2026-01-27,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2026-02-08,513057.5,1,Partially Recovered
+COL-000005,INS-0000072,2026-02-22,Formal Notice Email,Layla Anwar,No Answer,,,2,Promise to Pay Pending
+COL-000006,INS-0000072,2026-03-19,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Open
+COL-000007,INS-0000072,2026-04-09,Legal Escalation Notice,Rana Naguib,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000008,INS-0000160,2026-01-26,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000009,INS-0000160,2026-02-14,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Open
+COL-000010,INS-0000160,2026-03-08,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Written Off
+COL-000011,INS-0000160,2026-04-13,In-Person Visit,Rana Naguib,No Answer,,,3,Partially Recovered
+COL-000012,INS-0000167,2026-03-07,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Recovered
+COL-000013,INS-0000167,2026-03-22,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Open
+COL-000014,INS-0000167,2026-05-04,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Escalated - Legal
+COL-000015,INS-0000167,2026-05-21,In-Person Visit,Mostafa Reda,Wrong Contact Info,,,3,Partially Recovered
+COL-000016,INS-0000167,2026-06-22,Legal Escalation Notice,Layla Anwar,No Answer,,,3,Open
+COL-000017,INS-0000226,2026-03-18,Reminder Call,Nourhan Sabry,No Answer,,,1,Open
+COL-000018,INS-0000226,2026-04-19,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2026-04-30,39881.19,1,Written Off
+COL-000019,INS-0000240,2025-07-01,Reminder Call,Layla Anwar,No Answer,,,1,Recovered
+COL-000020,INS-0000240,2025-08-11,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Recovered
+COL-000021,INS-0000240,2025-08-27,Formal Notice Email,Mostafa Reda,No Answer,,,2,Open
+COL-000022,INS-0000240,2025-10-08,In-Person Visit,Layla Anwar,No Answer,,,3,Open
+COL-000023,INS-0000240,2025-11-06,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2025-11-10,901921.82,3,Open
+COL-000024,INS-0000242,2026-01-08,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Recovered
+COL-000025,INS-0000242,2026-01-22,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000026,INS-0000405,2025-11-20,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Open
+COL-000027,INS-0000405,2025-12-12,Reminder WhatsApp,Karim Fathy,Reached - No Commitment,,,1,Open
+COL-000028,INS-0000405,2026-01-12,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2026-01-18,181989.84,2,Open
+COL-000029,INS-0000405,2026-02-24,In-Person Visit,Nourhan Sabry,Wrong Contact Info,,,3,Recovered
+COL-000030,INS-0000405,2026-02-24,Legal Escalation Notice,Nourhan Sabry,Reached - Dispute,,,3,Recovered
+COL-000031,INS-0000417,2026-03-17,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000032,INS-0000417,2026-04-18,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000033,INS-0000431,2025-06-21,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000034,INS-0000431,2025-07-21,Reminder WhatsApp,Rana Naguib,Reached - Dispute,,,1,Open
+COL-000035,INS-0000431,2025-08-21,Formal Notice Email,Mostafa Reda,Reached - Dispute,,,2,Partially Recovered
+COL-000036,INS-0000431,2025-09-04,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000037,INS-0000449,2024-09-16,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000038,INS-0000449,2024-10-01,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Recovered
+COL-000039,INS-0000449,2024-10-31,Formal Notice Email,Nourhan Sabry,Reached - No Commitment,,,2,Open
+COL-000040,INS-0000584,2025-09-02,Reminder Call,Rana Naguib,No Answer,,,1,Promise to Pay Pending
+COL-000041,INS-0000600,2026-06-04,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-06-14,905270.12,1,Recovered
+COL-000042,INS-0000631,2024-08-16,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2024-08-19,678626.45,1,Promise to Pay Pending
+COL-000043,INS-0000631,2024-09-12,Reminder WhatsApp,Nourhan Sabry,Wrong Contact Info,,,1,Recovered
+COL-000044,INS-0000631,2024-10-03,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Partially Recovered
+COL-000045,INS-0000631,2024-11-03,In-Person Visit,Karim Fathy,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000046,INS-0000631,2024-12-20,Legal Escalation Notice,Karim Fathy,Reached - Dispute,,,3,Open
+COL-000047,INS-0000661,2026-02-03,Reminder Call,Layla Anwar,No Answer,,,1,Open
+COL-000048,INS-0000661,2026-03-07,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Written Off
+COL-000049,INS-0000797,2025-06-07,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000050,INS-0000840,2025-12-29,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000051,INS-0000847,2025-09-20,Reminder Call,Layla Anwar,No Answer,,,1,Promise to Pay Pending
+COL-000052,INS-0000877,2026-01-04,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Recovered
+COL-000053,INS-0000877,2026-01-28,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Recovered
+COL-000054,INS-0000877,2026-03-02,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-000055,INS-0000877,2026-04-05,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-000056,INS-0000902,2026-06-08,Reminder Call,Rana Naguib,Reached - Promise to Pay,2026-06-12,1348224.22,1,Escalated - Legal
+COL-000057,INS-0000935,2026-03-16,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2026-03-31,248875.97,1,Open
+COL-000058,INS-0000935,2026-04-18,Reminder WhatsApp,Rana Naguib,Reached - Dispute,,,1,Open
+COL-000059,INS-0000935,2026-05-03,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2026-05-09,288854.58,2,Escalated - Legal
+COL-000060,INS-0000935,2026-05-19,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Partially Recovered
+COL-000061,INS-0000973,2025-06-05,Reminder Call,Nourhan Sabry,No Answer,,,1,Promise to Pay Pending
+COL-000062,INS-0000973,2025-07-03,Reminder WhatsApp,Karim Fathy,No Answer,,,1,Partially Recovered
+COL-000063,INS-0000973,2025-08-11,Formal Notice Email,Mostafa Reda,No Answer,,,2,Open
+COL-000064,INS-0000973,2025-08-20,In-Person Visit,Rana Naguib,Wrong Contact Info,,,3,Recovered
+COL-000065,INS-0000973,2025-09-15,Legal Escalation Notice,Nourhan Sabry,Reached - No Commitment,,,3,Written Off
+COL-000066,INS-0001016,2025-10-13,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Escalated - Legal
+COL-000067,INS-0001016,2025-11-02,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2025-11-21,926563.97,1,Open
+COL-000068,INS-0001016,2025-12-10,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-000069,INS-0001016,2026-01-07,In-Person Visit,Mostafa Reda,Reached - No Commitment,,,3,Open
+COL-000070,INS-0001016,2026-01-28,Legal Escalation Notice,Karim Fathy,Reached - No Commitment,,,3,Recovered
+COL-000071,INS-0001048,2026-02-06,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Escalated - Legal
+COL-000072,INS-0001048,2026-03-04,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Partially Recovered
+COL-000073,INS-0001048,2026-04-08,Formal Notice Email,Mostafa Reda,Reached - Promise to Pay,2026-04-20,644822.59,2,Open
+COL-000074,INS-0001048,2026-05-10,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Written Off
+COL-000075,INS-0001048,2026-06-09,Legal Escalation Notice,Rana Naguib,No Answer,,,3,Promise to Pay Pending
+COL-000076,INS-0001190,2025-01-20,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Recovered
+COL-000077,INS-0001190,2025-02-21,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Recovered
+COL-000078,INS-0001303,2024-08-07,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000079,INS-0001303,2024-09-01,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2024-09-19,1195997.62,1,Recovered
+COL-000080,INS-0001303,2024-09-29,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2024-10-09,1518625.91,2,Partially Recovered
+COL-000081,INS-0001303,2024-11-02,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2024-11-22,1214100.57,3,Promise to Pay Pending
+COL-000082,INS-0001303,2024-12-10,Legal Escalation Notice,Mostafa Reda,Wrong Contact Info,,,3,Partially Recovered
+COL-000083,INS-0001328,2026-02-17,Reminder Call,Layla Anwar,No Answer,,,1,Escalated - Legal
+COL-000084,INS-0001328,2026-03-14,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000085,INS-0001328,2026-04-16,Formal Notice Email,Rana Naguib,No Answer,,,2,Partially Recovered
+COL-000086,INS-0001328,2026-05-21,In-Person Visit,Nourhan Sabry,No Answer,,,3,Escalated - Legal
+COL-000087,INS-0001328,2026-06-18,Legal Escalation Notice,Karim Fathy,Wrong Contact Info,,,3,Open
+COL-000088,INS-0001329,2026-05-28,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-05-31,119853.17,1,Promise to Pay Pending
+COL-000089,INS-0001329,2026-06-09,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2026-06-16,62002.19,1,Partially Recovered
+COL-000090,INS-0001337,2026-04-01,Reminder Call,Rana Naguib,Reached - Promise to Pay,2026-04-05,131441.57,1,Open
+COL-000091,INS-0001337,2026-05-01,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Partially Recovered
+COL-000092,INS-0001337,2026-05-17,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Open
+COL-000093,INS-0001344,2026-01-05,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-000094,INS-0001344,2026-02-05,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-000095,INS-0001378,2025-12-03,Reminder Call,Nourhan Sabry,No Answer,,,1,Partially Recovered
+COL-000096,INS-0001378,2025-12-21,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Open
+COL-000097,INS-0001378,2026-01-22,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Escalated - Legal
+COL-000098,INS-0001378,2026-02-19,In-Person Visit,Layla Anwar,No Answer,,,3,Recovered
+COL-000099,INS-0001378,2026-03-24,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2026-04-07,912257.14,3,Partially Recovered
+COL-000100,INS-0001390,2025-10-19,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2025-11-01,1273342.14,1,Escalated - Legal
+COL-000101,INS-0001390,2025-11-28,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Partially Recovered
+COL-000102,INS-0001390,2025-12-29,Formal Notice Email,Mostafa Reda,Reached - Promise to Pay,2026-01-15,915403.72,2,Promise to Pay Pending
+COL-000103,INS-0001392,2026-04-22,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000104,INS-0001392,2026-05-19,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000105,INS-0001401,2026-01-07,Reminder Call,Layla Anwar,No Answer,,,1,Open
+COL-000106,INS-0001401,2026-01-29,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Recovered
+COL-000107,INS-0001401,2026-02-18,Formal Notice Email,Layla Anwar,No Answer,,,2,Promise to Pay Pending
+COL-000108,INS-0001401,2026-03-24,In-Person Visit,Rana Naguib,Reached - Dispute,,,3,Open
+COL-000109,INS-0001401,2026-05-04,Legal Escalation Notice,Rana Naguib,Reached - Dispute,,,3,Open
+COL-000110,INS-0001488,2025-12-24,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000111,INS-0001488,2026-01-10,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Escalated - Legal
+COL-000112,INS-0001488,2026-02-18,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Recovered
+COL-000113,INS-0001488,2026-03-04,In-Person Visit,Nourhan Sabry,Wrong Contact Info,,,3,Open
+COL-000114,INS-0001501,2026-06-22,Reminder Call,Nourhan Sabry,No Answer,,,1,Escalated - Legal
+COL-000115,INS-0001571,2025-01-15,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Partially Recovered
+COL-000116,INS-0001571,2025-02-04,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Partially Recovered
+COL-000117,INS-0001574,2025-10-05,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Recovered
+COL-000118,INS-0001574,2025-10-27,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000119,INS-0001574,2025-12-03,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Recovered
+COL-000120,INS-0001574,2026-01-07,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-000121,INS-0001576,2026-04-15,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Partially Recovered
+COL-000122,INS-0001576,2026-05-07,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000123,INS-0001576,2026-06-01,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2026-06-09,308406.5,2,Open
+COL-000124,INS-0001659,2025-07-31,Reminder Call,Karim Fathy,No Answer,,,1,Open
+COL-000125,INS-0001659,2025-08-20,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000126,INS-0001659,2025-09-20,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2025-09-29,176535.0,2,Open
+COL-000127,INS-0001659,2025-10-13,In-Person Visit,Layla Anwar,Reached - Promise to Pay,2025-10-24,110645.89,3,Open
+COL-000128,INS-0001659,2025-11-20,Legal Escalation Notice,Nourhan Sabry,Reached - Dispute,,,3,Open
+COL-000129,INS-0001714,2025-12-29,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Escalated - Legal
+COL-000130,INS-0001730,2025-12-28,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Open
+COL-000131,INS-0001730,2026-01-30,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Open
+COL-000132,INS-0001730,2026-02-20,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Promise to Pay Pending
+COL-000133,INS-0001797,2024-11-08,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Recovered
+COL-000134,INS-0001797,2024-11-25,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Written Off
+COL-000135,INS-0001797,2024-12-25,Formal Notice Email,Mostafa Reda,No Answer,,,2,Escalated - Legal
+COL-000136,INS-0001797,2025-02-08,In-Person Visit,Mostafa Reda,Reached - Dispute,,,3,Recovered
+COL-000137,INS-0001797,2025-02-11,Legal Escalation Notice,Nourhan Sabry,Wrong Contact Info,,,3,Escalated - Legal
+COL-000138,INS-0001798,2025-02-13,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000139,INS-0001798,2025-02-25,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2025-03-09,277141.29,1,Promise to Pay Pending
+COL-000140,INS-0001798,2025-03-28,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2025-04-06,107359.25,2,Recovered
+COL-000141,INS-0001798,2025-05-14,In-Person Visit,Layla Anwar,Reached - Promise to Pay,2025-05-25,185011.5,3,Recovered
+COL-000142,INS-0001801,2025-11-02,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Escalated - Legal
+COL-000143,INS-0001801,2025-12-09,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Open
+COL-000144,INS-0001801,2025-12-28,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-000145,INS-0001801,2026-01-25,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Escalated - Legal
+COL-000146,INS-0001819,2026-01-20,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Open
+COL-000147,INS-0001819,2026-02-17,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Partially Recovered
+COL-000148,INS-0001819,2026-03-28,Formal Notice Email,Rana Naguib,Wrong Contact Info,,,2,Open
+COL-000149,INS-0001819,2026-04-24,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2026-05-10,224374.03,3,Promise to Pay Pending
+COL-000150,INS-0001819,2026-05-26,Legal Escalation Notice,Rana Naguib,Reached - Dispute,,,3,Recovered
+COL-000151,INS-0001854,2025-09-18,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Recovered
+COL-000152,INS-0001854,2025-10-14,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Open
+COL-000153,INS-0001854,2025-11-22,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Open
+COL-000154,INS-0001854,2025-12-04,In-Person Visit,Layla Anwar,Reached - Promise to Pay,2025-12-16,155611.72,3,Escalated - Legal
+COL-000155,INS-0001854,2026-01-17,Legal Escalation Notice,Mostafa Reda,No Answer,,,3,Open
+COL-000156,INS-0001856,2026-03-11,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Open
+COL-000157,INS-0001856,2026-04-08,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000158,INS-0001856,2026-05-16,Formal Notice Email,Rana Naguib,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-000159,INS-0001856,2026-05-27,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Recovered
+COL-000160,INS-0001887,2026-02-18,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Open
+COL-000161,INS-0001887,2026-03-19,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000162,INS-0001887,2026-04-20,Formal Notice Email,Nourhan Sabry,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-000163,INS-0001887,2026-05-07,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2026-05-19,633592.92,3,Written Off
+COL-000164,INS-0001887,2026-06-19,Legal Escalation Notice,Layla Anwar,No Answer,,,3,Promise to Pay Pending
+COL-000165,INS-0001968,2025-01-04,Reminder Call,Layla Anwar,No Answer,,,1,Promise to Pay Pending
+COL-000166,INS-0001968,2025-01-22,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Open
+COL-000167,INS-0001968,2025-02-18,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Open
+COL-000168,INS-0001968,2025-04-01,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Open
+COL-000169,INS-0001968,2025-04-26,Legal Escalation Notice,Layla Anwar,Reached - Dispute,,,3,Partially Recovered
+COL-000170,INS-0001969,2025-04-04,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Open
+COL-000171,INS-0001969,2025-04-26,Reminder WhatsApp,Mostafa Reda,Reached - Dispute,,,1,Partially Recovered
+COL-000172,INS-0001969,2025-06-03,Formal Notice Email,Rana Naguib,Wrong Contact Info,,,2,Open
+COL-000173,INS-0001969,2025-06-27,In-Person Visit,Rana Naguib,Wrong Contact Info,,,3,Open
+COL-000174,INS-0001969,2025-07-06,Legal Escalation Notice,Rana Naguib,No Answer,,,3,Open
+COL-000175,INS-0002000,2026-03-15,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Open
+COL-000176,INS-0002008,2026-05-24,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Recovered
+COL-000177,INS-0002008,2026-06-22,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Recovered
+COL-000178,INS-0002172,2026-01-24,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-000179,INS-0002172,2026-02-08,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Escalated - Legal
+COL-000180,INS-0002172,2026-03-07,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Partially Recovered
+COL-000181,INS-0002172,2026-04-12,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2026-04-15,66668.2,3,Open
+COL-000182,INS-0002280,2024-11-05,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Open
+COL-000183,INS-0002280,2024-12-02,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Escalated - Legal
+COL-000184,INS-0002280,2024-12-30,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2025-01-17,117697.21,2,Escalated - Legal
+COL-000185,INS-0002280,2025-01-25,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Open
+COL-000186,INS-0002280,2025-02-15,Legal Escalation Notice,Rana Naguib,Reached - Dispute,,,3,Written Off
+COL-000187,INS-0002286,2026-05-16,Reminder Call,Karim Fathy,No Answer,,,1,Recovered
+COL-000188,INS-0002286,2026-05-29,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Escalated - Legal
+COL-000189,INS-0002299,2025-12-02,Reminder Call,Nourhan Sabry,No Answer,,,1,Recovered
+COL-000190,INS-0002299,2025-12-23,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000191,INS-0002299,2026-01-24,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2026-02-06,189372.46,2,Promise to Pay Pending
+COL-000192,INS-0002299,2026-03-05,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2026-03-09,226444.27,3,Promise to Pay Pending
+COL-000193,INS-0002299,2026-03-15,Legal Escalation Notice,Karim Fathy,Reached - No Commitment,,,3,Recovered
+COL-000194,INS-0002344,2026-05-12,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Escalated - Legal
+COL-000195,INS-0002344,2026-06-20,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Escalated - Legal
+COL-000196,INS-0002359,2026-01-04,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000197,INS-0002359,2026-02-02,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2026-02-16,1824011.99,1,Recovered
+COL-000198,INS-0002359,2026-02-28,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Open
+COL-000199,INS-0002359,2026-03-13,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2026-03-17,1271649.29,3,Open
+COL-000200,INS-0002366,2026-02-01,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000201,INS-0002366,2026-03-03,Reminder WhatsApp,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000202,INS-0002366,2026-03-29,Formal Notice Email,Rana Naguib,No Answer,,,2,Recovered
+COL-000203,INS-0002366,2026-05-01,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2026-05-20,383154.96,3,Recovered
+COL-000204,INS-0002366,2026-05-07,Legal Escalation Notice,Layla Anwar,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000205,INS-0002379,2025-03-21,Reminder Call,Nourhan Sabry,No Answer,,,1,Open
+COL-000206,INS-0002379,2025-04-16,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Partially Recovered
+COL-000207,INS-0002379,2025-05-12,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Open
+COL-000208,INS-0002379,2025-06-17,In-Person Visit,Rana Naguib,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000209,INS-0002379,2025-06-20,Legal Escalation Notice,Rana Naguib,Reached - Promise to Pay,2025-06-26,851358.77,3,Recovered
+COL-000210,INS-0002413,2026-02-10,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-02-24,601910.41,1,Written Off
+COL-000211,INS-0002413,2026-03-18,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Open
+COL-000212,INS-0002413,2026-04-16,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2026-05-03,320795.95,2,Promise to Pay Pending
+COL-000213,INS-0002413,2026-05-10,In-Person Visit,Nourhan Sabry,Wrong Contact Info,,,3,Recovered
+COL-000214,INS-0002413,2026-06-20,Legal Escalation Notice,Rana Naguib,No Answer,,,3,Open
+COL-000215,INS-0002477,2026-06-18,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Open
+COL-000216,INS-0002490,2025-10-08,Reminder Call,Karim Fathy,Reached - Promise to Pay,2025-10-19,78569.31,1,Open
+COL-000217,INS-0002490,2025-10-24,Reminder WhatsApp,Mostafa Reda,Reached - Dispute,,,1,Partially Recovered
+COL-000218,INS-0002490,2025-11-17,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Open
+COL-000219,INS-0002490,2025-12-21,In-Person Visit,Layla Anwar,Reached - Promise to Pay,2026-01-04,52733.61,3,Promise to Pay Pending
+COL-000220,INS-0002490,2026-01-29,Legal Escalation Notice,Karim Fathy,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000221,INS-0002545,2026-04-29,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-05-06,259193.12,1,Partially Recovered
+COL-000222,INS-0002545,2026-06-03,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Escalated - Legal
+COL-000223,INS-0002545,2026-06-21,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Open
+COL-000224,INS-0002583,2025-10-14,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Partially Recovered
+COL-000225,INS-0002583,2025-11-07,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-000226,INS-0002583,2025-12-01,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Open
+COL-000227,INS-0002583,2026-01-16,In-Person Visit,Karim Fathy,Reached - Dispute,,,3,Written Off
+COL-000228,INS-0002583,2026-02-14,Legal Escalation Notice,Rana Naguib,Reached - No Commitment,,,3,Open
+COL-000229,INS-0002625,2026-01-24,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000230,INS-0002625,2026-03-02,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Open
+COL-000231,INS-0002625,2026-03-25,Formal Notice Email,Rana Naguib,No Answer,,,2,Escalated - Legal
+COL-000232,INS-0002625,2026-04-25,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Recovered
+COL-000233,INS-0002625,2026-05-25,Legal Escalation Notice,Mostafa Reda,Wrong Contact Info,,,3,Open
+COL-000234,INS-0002639,2026-01-01,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000235,INS-0002639,2026-01-31,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Open
+COL-000236,INS-0002639,2026-02-18,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Recovered
+COL-000237,INS-0002639,2026-04-06,In-Person Visit,Mostafa Reda,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000238,INS-0002639,2026-04-12,Legal Escalation Notice,Nourhan Sabry,Reached - Promise to Pay,2026-04-30,946255.88,3,Written Off
+COL-000239,INS-0002672,2025-05-15,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Open
+COL-000240,INS-0002672,2025-06-11,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000241,INS-0002672,2025-07-13,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Recovered
+COL-000242,INS-0002672,2025-08-09,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2025-08-27,105583.62,3,Partially Recovered
+COL-000243,INS-0002672,2025-08-19,Legal Escalation Notice,Layla Anwar,No Answer,,,3,Escalated - Legal
+COL-000244,INS-0002674,2025-11-09,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Partially Recovered
+COL-000245,INS-0002674,2025-12-12,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000246,INS-0002674,2025-12-25,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Recovered
+COL-000247,INS-0002674,2026-02-11,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Recovered
+COL-000248,INS-0002674,2026-03-10,Legal Escalation Notice,Nourhan Sabry,Reached - Promise to Pay,2026-03-25,232703.51,3,Recovered
+COL-000249,INS-0002676,2026-05-09,Reminder Call,Layla Anwar,No Answer,,,1,Recovered
+COL-000250,INS-0002676,2026-05-28,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Open
+COL-000251,INS-0002676,2026-06-26,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Open
+COL-000252,INS-0002692,2025-04-07,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Recovered
+COL-000253,INS-0002692,2025-05-10,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Promise to Pay Pending
+COL-000254,INS-0002692,2025-06-02,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-000255,INS-0002692,2025-06-13,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Open
+COL-000256,INS-0002695,2026-01-06,Reminder Call,Rana Naguib,Reached - Promise to Pay,2026-01-24,137176.65,1,Partially Recovered
+COL-000257,INS-0002695,2026-02-05,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Partially Recovered
+COL-000258,INS-0002695,2026-02-19,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Escalated - Legal
+COL-000259,INS-0002695,2026-03-31,In-Person Visit,Rana Naguib,Reached - Promise to Pay,2026-04-06,240011.38,3,Open
+COL-000260,INS-0002695,2026-05-06,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2026-05-20,122337.1,3,Written Off
+COL-000261,INS-0002707,2025-11-22,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Recovered
+COL-000262,INS-0002707,2025-12-24,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000263,INS-0002707,2026-01-12,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Open
+COL-000264,INS-0002707,2026-02-21,In-Person Visit,Mostafa Reda,Wrong Contact Info,,,3,Open
+COL-000265,INS-0002707,2026-03-16,Legal Escalation Notice,Mostafa Reda,Reached - Dispute,,,3,Partially Recovered
+COL-000266,INS-0002714,2024-12-05,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000267,INS-0002726,2025-11-21,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Escalated - Legal
+COL-000268,INS-0002726,2025-12-04,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Open
+COL-000269,INS-0002726,2026-01-06,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Partially Recovered
+COL-000270,INS-0002726,2026-02-17,In-Person Visit,Nourhan Sabry,No Answer,,,3,Written Off
+COL-000271,INS-0002726,2026-02-17,Legal Escalation Notice,Mostafa Reda,Reached - No Commitment,,,3,Recovered
+COL-000272,INS-0002737,2025-11-15,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000273,INS-0002737,2025-12-11,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Open
+COL-000274,INS-0002737,2026-01-02,Formal Notice Email,Layla Anwar,No Answer,,,2,Recovered
+COL-000275,INS-0002737,2026-01-28,In-Person Visit,Mostafa Reda,Reached - Dispute,,,3,Recovered
+COL-000276,INS-0002737,2026-03-21,Legal Escalation Notice,Mostafa Reda,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-000277,INS-0002765,2025-06-23,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Open
+COL-000278,INS-0002765,2025-07-31,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Recovered
+COL-000279,INS-0002765,2025-08-12,Formal Notice Email,Mostafa Reda,Reached - Promise to Pay,2025-08-15,50795.08,2,Partially Recovered
+COL-000280,INS-0002781,2025-10-12,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Partially Recovered
+COL-000281,INS-0002781,2025-11-16,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000282,INS-0002781,2025-12-11,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-000283,INS-0002781,2026-01-22,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2026-02-04,275498.58,3,Partially Recovered
+COL-000284,INS-0002781,2026-01-28,Legal Escalation Notice,Layla Anwar,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000285,INS-0002788,2024-08-10,Reminder Call,Rana Naguib,No Answer,,,1,Open
+COL-000286,INS-0002793,2025-11-02,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Partially Recovered
+COL-000287,INS-0002793,2025-11-26,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Partially Recovered
+COL-000288,INS-0002793,2026-01-11,Formal Notice Email,Nourhan Sabry,No Answer,,,2,Partially Recovered
+COL-000289,INS-0002793,2026-02-11,In-Person Visit,Mostafa Reda,No Answer,,,3,Escalated - Legal
+COL-000290,INS-0002793,2026-02-10,Legal Escalation Notice,Mostafa Reda,Reached - No Commitment,,,3,Open
+COL-000291,INS-0002800,2026-06-19,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000292,INS-0002806,2025-01-13,Reminder Call,Rana Naguib,No Answer,,,1,Open
+COL-000293,INS-0002806,2025-02-02,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2025-02-05,305998.49,1,Partially Recovered
+COL-000294,INS-0002806,2025-03-05,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Promise to Pay Pending
+COL-000295,INS-0002806,2025-04-01,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Open
+COL-000296,INS-0002806,2025-05-01,Legal Escalation Notice,Nourhan Sabry,No Answer,,,3,Written Off
+COL-000297,INS-0002833,2026-01-02,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Open
+COL-000298,INS-0002833,2026-01-24,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000299,INS-0002849,2024-12-21,Reminder Call,Layla Anwar,Reached - Promise to Pay,2025-01-08,1468022.4,1,Partially Recovered
+COL-000300,INS-0002849,2025-01-21,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Open
+COL-000301,INS-0002849,2025-02-01,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Open
+COL-000302,INS-0002849,2025-03-18,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Open
+COL-000303,INS-0002849,2025-04-01,Legal Escalation Notice,Karim Fathy,Reached - No Commitment,,,3,Open
+COL-000304,INS-0002850,2025-03-17,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2025-04-04,307607.47,1,Promise to Pay Pending
+COL-000305,INS-0002850,2025-04-09,Reminder WhatsApp,Nourhan Sabry,Wrong Contact Info,,,1,Recovered
+COL-000306,INS-0002850,2025-05-19,Formal Notice Email,Rana Naguib,Wrong Contact Info,,,2,Recovered
+COL-000307,INS-0002868,2025-04-13,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Written Off
+COL-000308,INS-0002868,2025-05-18,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Escalated - Legal
+COL-000309,INS-0002868,2025-06-10,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-000310,INS-0002868,2025-07-04,In-Person Visit,Layla Anwar,No Answer,,,3,Open
+COL-000311,INS-0002868,2025-07-22,Legal Escalation Notice,Mostafa Reda,No Answer,,,3,Open
+COL-000312,INS-0002870,2025-10-19,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Open
+COL-000313,INS-0002870,2025-11-17,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000314,INS-0002870,2025-12-24,Formal Notice Email,Karim Fathy,No Answer,,,2,Promise to Pay Pending
+COL-000315,INS-0002870,2026-01-02,In-Person Visit,Karim Fathy,No Answer,,,3,Partially Recovered
+COL-000316,INS-0002870,2026-02-03,Legal Escalation Notice,Nourhan Sabry,Reached - Promise to Pay,2026-02-10,226003.51,3,Promise to Pay Pending
+COL-000317,INS-0002871,2026-01-18,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000318,INS-0002871,2026-02-14,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Partially Recovered
+COL-000319,INS-0002871,2026-03-26,Formal Notice Email,Karim Fathy,Reached - Promise to Pay,2026-04-10,440537.29,2,Partially Recovered
+COL-000320,INS-0002871,2026-04-13,In-Person Visit,Nourhan Sabry,Wrong Contact Info,,,3,Recovered
+COL-000321,INS-0002872,2026-04-15,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Recovered
+COL-000322,INS-0002872,2026-05-08,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Recovered
+COL-000323,INS-0002890,2026-06-18,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000324,INS-0002915,2025-11-27,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Open
+COL-000325,INS-0002943,2024-11-06,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Recovered
+COL-000326,INS-0002943,2024-12-13,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2024-12-17,389282.18,1,Written Off
+COL-000327,INS-0002943,2025-01-02,Formal Notice Email,Layla Anwar,No Answer,,,2,Promise to Pay Pending
+COL-000328,INS-0002944,2025-02-09,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000329,INS-0002944,2025-03-04,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Open
+COL-000330,INS-0002944,2025-04-08,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Written Off
+COL-000331,INS-0002944,2025-04-23,In-Person Visit,Karim Fathy,Reached - Dispute,,,3,Recovered
+COL-000332,INS-0002944,2025-05-15,Legal Escalation Notice,Mostafa Reda,Reached - Dispute,,,3,Recovered
+COL-000333,INS-0002948,2026-02-16,Reminder Call,Rana Naguib,No Answer,,,1,Promise to Pay Pending
+COL-000334,INS-0002957,2025-11-25,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2025-12-15,275856.34,1,Recovered
+COL-000335,INS-0002957,2026-01-03,Reminder WhatsApp,Karim Fathy,No Answer,,,1,Open
+COL-000336,INS-0002957,2026-02-02,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Partially Recovered
+COL-000337,INS-0002957,2026-02-25,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Open
+COL-000338,INS-0002957,2026-03-19,Legal Escalation Notice,Nourhan Sabry,Reached - Dispute,,,3,Open
+COL-000339,INS-0002979,2026-05-15,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Escalated - Legal
+COL-000340,INS-0002979,2026-06-09,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Partially Recovered
+COL-000341,INS-0003000,2026-01-23,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000342,INS-0003000,2026-02-16,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Recovered
+COL-000343,INS-0003000,2026-03-25,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Open
+COL-000344,INS-0003011,2024-10-23,Reminder Call,Layla Anwar,No Answer,,,1,Promise to Pay Pending
+COL-000345,INS-0003011,2024-11-30,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2024-12-08,1132065.08,1,Promise to Pay Pending
+COL-000346,INS-0003011,2024-12-09,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2024-12-27,859026.96,2,Open
+COL-000347,INS-0003037,2026-02-14,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Partially Recovered
+COL-000348,INS-0003037,2026-03-15,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Open
+COL-000349,INS-0003037,2026-04-03,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Escalated - Legal
+COL-000350,INS-0003037,2026-05-05,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-000351,INS-0003037,2026-05-23,Legal Escalation Notice,Layla Anwar,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000352,INS-0003044,2025-10-16,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000353,INS-0003044,2025-11-12,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Open
+COL-000354,INS-0003044,2025-12-06,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Escalated - Legal
+COL-000355,INS-0003044,2026-01-15,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Open
+COL-000356,INS-0003079,2025-08-23,Reminder Call,Mostafa Reda,No Answer,,,1,Written Off
+COL-000357,INS-0003079,2025-09-25,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000358,INS-0003079,2025-10-06,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Recovered
+COL-000359,INS-0003079,2025-11-19,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Recovered
+COL-000360,INS-0003079,2025-12-10,Legal Escalation Notice,Karim Fathy,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000361,INS-0003091,2025-12-03,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2025-12-22,107009.78,1,Open
+COL-000362,INS-0003091,2025-12-19,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Recovered
+COL-000363,INS-0003091,2026-01-25,Formal Notice Email,Rana Naguib,Wrong Contact Info,,,2,Open
+COL-000364,INS-0003091,2026-02-10,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-000365,INS-0003098,2026-06-17,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000366,INS-0003104,2026-03-09,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2026-03-21,114955.9,1,Partially Recovered
+COL-000367,INS-0003104,2026-04-04,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Recovered
+COL-000368,INS-0003105,2026-06-13,Reminder Call,Mostafa Reda,No Answer,,,1,Promise to Pay Pending
+COL-000369,INS-0003125,2025-06-17,Reminder Call,Mostafa Reda,No Answer,,,1,Promise to Pay Pending
+COL-000370,INS-0003166,2024-12-20,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000371,INS-0003166,2025-01-18,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2025-01-27,586733.26,1,Open
+COL-000372,INS-0003170,2025-12-27,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Partially Recovered
+COL-000373,INS-0003170,2026-01-17,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Open
+COL-000374,INS-0003170,2026-02-20,Formal Notice Email,Mostafa Reda,No Answer,,,2,Promise to Pay Pending
+COL-000375,INS-0003170,2026-03-07,In-Person Visit,Karim Fathy,Reached - Dispute,,,3,Escalated - Legal
+COL-000376,INS-0003198,2025-02-16,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Partially Recovered
+COL-000377,INS-0003198,2025-03-27,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Recovered
+COL-000378,INS-0003198,2025-04-20,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2025-05-10,440649.96,2,Written Off
+COL-000379,INS-0003198,2025-05-22,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2025-06-10,479324.86,3,Partially Recovered
+COL-000380,INS-0003199,2025-05-15,Reminder Call,Rana Naguib,No Answer,,,1,Promise to Pay Pending
+COL-000381,INS-0003199,2025-06-16,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Open
+COL-000382,INS-0003199,2025-07-12,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2025-07-17,411022.63,2,Promise to Pay Pending
+COL-000383,INS-0003199,2025-07-28,In-Person Visit,Rana Naguib,Reached - Promise to Pay,2025-08-16,265123.29,3,Escalated - Legal
+COL-000384,INS-0003244,2025-12-10,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Open
+COL-000385,INS-0003244,2026-01-08,Reminder WhatsApp,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000386,INS-0003244,2026-02-02,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Open
+COL-000387,INS-0003244,2026-02-27,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Recovered
+COL-000388,INS-0003244,2026-04-07,Legal Escalation Notice,Nourhan Sabry,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000389,INS-0003260,2026-06-16,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Recovered
+COL-000390,INS-0003299,2025-08-17,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Written Off
+COL-000391,INS-0003299,2025-09-24,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Partially Recovered
+COL-000392,INS-0003299,2025-10-14,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Open
+COL-000393,INS-0003318,2025-02-08,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Partially Recovered
+COL-000394,INS-0003318,2025-03-18,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Open
+COL-000395,INS-0003318,2025-04-03,Formal Notice Email,Nourhan Sabry,No Answer,,,2,Open
+COL-000396,INS-0003318,2025-04-22,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000397,INS-0003375,2024-09-29,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-000398,INS-0003375,2024-10-21,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2024-11-04,2461556.22,1,Partially Recovered
+COL-000399,INS-0003375,2024-11-30,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Escalated - Legal
+COL-000400,INS-0003375,2024-12-23,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2024-12-29,1401441.82,3,Promise to Pay Pending
+COL-000401,INS-0003375,2025-01-21,Legal Escalation Notice,Mostafa Reda,Reached - Promise to Pay,2025-02-10,1343806.56,3,Open
+COL-000402,INS-0003382,2026-06-26,Reminder Call,Rana Naguib,No Answer,,,1,Recovered
+COL-000403,INS-0003411,2026-01-24,Reminder Call,Layla Anwar,Reached - Promise to Pay,2026-02-04,25707.86,1,Partially Recovered
+COL-000404,INS-0003425,2025-01-26,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Open
+COL-000405,INS-0003425,2025-02-11,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Recovered
+COL-000406,INS-0003425,2025-03-12,Formal Notice Email,Mostafa Reda,Reached - Promise to Pay,2025-03-31,604806.24,2,Open
+COL-000407,INS-0003425,2025-04-12,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Recovered
+COL-000408,INS-0003425,2025-05-12,Legal Escalation Notice,Rana Naguib,Reached - Dispute,,,3,Recovered
+COL-000409,INS-0003439,2026-02-26,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000410,INS-0003439,2026-03-16,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-04-04,100100.01,1,Escalated - Legal
+COL-000411,INS-0003439,2026-04-17,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Escalated - Legal
+COL-000412,INS-0003439,2026-05-11,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2026-05-16,159875.93,3,Open
+COL-000413,INS-0003439,2026-06-09,Legal Escalation Notice,Karim Fathy,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000414,INS-0003454,2025-01-16,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000415,INS-0003454,2025-02-20,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2025-02-28,90467.01,1,Open
+COL-000416,INS-0003454,2025-03-14,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Promise to Pay Pending
+COL-000417,INS-0003476,2026-04-24,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Recovered
+COL-000418,INS-0003476,2026-05-20,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Recovered
+COL-000419,INS-0003488,2025-05-14,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000420,INS-0003488,2025-06-18,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000421,INS-0003488,2025-07-17,Formal Notice Email,Mostafa Reda,No Answer,,,2,Recovered
+COL-000422,INS-0003488,2025-08-16,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Partially Recovered
+COL-000423,INS-0003488,2025-09-12,Legal Escalation Notice,Rana Naguib,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-000424,INS-0003497,2025-02-08,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Open
+COL-000425,INS-0003497,2025-02-28,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Open
+COL-000426,INS-0003497,2025-03-31,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Partially Recovered
+COL-000427,INS-0003497,2025-04-21,In-Person Visit,Layla Anwar,Reached - Promise to Pay,2025-05-10,1160664.0,3,Promise to Pay Pending
+COL-000428,INS-0003497,2025-05-28,Legal Escalation Notice,Nourhan Sabry,No Answer,,,3,Recovered
+COL-000429,INS-0003525,2025-04-05,Reminder Call,Layla Anwar,Reached - Promise to Pay,2025-04-15,1119918.54,1,Promise to Pay Pending
+COL-000430,INS-0003525,2025-05-07,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000431,INS-0003525,2025-06-06,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Open
+COL-000432,INS-0003525,2025-06-21,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Open
+COL-000433,INS-0003525,2025-08-02,Legal Escalation Notice,Mostafa Reda,Wrong Contact Info,,,3,Open
+COL-000434,INS-0003561,2025-08-17,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000435,INS-0003561,2025-09-05,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2025-09-08,322320.08,1,Recovered
+COL-000436,INS-0003561,2025-10-09,Formal Notice Email,Layla Anwar,Reached - No Commitment,,,2,Written Off
+COL-000437,INS-0003583,2026-06-22,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-06-25,78599.7,1,Partially Recovered
+COL-000438,INS-0003614,2026-02-23,Reminder Call,Rana Naguib,No Answer,,,1,Escalated - Legal
+COL-000439,INS-0003614,2026-03-16,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000440,INS-0003614,2026-04-07,Formal Notice Email,Layla Anwar,No Answer,,,2,Recovered
+COL-000441,INS-0003614,2026-05-16,In-Person Visit,Karim Fathy,Reached - Dispute,,,3,Open
+COL-000442,INS-0003614,2026-05-27,Legal Escalation Notice,Layla Anwar,Reached - Promise to Pay,2026-06-07,840463.8,3,Promise to Pay Pending
+COL-000443,INS-0003615,2026-05-21,Reminder Call,Mostafa Reda,No Answer,,,1,Escalated - Legal
+COL-000444,INS-0003615,2026-06-13,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Partially Recovered
+COL-000445,INS-0003679,2025-08-10,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Recovered
+COL-000446,INS-0003679,2025-09-01,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Partially Recovered
+COL-000447,INS-0003679,2025-10-14,Formal Notice Email,Layla Anwar,Reached - No Commitment,,,2,Open
+COL-000448,INS-0003679,2025-10-22,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Open
+COL-000449,INS-0003679,2025-12-02,Legal Escalation Notice,Nourhan Sabry,No Answer,,,3,Recovered
+COL-000450,INS-0003681,2026-02-08,Reminder Call,Karim Fathy,No Answer,,,1,Partially Recovered
+COL-000451,INS-0003681,2026-03-10,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2026-03-13,62404.82,1,Open
+COL-000452,INS-0003696,2026-05-04,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Escalated - Legal
+COL-000453,INS-0003696,2026-06-01,Reminder WhatsApp,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000454,INS-0003696,2026-06-14,Formal Notice Email,Nourhan Sabry,No Answer,,,2,Recovered
+COL-000455,INS-0003766,2025-07-07,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Open
+COL-000456,INS-0003766,2025-07-24,Reminder WhatsApp,Karim Fathy,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000457,INS-0003800,2025-06-02,Reminder Call,Layla Anwar,Reached - Promise to Pay,2025-06-10,784491.43,1,Recovered
+COL-000458,INS-0003800,2025-07-10,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Open
+COL-000459,INS-0003800,2025-08-04,Formal Notice Email,Layla Anwar,Reached - No Commitment,,,2,Partially Recovered
+COL-000460,INS-0003800,2025-08-12,In-Person Visit,Layla Anwar,Reached - No Commitment,,,3,Partially Recovered
+COL-000461,INS-0003832,2025-11-29,Reminder Call,Nourhan Sabry,No Answer,,,1,Recovered
+COL-000462,INS-0003832,2025-12-28,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2026-01-01,802410.91,1,Open
+COL-000463,INS-0003832,2026-01-12,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Open
+COL-000464,INS-0003832,2026-02-14,In-Person Visit,Mostafa Reda,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-000465,INS-0003880,2026-04-10,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000466,INS-0003880,2026-05-10,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Promise to Pay Pending
+COL-000467,INS-0003880,2026-06-06,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Escalated - Legal
+COL-000468,INS-0003949,2025-01-11,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2025-01-15,1576269.14,1,Open
+COL-000469,INS-0003949,2025-02-06,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Recovered
+COL-000470,INS-0003949,2025-02-23,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2025-03-11,2150220.9,2,Recovered
+COL-000471,INS-0003949,2025-04-02,In-Person Visit,Layla Anwar,Reached - Promise to Pay,2025-04-19,1074370.98,3,Open
+COL-000472,INS-0003949,2025-05-02,Legal Escalation Notice,Layla Anwar,Wrong Contact Info,,,3,Open
+COL-000473,INS-0003954,2026-04-01,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Open
+COL-000474,INS-0003954,2026-05-11,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000475,INS-0003954,2026-05-28,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Escalated - Legal
+COL-000476,INS-0003954,2026-06-14,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2026-06-24,269975.76,3,Partially Recovered
+COL-000477,INS-0003970,2025-03-19,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Open
+COL-000478,INS-0003970,2025-05-01,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Partially Recovered
+COL-000479,INS-0003970,2025-05-17,Formal Notice Email,Layla Anwar,Reached - Dispute,,,2,Promise to Pay Pending
+COL-000480,INS-0003970,2025-07-01,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2025-07-14,84313.16,3,Escalated - Legal
+COL-000481,INS-0003970,2025-07-18,Legal Escalation Notice,Nourhan Sabry,Wrong Contact Info,,,3,Recovered
+COL-000482,INS-0003971,2025-06-21,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Partially Recovered
+COL-000483,INS-0003971,2025-07-18,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Partially Recovered
+COL-000484,INS-0003971,2025-08-20,Formal Notice Email,Karim Fathy,Reached - Promise to Pay,2025-08-29,66671.36,2,Open
+COL-000485,INS-0003971,2025-09-02,In-Person Visit,Mostafa Reda,No Answer,,,3,Written Off
+COL-000486,INS-0003971,2025-10-03,Legal Escalation Notice,Nourhan Sabry,Reached - Promise to Pay,2025-10-16,40636.76,3,Promise to Pay Pending
+COL-000487,INS-0004052,2024-10-28,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Partially Recovered
+COL-000488,INS-0004052,2024-12-04,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Recovered
+COL-000489,INS-0004052,2024-12-30,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Open
+COL-000490,INS-0004052,2025-01-11,In-Person Visit,Mostafa Reda,Reached - Dispute,,,3,Partially Recovered
+COL-000491,INS-0004070,2026-04-09,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000492,INS-0004070,2026-05-04,Reminder WhatsApp,Karim Fathy,Reached - No Commitment,,,1,Open
+COL-000493,INS-0004070,2026-06-13,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-000494,INS-0004097,2025-01-31,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000495,INS-0004182,2026-05-11,Reminder Call,Rana Naguib,No Answer,,,1,Open
+COL-000496,INS-0004182,2026-06-08,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Recovered
+COL-000497,INS-0004187,2026-05-18,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2026-06-05,1536049.01,1,Open
+COL-000498,INS-0004187,2026-06-16,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Recovered
+COL-000499,INS-0004234,2025-06-10,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Recovered
+COL-000500,INS-0004234,2025-07-14,Reminder WhatsApp,Rana Naguib,Reached - Dispute,,,1,Open
+COL-000501,INS-0004234,2025-07-27,Formal Notice Email,Karim Fathy,No Answer,,,2,Promise to Pay Pending
+COL-000502,INS-0004282,2025-11-28,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Open
+COL-000503,INS-0004282,2026-01-02,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-000504,INS-0004282,2026-01-26,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-000505,INS-0004283,2026-02-27,Reminder Call,Layla Anwar,Reached - Promise to Pay,2026-03-04,51903.14,1,Open
+COL-000506,INS-0004283,2026-04-04,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-04-17,62907.81,1,Promise to Pay Pending
+COL-000507,INS-0004283,2026-05-05,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Partially Recovered
+COL-000508,INS-0004283,2026-05-20,In-Person Visit,Nourhan Sabry,Wrong Contact Info,,,3,Recovered
+COL-000509,INS-0004321,2026-04-08,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000510,INS-0004321,2026-05-08,Reminder WhatsApp,Karim Fathy,No Answer,,,1,Partially Recovered
+COL-000511,INS-0004321,2026-06-07,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Open
+COL-000512,INS-0004336,2026-06-24,Reminder Call,Karim Fathy,No Answer,,,1,Open
+COL-000513,INS-0004354,2026-02-15,Reminder Call,Karim Fathy,No Answer,,,1,Partially Recovered
+COL-000514,INS-0004354,2026-03-19,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000515,INS-0004354,2026-04-15,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Recovered
+COL-000516,INS-0004355,2026-05-17,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Partially Recovered
+COL-000517,INS-0004365,2026-05-17,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Open
+COL-000518,INS-0004365,2026-06-18,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Recovered
+COL-000519,INS-0004396,2025-06-02,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000520,INS-0004396,2025-07-10,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Escalated - Legal
+COL-000521,INS-0004396,2025-08-02,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Partially Recovered
+COL-000522,INS-0004415,2026-06-22,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Open
+COL-000523,INS-0004447,2025-11-26,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Partially Recovered
+COL-000524,INS-0004447,2025-12-24,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Promise to Pay Pending
+COL-000525,INS-0004447,2026-02-01,Formal Notice Email,Karim Fathy,Reached - Promise to Pay,2026-02-11,51288.21,2,Promise to Pay Pending
+COL-000526,INS-0004498,2025-12-04,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Written Off
+COL-000527,INS-0004498,2025-12-24,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2025-12-31,51312.22,1,Open
+COL-000528,INS-0004498,2026-01-25,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Escalated - Legal
+COL-000529,INS-0004498,2026-02-24,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2026-03-10,35797.61,3,Written Off
+COL-000530,INS-0004498,2026-03-31,Legal Escalation Notice,Layla Anwar,Reached - Dispute,,,3,Recovered
+COL-000531,INS-0004505,2026-01-23,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2026-02-11,226543.73,1,Promise to Pay Pending
+COL-000532,INS-0004505,2026-02-20,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000533,INS-0004505,2026-03-15,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2026-03-25,221015.31,2,Recovered
+COL-000534,INS-0004505,2026-04-24,In-Person Visit,Rana Naguib,No Answer,,,3,Recovered
+COL-000535,INS-0004505,2026-05-17,Legal Escalation Notice,Nourhan Sabry,Reached - No Commitment,,,3,Recovered
+COL-000536,INS-0004506,2026-04-20,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000537,INS-0004506,2026-05-16,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000538,INS-0004511,2025-08-26,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Recovered
+COL-000539,INS-0004511,2025-09-16,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Partially Recovered
+COL-000540,INS-0004511,2025-10-15,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2025-10-19,39367.46,2,Open
+COL-000541,INS-0004519,2025-11-29,Reminder Call,Nourhan Sabry,No Answer,,,1,Escalated - Legal
+COL-000542,INS-0004519,2025-12-30,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000543,INS-0004570,2026-02-01,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Open
+COL-000544,INS-0004570,2026-02-24,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Recovered
+COL-000545,INS-0004570,2026-03-21,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2026-03-26,63969.85,2,Open
+COL-000546,INS-0004570,2026-05-02,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2026-05-21,54255.65,3,Escalated - Legal
+COL-000547,INS-0004570,2026-06-02,Legal Escalation Notice,Karim Fathy,Reached - Dispute,,,3,Recovered
+COL-000548,INS-0004571,2026-05-08,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Partially Recovered
+COL-000549,INS-0004571,2026-05-26,Reminder WhatsApp,Nourhan Sabry,Wrong Contact Info,,,1,Partially Recovered
+COL-000550,INS-0004571,2026-06-21,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Promise to Pay Pending
+COL-000551,INS-0004609,2025-08-09,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000552,INS-0004609,2025-08-30,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Open
+COL-000553,INS-0004609,2025-09-29,Formal Notice Email,Layla Anwar,No Answer,,,2,Recovered
+COL-000554,INS-0004609,2025-11-02,In-Person Visit,Layla Anwar,Reached - No Commitment,,,3,Written Off
+COL-000555,INS-0004609,2025-11-23,Legal Escalation Notice,Layla Anwar,Wrong Contact Info,,,3,Partially Recovered
+COL-000556,INS-0004625,2026-05-01,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Escalated - Legal
+COL-000557,INS-0004625,2026-05-13,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Recovered
+COL-000558,INS-0004625,2026-06-22,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-000559,INS-0004631,2025-04-25,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Recovered
+COL-000560,INS-0004631,2025-05-16,Reminder WhatsApp,Rana Naguib,Reached - Dispute,,,1,Recovered
+COL-000561,INS-0004631,2025-06-16,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Recovered
+COL-000562,INS-0004632,2025-07-17,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Recovered
+COL-000563,INS-0004632,2025-08-11,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Open
+COL-000564,INS-0004641,2025-06-21,Reminder Call,Karim Fathy,No Answer,,,1,Partially Recovered
+COL-000565,INS-0004642,2025-09-21,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Open
+COL-000566,INS-0004642,2025-10-22,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Recovered
+COL-000567,INS-0004642,2025-12-01,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Open
+COL-000568,INS-0004642,2025-12-24,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Escalated - Legal
+COL-000569,INS-0004642,2026-01-03,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2026-01-06,62970.72,3,Promise to Pay Pending
+COL-000570,INS-0004654,2025-09-16,Reminder Call,Rana Naguib,Reached - Promise to Pay,2025-09-28,96710.82,1,Recovered
+COL-000571,INS-0004654,2025-10-09,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Recovered
+COL-000572,INS-0004654,2025-11-09,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-000573,INS-0004654,2025-11-24,In-Person Visit,Karim Fathy,No Answer,,,3,Promise to Pay Pending
+COL-000574,INS-0004654,2026-01-03,Legal Escalation Notice,Layla Anwar,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000575,INS-0004665,2026-04-08,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000576,INS-0004665,2026-04-29,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Promise to Pay Pending
+COL-000577,INS-0004665,2026-06-12,Formal Notice Email,Mostafa Reda,No Answer,,,2,Written Off
+COL-000578,INS-0004677,2025-12-27,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Recovered
+COL-000579,INS-0004677,2026-01-12,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000580,INS-0004677,2026-02-22,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Open
+COL-000581,INS-0004677,2026-03-02,In-Person Visit,Karim Fathy,No Answer,,,3,Recovered
+COL-000582,INS-0004689,2024-08-05,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Partially Recovered
+COL-000583,INS-0004689,2024-08-28,Reminder WhatsApp,Nourhan Sabry,Wrong Contact Info,,,1,Partially Recovered
+COL-000584,INS-0004689,2024-10-07,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2024-10-19,130351.51,2,Recovered
+COL-000585,INS-0004710,2026-03-14,Reminder Call,Karim Fathy,No Answer,,,1,Open
+COL-000586,INS-0004710,2026-03-30,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Partially Recovered
+COL-000587,INS-0004710,2026-04-28,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Recovered
+COL-000588,INS-0004710,2026-06-10,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Escalated - Legal
+COL-000589,INS-0004722,2026-03-29,Reminder Call,Layla Anwar,Reached - Promise to Pay,2026-04-01,114128.15,1,Escalated - Legal
+COL-000590,INS-0004722,2026-05-01,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2026-05-09,85287.81,1,Partially Recovered
+COL-000591,INS-0004723,2026-06-27,Reminder Call,Layla Anwar,No Answer,,,1,Partially Recovered
+COL-000592,INS-0004728,2025-06-03,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2025-06-23,104158.23,1,Promise to Pay Pending
+COL-000593,INS-0004728,2025-06-25,Reminder WhatsApp,Mostafa Reda,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000594,INS-0004728,2025-08-07,Formal Notice Email,Karim Fathy,No Answer,,,2,Open
+COL-000595,INS-0004728,2025-08-16,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Recovered
+COL-000596,INS-0004728,2025-09-06,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2025-09-21,212900.23,3,Promise to Pay Pending
+COL-000597,INS-0004730,2025-12-03,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Partially Recovered
+COL-000598,INS-0004730,2026-01-06,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Escalated - Legal
+COL-000599,INS-0004730,2026-01-21,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Open
+COL-000600,INS-0004730,2026-02-22,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Recovered
+COL-000601,INS-0004730,2026-03-26,Legal Escalation Notice,Layla Anwar,Reached - Promise to Pay,2026-04-10,37382.27,3,Recovered
+COL-000602,INS-0004731,2026-03-03,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000603,INS-0004731,2026-04-08,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Recovered
+COL-000604,INS-0004731,2026-04-23,Formal Notice Email,Rana Naguib,No Answer,,,2,Recovered
+COL-000605,INS-0004731,2026-05-18,In-Person Visit,Karim Fathy,Reached - Dispute,,,3,Escalated - Legal
+COL-000606,INS-0004732,2026-06-02,Reminder Call,Rana Naguib,No Answer,,,1,Promise to Pay Pending
+COL-000607,INS-0004732,2026-06-30,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Open
+COL-000608,INS-0004777,2025-10-19,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Partially Recovered
+COL-000609,INS-0004777,2025-11-15,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Partially Recovered
+COL-000610,INS-0004777,2025-12-10,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2025-12-17,57033.74,2,Recovered
+COL-000611,INS-0004777,2025-12-25,In-Person Visit,Rana Naguib,No Answer,,,3,Open
+COL-000612,INS-0004777,2026-01-23,Legal Escalation Notice,Karim Fathy,Wrong Contact Info,,,3,Open
+COL-000613,INS-0004794,2026-03-09,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Open
+COL-000614,INS-0004794,2026-04-18,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Open
+COL-000615,INS-0004794,2026-05-03,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Recovered
+COL-000616,INS-0004794,2026-06-10,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Partially Recovered
+COL-000617,INS-0004795,2026-06-14,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-06-27,17583.83,1,Open
+COL-000618,INS-0004806,2025-05-09,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Recovered
+COL-000619,INS-0004809,2026-01-31,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000620,INS-0004810,2026-04-30,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Open
+COL-000621,INS-0004810,2026-06-04,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Partially Recovered
+COL-000622,INS-0004810,2026-06-17,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-000623,INS-0004815,2025-06-21,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000624,INS-0004815,2025-07-20,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Open
+COL-000625,INS-0004815,2025-08-06,Formal Notice Email,Nourhan Sabry,Reached - Dispute,,,2,Recovered
+COL-000626,INS-0004815,2025-08-29,In-Person Visit,Mostafa Reda,No Answer,,,3,Recovered
+COL-000627,INS-0004815,2025-09-27,Legal Escalation Notice,Layla Anwar,Reached - Dispute,,,3,Recovered
+COL-000628,INS-0004826,2026-04-10,Reminder Call,Nourhan Sabry,No Answer,,,1,Partially Recovered
+COL-000629,INS-0004826,2026-05-20,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2026-05-31,22696.04,1,Escalated - Legal
+COL-000630,INS-0004826,2026-05-27,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Partially Recovered
+COL-000631,INS-0004838,2024-12-24,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2025-01-07,145599.28,1,Escalated - Legal
+COL-000632,INS-0004838,2025-01-28,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2025-02-13,138409.84,1,Promise to Pay Pending
+COL-000633,INS-0004838,2025-02-17,Formal Notice Email,Mostafa Reda,Reached - Promise to Pay,2025-03-06,398857.75,2,Escalated - Legal
+COL-000634,INS-0004838,2025-03-10,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2025-03-29,320137.47,3,Escalated - Legal
+COL-000635,INS-0004838,2025-04-26,Legal Escalation Notice,Rana Naguib,Reached - Dispute,,,3,Partially Recovered
+COL-000636,INS-0004863,2026-01-02,Reminder Call,Mostafa Reda,No Answer,,,1,Promise to Pay Pending
+COL-000637,INS-0004863,2026-01-22,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2026-02-05,89326.57,1,Promise to Pay Pending
+COL-000638,INS-0004863,2026-02-15,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Open
+COL-000639,INS-0004863,2026-03-19,In-Person Visit,Nourhan Sabry,Reached - Promise to Pay,2026-03-24,61158.14,3,Partially Recovered
+COL-000640,INS-0004863,2026-04-12,Legal Escalation Notice,Mostafa Reda,Reached - No Commitment,,,3,Open
+COL-000641,INS-0004871,2025-06-06,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Recovered
+COL-000642,INS-0004871,2025-07-13,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2025-07-28,43672.08,1,Open
+COL-000643,INS-0004871,2025-07-23,Formal Notice Email,Mostafa Reda,No Answer,,,2,Open
+COL-000644,INS-0004871,2025-09-07,In-Person Visit,Rana Naguib,Wrong Contact Info,,,3,Recovered
+COL-000645,INS-0004873,2025-12-01,Reminder Call,Karim Fathy,No Answer,,,1,Promise to Pay Pending
+COL-000646,INS-0004897,2025-06-24,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Open
+COL-000647,INS-0004897,2025-07-22,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Open
+COL-000648,INS-0004897,2025-08-25,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Recovered
+COL-000649,INS-0004897,2025-09-17,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Open
+COL-000650,INS-0004899,2025-12-19,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000651,INS-0004899,2026-01-30,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Partially Recovered
+COL-000652,INS-0004899,2026-02-28,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Open
+COL-000653,INS-0004899,2026-03-28,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Open
+COL-000654,INS-0004899,2026-04-14,Legal Escalation Notice,Rana Naguib,Reached - No Commitment,,,3,Partially Recovered
+COL-000655,INS-0004909,2026-04-29,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Escalated - Legal
+COL-000656,INS-0004909,2026-06-03,Reminder WhatsApp,Karim Fathy,No Answer,,,1,Recovered
+COL-000657,INS-0004909,2026-06-12,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Written Off
+COL-000658,INS-0004915,2026-05-23,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Recovered
+COL-000659,INS-0004915,2026-06-20,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Escalated - Legal
+COL-000660,INS-0004920,2026-05-29,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Open
+COL-000661,INS-0004920,2026-06-10,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Written Off
+COL-000662,INS-0004926,2025-01-16,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000663,INS-0004926,2025-02-11,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Recovered
+COL-000664,INS-0004926,2025-03-16,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2025-03-24,22586.74,2,Escalated - Legal
+COL-000665,INS-0004926,2025-04-04,In-Person Visit,Karim Fathy,Reached - Dispute,,,3,Open
+COL-000666,INS-0004978,2026-04-21,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2026-05-05,35536.6,1,Open
+COL-000667,INS-0004978,2026-05-24,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000668,INS-0004992,2026-04-21,Reminder Call,Karim Fathy,No Answer,,,1,Recovered
+COL-000669,INS-0004992,2026-05-18,Reminder WhatsApp,Rana Naguib,Reached - Dispute,,,1,Partially Recovered
+COL-000670,INS-0005005,2026-03-31,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Recovered
+COL-000671,INS-0005005,2026-04-29,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Recovered
+COL-000672,INS-0005005,2026-05-31,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Escalated - Legal
+COL-000673,INS-0005005,2026-06-27,In-Person Visit,Mostafa Reda,Reached - No Commitment,,,3,Partially Recovered
+COL-000674,INS-0005011,2025-06-12,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000675,INS-0005011,2025-07-03,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000676,INS-0005011,2025-08-16,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2025-08-24,107984.54,2,Escalated - Legal
+COL-000677,INS-0005011,2025-09-11,In-Person Visit,Nourhan Sabry,No Answer,,,3,Open
+COL-000678,INS-0005011,2025-10-13,Legal Escalation Notice,Mostafa Reda,Reached - Promise to Pay,2025-10-27,86269.66,3,Written Off
+COL-000679,INS-0005028,2024-12-15,Reminder Call,Nourhan Sabry,No Answer,,,1,Promise to Pay Pending
+COL-000680,INS-0005028,2025-01-09,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Open
+COL-000681,INS-0005028,2025-01-24,Formal Notice Email,Nourhan Sabry,No Answer,,,2,Promise to Pay Pending
+COL-000682,INS-0005028,2025-03-02,In-Person Visit,Rana Naguib,Wrong Contact Info,,,3,Partially Recovered
+COL-000683,INS-0005028,2025-04-11,Legal Escalation Notice,Mostafa Reda,Reached - Dispute,,,3,Written Off
+COL-000684,INS-0005033,2026-03-05,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Recovered
+COL-000685,INS-0005033,2026-04-09,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Recovered
+COL-000686,INS-0005033,2026-04-24,Formal Notice Email,Rana Naguib,No Answer,,,2,Open
+COL-000687,INS-0005033,2026-05-25,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Recovered
+COL-000688,INS-0005033,2026-06-18,Legal Escalation Notice,Nourhan Sabry,Reached - No Commitment,,,3,Escalated - Legal
+COL-000689,INS-0005040,2025-06-13,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Partially Recovered
+COL-000690,INS-0005040,2025-07-08,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2025-07-28,48735.62,1,Recovered
+COL-000691,INS-0005040,2025-08-21,Formal Notice Email,Layla Anwar,No Answer,,,2,Promise to Pay Pending
+COL-000692,INS-0005040,2025-09-07,In-Person Visit,Nourhan Sabry,Reached - No Commitment,,,3,Open
+COL-000693,INS-0005040,2025-09-26,Legal Escalation Notice,Mostafa Reda,No Answer,,,3,Open
+COL-000694,INS-0005042,2025-12-23,Reminder Call,Nourhan Sabry,No Answer,,,1,Open
+COL-000695,INS-0005043,2026-03-23,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Partially Recovered
+COL-000696,INS-0005043,2026-04-22,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Recovered
+COL-000697,INS-0005043,2026-05-08,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Recovered
+COL-000698,INS-0005043,2026-05-29,In-Person Visit,Nourhan Sabry,No Answer,,,3,Escalated - Legal
+COL-000699,INS-0005049,2025-07-08,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2025-07-22,90639.87,1,Recovered
+COL-000700,INS-0005049,2025-07-31,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Escalated - Legal
+COL-000701,INS-0005049,2025-09-05,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2025-09-17,88110.73,2,Partially Recovered
+COL-000702,INS-0005049,2025-10-12,In-Person Visit,Mostafa Reda,No Answer,,,3,Recovered
+COL-000703,INS-0005093,2026-05-06,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Recovered
+COL-000704,INS-0005103,2024-09-23,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Partially Recovered
+COL-000705,INS-0005103,2024-11-03,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Partially Recovered
+COL-000706,INS-0005103,2024-11-25,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Open
+COL-000707,INS-0005103,2024-12-24,In-Person Visit,Nourhan Sabry,No Answer,,,3,Open
+COL-000708,INS-0005103,2025-01-14,Legal Escalation Notice,Nourhan Sabry,No Answer,,,3,Escalated - Legal
+COL-000709,INS-0005115,2025-08-09,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Open
+COL-000710,INS-0005115,2025-09-10,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Recovered
+COL-000711,INS-0005115,2025-10-10,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Partially Recovered
+COL-000712,INS-0005115,2025-11-03,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-000713,INS-0005115,2025-11-26,Legal Escalation Notice,Karim Fathy,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000714,INS-0005116,2025-11-02,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000715,INS-0005116,2025-12-03,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Escalated - Legal
+COL-000716,INS-0005116,2026-01-03,Formal Notice Email,Karim Fathy,Reached - Promise to Pay,2026-01-12,139258.75,2,Open
+COL-000717,INS-0005116,2026-01-29,In-Person Visit,Mostafa Reda,Reached - Dispute,,,3,Escalated - Legal
+COL-000718,INS-0005116,2026-02-20,Legal Escalation Notice,Rana Naguib,Reached - No Commitment,,,3,Recovered
+COL-000719,INS-0005117,2026-02-13,Reminder Call,Layla Anwar,No Answer,,,1,Escalated - Legal
+COL-000720,INS-0005117,2026-03-15,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000721,INS-0005118,2026-05-15,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-05-25,24635.78,1,Partially Recovered
+COL-000722,INS-0005118,2026-05-30,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Escalated - Legal
+COL-000723,INS-0005123,2025-08-04,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-000724,INS-0005123,2025-08-27,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Open
+COL-000725,INS-0005123,2025-09-26,Formal Notice Email,Mostafa Reda,Reached - Promise to Pay,2025-10-16,134805.19,2,Partially Recovered
+COL-000726,INS-0005123,2025-11-03,In-Person Visit,Layla Anwar,Reached - Promise to Pay,2025-11-20,142474.8,3,Open
+COL-000727,INS-0005131,2026-05-29,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Recovered
+COL-000728,INS-0005136,2024-12-17,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000729,INS-0005136,2025-01-11,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2025-01-23,108260.82,1,Open
+COL-000730,INS-0005136,2025-02-17,Formal Notice Email,Karim Fathy,No Answer,,,2,Open
+COL-000731,INS-0005137,2025-03-13,Reminder Call,Nourhan Sabry,No Answer,,,1,Recovered
+COL-000732,INS-0005137,2025-04-06,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000733,INS-0005137,2025-04-29,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2025-05-04,61636.06,2,Recovered
+COL-000734,INS-0005137,2025-06-04,In-Person Visit,Layla Anwar,Reached - Promise to Pay,2025-06-22,42011.1,3,Open
+COL-000735,INS-0005139,2025-09-17,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Open
+COL-000736,INS-0005152,2026-02-26,Reminder Call,Nourhan Sabry,No Answer,,,1,Open
+COL-000737,INS-0005152,2026-04-03,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000738,INS-0005152,2026-04-26,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Promise to Pay Pending
+COL-000739,INS-0005165,2026-01-11,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Open
+COL-000740,INS-0005165,2026-01-30,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Escalated - Legal
+COL-000741,INS-0005165,2026-02-27,Formal Notice Email,Layla Anwar,No Answer,,,2,Open
+COL-000742,INS-0005165,2026-03-25,In-Person Visit,Karim Fathy,Reached - Dispute,,,3,Recovered
+COL-000743,INS-0005165,2026-04-28,Legal Escalation Notice,Layla Anwar,Reached - Dispute,,,3,Partially Recovered
+COL-000744,INS-0005216,2025-07-01,Reminder Call,Layla Anwar,Reached - Promise to Pay,2025-07-15,239426.97,1,Open
+COL-000745,INS-0005216,2025-08-08,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000746,INS-0005216,2025-09-04,Formal Notice Email,Layla Anwar,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-000747,INS-0005216,2025-10-05,In-Person Visit,Layla Anwar,No Answer,,,3,Partially Recovered
+COL-000748,INS-0005216,2025-10-21,Legal Escalation Notice,Rana Naguib,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000749,INS-0005231,2026-06-01,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000750,INS-0005231,2026-06-28,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000751,INS-0005273,2025-05-11,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2025-05-19,96998.47,1,Promise to Pay Pending
+COL-000752,INS-0005273,2025-06-08,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Open
+COL-000753,INS-0005273,2025-06-29,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Escalated - Legal
+COL-000754,INS-0005273,2025-08-18,In-Person Visit,Layla Anwar,No Answer,,,3,Open
+COL-000755,INS-0005273,2025-08-22,Legal Escalation Notice,Rana Naguib,Reached - Dispute,,,3,Open
+COL-000756,INS-0005274,2025-08-16,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000757,INS-0005274,2025-09-13,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000758,INS-0005285,2026-06-05,Reminder Call,Karim Fathy,No Answer,,,1,Open
+COL-000759,INS-0005285,2026-06-28,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Open
+COL-000760,INS-0005314,2025-03-09,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Partially Recovered
+COL-000761,INS-0005314,2025-04-21,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Open
+COL-000762,INS-0005314,2025-05-21,Formal Notice Email,Karim Fathy,No Answer,,,2,Recovered
+COL-000763,INS-0005314,2025-06-02,In-Person Visit,Rana Naguib,Reached - Promise to Pay,2025-06-10,71924.38,3,Recovered
+COL-000764,INS-0005336,2025-06-13,Reminder Call,Rana Naguib,Reached - Promise to Pay,2025-06-28,58860.59,1,Promise to Pay Pending
+COL-000765,INS-0005336,2025-07-09,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Promise to Pay Pending
+COL-000766,INS-0005336,2025-08-13,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Escalated - Legal
+COL-000767,INS-0005340,2026-06-13,Reminder Call,Layla Anwar,Reached - Promise to Pay,2026-06-24,46574.69,1,Open
+COL-000768,INS-0005347,2026-03-11,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000769,INS-0005347,2026-04-16,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Promise to Pay Pending
+COL-000770,INS-0005347,2026-05-03,Formal Notice Email,Rana Naguib,No Answer,,,2,Partially Recovered
+COL-000771,INS-0005347,2026-05-30,In-Person Visit,Mostafa Reda,No Answer,,,3,Open
+COL-000772,INS-0005347,2026-06-22,Legal Escalation Notice,Layla Anwar,Reached - Dispute,,,3,Partially Recovered
+COL-000773,INS-0005348,2026-06-18,Reminder Call,Nourhan Sabry,No Answer,,,1,Partially Recovered
+COL-000774,INS-0005401,2025-10-03,Reminder Call,Nourhan Sabry,No Answer,,,1,Recovered
+COL-000775,INS-0005401,2025-11-03,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Open
+COL-000776,INS-0005401,2025-11-22,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2025-12-06,45058.03,2,Promise to Pay Pending
+COL-000777,INS-0005401,2025-12-24,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Open
+COL-000778,INS-0005401,2026-01-05,Legal Escalation Notice,Mostafa Reda,Reached - Promise to Pay,2026-01-22,25973.79,3,Promise to Pay Pending
+COL-000779,INS-0005434,2025-12-23,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Partially Recovered
+COL-000780,INS-0005434,2026-01-12,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000781,INS-0005434,2026-02-13,Formal Notice Email,Rana Naguib,No Answer,,,2,Promise to Pay Pending
+COL-000782,INS-0005434,2026-03-11,In-Person Visit,Nourhan Sabry,Wrong Contact Info,,,3,Partially Recovered
+COL-000783,INS-0005434,2026-04-12,Legal Escalation Notice,Rana Naguib,Reached - Dispute,,,3,Partially Recovered
+COL-000784,INS-0005435,2026-03-20,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000785,INS-0005435,2026-04-10,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-04-25,30096.74,1,Recovered
+COL-000786,INS-0005435,2026-05-14,Formal Notice Email,Nourhan Sabry,Reached - No Commitment,,,2,Open
+COL-000787,INS-0005435,2026-06-14,In-Person Visit,Mostafa Reda,Reached - Dispute,,,3,Open
+COL-000788,INS-0005441,2026-04-24,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000789,INS-0005441,2026-05-19,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Open
+COL-000790,INS-0005451,2026-04-10,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Recovered
+COL-000791,INS-0005451,2026-04-21,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2026-04-28,95463.31,1,Recovered
+COL-000792,INS-0005451,2026-05-29,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Recovered
+COL-000793,INS-0005451,2026-06-30,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Open
+COL-000794,INS-0005475,2026-05-08,Reminder Call,Rana Naguib,Reached - Promise to Pay,2026-05-24,178401.04,1,Promise to Pay Pending
+COL-000795,INS-0005475,2026-06-02,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000796,INS-0005475,2026-06-28,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2026-07-10,447944.09,2,Open
+COL-000797,INS-0005481,2025-12-17,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Recovered
+COL-000798,INS-0005481,2026-01-13,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Recovered
+COL-000799,INS-0005481,2026-02-13,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Open
+COL-000800,INS-0005481,2026-03-06,In-Person Visit,Rana Naguib,Wrong Contact Info,,,3,Written Off
+COL-000801,INS-0005481,2026-03-24,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2026-04-12,23445.93,3,Recovered
+COL-000802,INS-0005482,2026-03-07,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Escalated - Legal
+COL-000803,INS-0005483,2026-06-18,Reminder Call,Layla Anwar,No Answer,,,1,Recovered
+COL-000804,INS-0005488,2024-08-20,Reminder Call,Karim Fathy,Reached - Promise to Pay,2024-08-25,401065.13,1,Promise to Pay Pending
+COL-000805,INS-0005488,2024-09-24,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Written Off
+COL-000806,INS-0005488,2024-10-09,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Partially Recovered
+COL-000807,INS-0005488,2024-11-12,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2024-11-29,464187.68,3,Recovered
+COL-000808,INS-0005488,2024-11-22,Legal Escalation Notice,Nourhan Sabry,Reached - No Commitment,,,3,Partially Recovered
+COL-000809,INS-0005507,2025-11-18,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Recovered
+COL-000810,INS-0005507,2025-12-22,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Escalated - Legal
+COL-000811,INS-0005507,2026-01-24,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2026-01-29,28008.24,2,Escalated - Legal
+COL-000812,INS-0005507,2026-02-24,In-Person Visit,Karim Fathy,No Answer,,,3,Promise to Pay Pending
+COL-000813,INS-0005514,2026-06-04,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Partially Recovered
+COL-000814,INS-0005514,2026-06-25,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2026-07-01,38737.12,1,Partially Recovered
+COL-000815,INS-0005533,2026-03-08,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2026-03-27,10036.57,1,Recovered
+COL-000816,INS-0005539,2025-03-21,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Open
+COL-000817,INS-0005539,2025-04-17,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2025-04-23,156607.7,1,Promise to Pay Pending
+COL-000818,INS-0005539,2025-05-19,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Escalated - Legal
+COL-000819,INS-0005539,2025-05-22,In-Person Visit,Karim Fathy,Wrong Contact Info,,,3,Open
+COL-000820,INS-0005539,2025-06-27,Legal Escalation Notice,Layla Anwar,No Answer,,,3,Promise to Pay Pending
+COL-000821,INS-0005541,2025-09-09,Reminder Call,Rana Naguib,No Answer,,,1,Open
+COL-000822,INS-0005541,2025-10-09,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2025-10-13,58200.9,1,Open
+COL-000823,INS-0005541,2025-11-04,Formal Notice Email,Layla Anwar,Reached - Dispute,,,2,Recovered
+COL-000824,INS-0005541,2025-12-17,In-Person Visit,Mostafa Reda,Reached - No Commitment,,,3,Written Off
+COL-000825,INS-0005543,2026-03-17,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Written Off
+COL-000826,INS-0005543,2026-04-09,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-04-13,78525.94,1,Partially Recovered
+COL-000827,INS-0005543,2026-05-16,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-000828,INS-0005543,2026-05-26,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2026-06-10,33026.29,3,Open
+COL-000829,INS-0005558,2025-07-13,Reminder Call,Rana Naguib,No Answer,,,1,Written Off
+COL-000830,INS-0005558,2025-08-01,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2025-08-12,84386.63,1,Partially Recovered
+COL-000831,INS-0005558,2025-08-30,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Partially Recovered
+COL-000832,INS-0005558,2025-09-29,In-Person Visit,Mostafa Reda,Reached - Promise to Pay,2025-10-05,107280.89,3,Recovered
+COL-000833,INS-0005558,2025-10-19,Legal Escalation Notice,Karim Fathy,No Answer,,,3,Open
+COL-000834,INS-0005559,2025-10-10,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Partially Recovered
+COL-000835,INS-0005559,2025-11-01,Reminder WhatsApp,Rana Naguib,Reached - Dispute,,,1,Recovered
+COL-000836,INS-0005559,2025-11-28,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Recovered
+COL-000837,INS-0005559,2026-01-08,In-Person Visit,Mostafa Reda,Wrong Contact Info,,,3,Written Off
+COL-000838,INS-0005604,2025-11-18,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Escalated - Legal
+COL-000839,INS-0005604,2025-12-14,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Recovered
+COL-000840,INS-0005604,2026-01-04,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Recovered
+COL-000841,INS-0005615,2026-01-27,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000842,INS-0005615,2026-02-19,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Escalated - Legal
+COL-000843,INS-0005615,2026-03-14,Formal Notice Email,Mostafa Reda,No Answer,,,2,Open
+COL-000844,INS-0005615,2026-04-11,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Escalated - Legal
+COL-000845,INS-0005615,2026-05-07,Legal Escalation Notice,Karim Fathy,No Answer,,,3,Open
+COL-000846,INS-0005621,2025-11-18,Reminder Call,Nourhan Sabry,No Answer,,,1,Promise to Pay Pending
+COL-000847,INS-0005621,2025-12-05,Reminder WhatsApp,Nourhan Sabry,Wrong Contact Info,,,1,Open
+COL-000848,INS-0005621,2026-01-02,Formal Notice Email,Mostafa Reda,Reached - Promise to Pay,2026-01-08,72850.16,2,Partially Recovered
+COL-000849,INS-0005621,2026-02-20,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Partially Recovered
+COL-000850,INS-0005621,2026-03-04,Legal Escalation Notice,Karim Fathy,No Answer,,,3,Recovered
+COL-000851,INS-0005623,2026-05-12,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Partially Recovered
+COL-000852,INS-0005623,2026-06-05,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Open
+COL-000853,INS-0005632,2026-02-05,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-000854,INS-0005632,2026-03-05,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2026-03-20,77779.31,1,Open
+COL-000855,INS-0005632,2026-03-28,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2026-04-12,52921.09,2,Open
+COL-000856,INS-0005632,2026-05-08,In-Person Visit,Mostafa Reda,Reached - Dispute,,,3,Written Off
+COL-000857,INS-0005632,2026-06-07,Legal Escalation Notice,Mostafa Reda,Reached - Promise to Pay,2026-06-27,43770.7,3,Recovered
+COL-000858,INS-0005638,2024-12-08,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Recovered
+COL-000859,INS-0005638,2024-12-26,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Escalated - Legal
+COL-000860,INS-0005638,2025-01-31,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-000861,INS-0005638,2025-03-08,In-Person Visit,Rana Naguib,No Answer,,,3,Partially Recovered
+COL-000862,INS-0005649,2025-01-21,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000863,INS-0005649,2025-03-04,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Open
+COL-000864,INS-0005649,2025-03-25,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Recovered
+COL-000865,INS-0005649,2025-04-28,In-Person Visit,Karim Fathy,No Answer,,,3,Open
+COL-000866,INS-0005659,2026-06-26,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Partially Recovered
+COL-000867,INS-0005665,2025-09-17,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Recovered
+COL-000868,INS-0005665,2025-10-10,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Partially Recovered
+COL-000869,INS-0005665,2025-11-17,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Promise to Pay Pending
+COL-000870,INS-0005665,2025-12-14,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Escalated - Legal
+COL-000871,INS-0005665,2026-01-07,Legal Escalation Notice,Karim Fathy,Reached - Dispute,,,3,Partially Recovered
+COL-000872,INS-0005666,2025-12-12,Reminder Call,Rana Naguib,Reached - Promise to Pay,2025-12-31,17743.09,1,Promise to Pay Pending
+COL-000873,INS-0005666,2026-01-06,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2026-01-23,26737.72,1,Escalated - Legal
+COL-000874,INS-0005667,2026-03-22,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Open
+COL-000875,INS-0005667,2026-04-11,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Partially Recovered
+COL-000876,INS-0005667,2026-05-22,Formal Notice Email,Layla Anwar,No Answer,,,2,Open
+COL-000877,INS-0005676,2026-02-22,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Open
+COL-000878,INS-0005676,2026-03-27,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Recovered
+COL-000879,INS-0005676,2026-04-14,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-000880,INS-0005676,2026-05-29,In-Person Visit,Nourhan Sabry,Reached - No Commitment,,,3,Open
+COL-000881,INS-0005676,2026-06-29,Legal Escalation Notice,Karim Fathy,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-000882,INS-0005682,2026-04-06,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-000883,INS-0005716,2025-03-09,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000884,INS-0005718,2025-09-05,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-000885,INS-0005718,2025-10-09,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2025-10-23,35122.34,1,Open
+COL-000886,INS-0005718,2025-11-05,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Escalated - Legal
+COL-000887,INS-0005718,2025-12-08,In-Person Visit,Nourhan Sabry,Reached - No Commitment,,,3,Partially Recovered
+COL-000888,INS-0005718,2026-01-08,Legal Escalation Notice,Rana Naguib,No Answer,,,3,Promise to Pay Pending
+COL-000889,INS-0005721,2026-06-14,Reminder Call,Layla Anwar,No Answer,,,1,Open
+COL-000890,INS-0005754,2026-01-29,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-000891,INS-0005754,2026-02-19,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000892,INS-0005754,2026-03-23,Formal Notice Email,Mostafa Reda,No Answer,,,2,Open
+COL-000893,INS-0005754,2026-04-20,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Escalated - Legal
+COL-000894,INS-0005766,2025-05-29,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000895,INS-0005775,2026-06-29,Reminder Call,Nourhan Sabry,No Answer,,,1,Open
+COL-000896,INS-0005796,2025-11-09,Reminder Call,Mostafa Reda,No Answer,,,1,Recovered
+COL-000897,INS-0005796,2025-12-13,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Open
+COL-000898,INS-0005796,2026-01-09,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-000899,INS-0005796,2026-01-21,In-Person Visit,Karim Fathy,No Answer,,,3,Written Off
+COL-000900,INS-0005796,2026-02-28,Legal Escalation Notice,Mostafa Reda,Reached - No Commitment,,,3,Open
+COL-000901,INS-0005805,2025-12-23,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000902,INS-0005805,2026-01-20,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Partially Recovered
+COL-000903,INS-0005805,2026-02-18,Formal Notice Email,Mostafa Reda,No Answer,,,2,Promise to Pay Pending
+COL-000904,INS-0005806,2026-03-24,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Partially Recovered
+COL-000905,INS-0005806,2026-04-13,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Recovered
+COL-000906,INS-0005806,2026-05-12,Formal Notice Email,Rana Naguib,No Answer,,,2,Open
+COL-000907,INS-0005806,2026-06-29,In-Person Visit,Mostafa Reda,No Answer,,,3,Escalated - Legal
+COL-000908,INS-0005821,2025-10-28,Reminder Call,Karim Fathy,No Answer,,,1,Open
+COL-000909,INS-0005821,2025-12-05,Reminder WhatsApp,Karim Fathy,No Answer,,,1,Recovered
+COL-000910,INS-0005821,2026-01-03,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Open
+COL-000911,INS-0005821,2026-01-16,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Open
+COL-000912,INS-0005821,2026-02-23,Legal Escalation Notice,Rana Naguib,Reached - Promise to Pay,2026-03-08,39026.9,3,Promise to Pay Pending
+COL-000913,INS-0005822,2026-02-06,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000914,INS-0005822,2026-03-03,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Recovered
+COL-000915,INS-0005822,2026-03-23,Formal Notice Email,Layla Anwar,Reached - No Commitment,,,2,Recovered
+COL-000916,INS-0005822,2026-04-28,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Open
+COL-000917,INS-0005822,2026-06-06,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2026-06-11,36362.23,3,Partially Recovered
+COL-000918,INS-0005830,2026-01-15,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-000919,INS-0005830,2026-02-13,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Recovered
+COL-000920,INS-0005830,2026-03-13,Formal Notice Email,Layla Anwar,Reached - No Commitment,,,2,Partially Recovered
+COL-000921,INS-0005830,2026-04-11,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Recovered
+COL-000922,INS-0005830,2026-05-24,Legal Escalation Notice,Mostafa Reda,No Answer,,,3,Recovered
+COL-000923,INS-0005836,2024-09-29,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Partially Recovered
+COL-000924,INS-0005836,2024-10-26,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Open
+COL-000925,INS-0005836,2024-11-27,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2024-12-05,117378.67,2,Open
+COL-000926,INS-0005836,2024-12-09,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-000927,INS-0005837,2024-12-31,Reminder Call,Karim Fathy,Reached - Promise to Pay,2025-01-11,91205.28,1,Recovered
+COL-000928,INS-0005837,2025-01-27,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Open
+COL-000929,INS-0005837,2025-02-18,Formal Notice Email,Nourhan Sabry,Reached - No Commitment,,,2,Recovered
+COL-000930,INS-0005837,2025-03-20,In-Person Visit,Rana Naguib,No Answer,,,3,Escalated - Legal
+COL-000931,INS-0005837,2025-04-03,Legal Escalation Notice,Rana Naguib,No Answer,,,3,Escalated - Legal
+COL-000932,INS-0005859,2024-12-24,Reminder Call,Karim Fathy,Reached - Promise to Pay,2025-01-11,74148.13,1,Escalated - Legal
+COL-000933,INS-0005859,2025-01-23,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Open
+COL-000934,INS-0005875,2026-04-02,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2026-04-05,143394.36,1,Recovered
+COL-000935,INS-0005875,2026-05-03,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2026-05-07,137906.15,1,Partially Recovered
+COL-000936,INS-0005875,2026-05-28,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2026-06-17,133585.57,2,Recovered
+COL-000937,INS-0005875,2026-06-12,In-Person Visit,Karim Fathy,Wrong Contact Info,,,3,Partially Recovered
+COL-000938,INS-0005892,2025-04-10,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Partially Recovered
+COL-000939,INS-0005892,2025-04-25,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Partially Recovered
+COL-000940,INS-0005892,2025-05-31,Formal Notice Email,Rana Naguib,No Answer,,,2,Promise to Pay Pending
+COL-000941,INS-0005893,2025-07-11,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Partially Recovered
+COL-000942,INS-0005893,2025-07-30,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000943,INS-0005893,2025-08-19,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2025-08-22,41356.26,2,Promise to Pay Pending
+COL-000944,INS-0005893,2025-09-27,In-Person Visit,Nourhan Sabry,Reached - No Commitment,,,3,Escalated - Legal
+COL-000945,INS-0005893,2025-11-04,Legal Escalation Notice,Layla Anwar,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000946,INS-0005895,2025-12-30,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-000947,INS-0005895,2026-01-30,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Partially Recovered
+COL-000948,INS-0005895,2026-03-02,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Open
+COL-000949,INS-0005896,2026-04-02,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000950,INS-0005896,2026-05-07,Reminder WhatsApp,Mostafa Reda,Reached - Dispute,,,1,Recovered
+COL-000951,INS-0005896,2026-05-20,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Partially Recovered
+COL-000952,INS-0005896,2026-06-14,In-Person Visit,Mostafa Reda,Reached - No Commitment,,,3,Escalated - Legal
+COL-000953,INS-0005907,2026-02-01,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2026-02-12,218840.75,1,Promise to Pay Pending
+COL-000954,INS-0005907,2026-03-10,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Recovered
+COL-000955,INS-0005907,2026-03-30,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2026-04-11,134055.08,2,Recovered
+COL-000956,INS-0005907,2026-05-09,In-Person Visit,Mostafa Reda,Wrong Contact Info,,,3,Recovered
+COL-000957,INS-0005907,2026-06-10,Legal Escalation Notice,Mostafa Reda,Reached - No Commitment,,,3,Open
+COL-000958,INS-0005913,2024-09-17,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Recovered
+COL-000959,INS-0005920,2026-06-22,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Open
+COL-000960,INS-0005937,2026-02-22,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Escalated - Legal
+COL-000961,INS-0005937,2026-03-23,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000962,INS-0005937,2026-04-02,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Partially Recovered
+COL-000963,INS-0005937,2026-05-21,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000964,INS-0005937,2026-05-20,Legal Escalation Notice,Mostafa Reda,Wrong Contact Info,,,3,Recovered
+COL-000965,INS-0005947,2026-02-12,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2026-03-02,85398.56,1,Recovered
+COL-000966,INS-0005947,2026-03-09,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Promise to Pay Pending
+COL-000967,INS-0005947,2026-04-18,Formal Notice Email,Karim Fathy,No Answer,,,2,Open
+COL-000968,INS-0005968,2025-03-26,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Open
+COL-000969,INS-0005968,2025-04-10,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Recovered
+COL-000970,INS-0005968,2025-05-29,Formal Notice Email,Nourhan Sabry,Reached - Dispute,,,2,Open
+COL-000971,INS-0005968,2025-06-26,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Promise to Pay Pending
+COL-000972,INS-0005970,2025-09-21,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Recovered
+COL-000973,INS-0005970,2025-10-20,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Partially Recovered
+COL-000974,INS-0005970,2025-11-09,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2025-11-12,45360.91,2,Escalated - Legal
+COL-000975,INS-0005970,2025-12-12,In-Person Visit,Mostafa Reda,No Answer,,,3,Partially Recovered
+COL-000976,INS-0005973,2026-06-24,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2026-07-01,41247.15,1,Open
+COL-000977,INS-0006000,2026-03-11,Reminder Call,Karim Fathy,No Answer,,,1,Recovered
+COL-000978,INS-0006000,2026-04-11,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Recovered
+COL-000979,INS-0006001,2026-06-15,Reminder Call,Nourhan Sabry,No Answer,,,1,Open
+COL-000980,INS-0006006,2025-01-05,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Open
+COL-000981,INS-0006006,2025-02-01,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Partially Recovered
+COL-000982,INS-0006006,2025-02-27,Formal Notice Email,Mostafa Reda,Reached - Dispute,,,2,Recovered
+COL-000983,INS-0006006,2025-04-13,In-Person Visit,Nourhan Sabry,Wrong Contact Info,,,3,Open
+COL-000984,INS-0006006,2025-05-06,Legal Escalation Notice,Rana Naguib,No Answer,,,3,Open
+COL-000985,INS-0006009,2025-10-01,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Open
+COL-000986,INS-0006009,2025-10-29,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Escalated - Legal
+COL-000987,INS-0006032,2025-07-08,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2025-07-24,15331.67,1,Escalated - Legal
+COL-000988,INS-0006032,2025-08-15,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-000989,INS-0006047,2025-07-03,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2025-07-11,46068.98,1,Open
+COL-000990,INS-0006047,2025-08-04,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Escalated - Legal
+COL-000991,INS-0006047,2025-08-21,Formal Notice Email,Nourhan Sabry,Reached - No Commitment,,,2,Recovered
+COL-000992,INS-0006047,2025-09-16,In-Person Visit,Nourhan Sabry,Reached - Promise to Pay,2025-09-28,33383.82,3,Promise to Pay Pending
+COL-000993,INS-0006047,2025-10-18,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2025-11-07,18780.68,3,Open
+COL-000994,INS-0006056,2024-09-15,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Escalated - Legal
+COL-000995,INS-0006056,2024-10-01,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Recovered
+COL-000996,INS-0006056,2024-10-30,Formal Notice Email,Mostafa Reda,No Answer,,,2,Partially Recovered
+COL-000997,INS-0006057,2024-12-14,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Open
+COL-000998,INS-0006057,2025-01-05,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Open
+COL-000999,INS-0006057,2025-02-15,Formal Notice Email,Nourhan Sabry,Reached - Dispute,,,2,Promise to Pay Pending
+COL-001000,INS-0006057,2025-03-06,In-Person Visit,Karim Fathy,Wrong Contact Info,,,3,Open
+COL-001001,INS-0006062,2026-03-14,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Open
+COL-001002,INS-0006062,2026-04-15,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Recovered
+COL-001003,INS-0006062,2026-04-29,Formal Notice Email,Karim Fathy,Reached - Promise to Pay,2026-05-11,37352.66,2,Partially Recovered
+COL-001004,INS-0006062,2026-06-02,In-Person Visit,Mostafa Reda,Reached - Dispute,,,3,Open
+COL-001005,INS-0006062,2026-06-14,Legal Escalation Notice,Nourhan Sabry,Reached - No Commitment,,,3,Partially Recovered
+COL-001006,INS-0006076,2026-01-27,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-02-15,108754.01,1,Escalated - Legal
+COL-001007,INS-0006076,2026-02-22,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Partially Recovered
+COL-001008,INS-0006076,2026-03-12,Formal Notice Email,Mostafa Reda,No Answer,,,2,Promise to Pay Pending
+COL-001009,INS-0006076,2026-04-06,In-Person Visit,Karim Fathy,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-001010,INS-0006076,2026-05-10,Legal Escalation Notice,Mostafa Reda,Wrong Contact Info,,,3,Escalated - Legal
+COL-001011,INS-0006082,2026-01-27,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Open
+COL-001012,INS-0006082,2026-02-13,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Partially Recovered
+COL-001013,INS-0006138,2025-05-23,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Recovered
+COL-001014,INS-0006138,2025-06-25,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2025-07-11,74131.38,1,Promise to Pay Pending
+COL-001015,INS-0006138,2025-07-25,Formal Notice Email,Mostafa Reda,No Answer,,,2,Recovered
+COL-001016,INS-0006138,2025-08-03,In-Person Visit,Nourhan Sabry,Reached - Dispute,,,3,Recovered
+COL-001017,INS-0006138,2025-09-23,Legal Escalation Notice,Mostafa Reda,Reached - Promise to Pay,2025-09-30,91371.37,3,Partially Recovered
+COL-001018,INS-0006141,2026-02-25,Reminder Call,Mostafa Reda,Wrong Contact Info,,,1,Written Off
+COL-001019,INS-0006141,2026-03-24,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Recovered
+COL-001020,INS-0006141,2026-04-10,Formal Notice Email,Karim Fathy,No Answer,,,2,Promise to Pay Pending
+COL-001021,INS-0006175,2024-08-04,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Open
+COL-001022,INS-0006175,2024-09-07,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Recovered
+COL-001023,INS-0006179,2025-08-08,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Partially Recovered
+COL-001024,INS-0006194,2024-10-31,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Recovered
+COL-001025,INS-0006194,2024-11-25,Reminder WhatsApp,Karim Fathy,Reached - No Commitment,,,1,Open
+COL-001026,INS-0006198,2025-11-04,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Escalated - Legal
+COL-001027,INS-0006198,2025-11-27,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2025-12-04,24534.31,1,Escalated - Legal
+COL-001028,INS-0006208,2025-10-13,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Promise to Pay Pending
+COL-001029,INS-0006231,2026-01-18,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Recovered
+COL-001030,INS-0006231,2026-02-13,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Open
+COL-001031,INS-0006231,2026-03-17,Formal Notice Email,Mostafa Reda,Reached - Dispute,,,2,Escalated - Legal
+COL-001032,INS-0006231,2026-04-20,In-Person Visit,Nourhan Sabry,Reached - Promise to Pay,2026-04-25,177489.52,3,Recovered
+COL-001033,INS-0006231,2026-05-11,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2026-05-19,253520.76,3,Promise to Pay Pending
+COL-001034,INS-0006237,2025-08-15,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Partially Recovered
+COL-001035,INS-0006237,2025-09-16,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Recovered
+COL-001036,INS-0006237,2025-10-08,Formal Notice Email,Layla Anwar,Wrong Contact Info,,,2,Open
+COL-001037,INS-0006237,2025-11-21,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Recovered
+COL-001038,INS-0006258,2025-10-02,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Partially Recovered
+COL-001039,INS-0006258,2025-10-25,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2025-11-01,31442.05,1,Escalated - Legal
+COL-001040,INS-0006258,2025-11-22,Formal Notice Email,Layla Anwar,Reached - No Commitment,,,2,Recovered
+COL-001041,INS-0006259,2026-01-03,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Recovered
+COL-001042,INS-0006259,2026-01-22,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-001043,INS-0006259,2026-02-21,Formal Notice Email,Karim Fathy,Wrong Contact Info,,,2,Recovered
+COL-001044,INS-0006259,2026-03-16,In-Person Visit,Nourhan Sabry,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-001045,INS-0006259,2026-04-09,Legal Escalation Notice,Layla Anwar,No Answer,,,3,Escalated - Legal
+COL-001046,INS-0006260,2026-03-23,Reminder Call,Karim Fathy,No Answer,,,1,Open
+COL-001047,INS-0006278,2024-09-14,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Open
+COL-001048,INS-0006278,2024-10-01,Reminder WhatsApp,Mostafa Reda,Reached - Dispute,,,1,Promise to Pay Pending
+COL-001049,INS-0006278,2024-11-15,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Recovered
+COL-001050,INS-0006280,2025-03-10,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Open
+COL-001051,INS-0006280,2025-04-13,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Open
+COL-001052,INS-0006280,2025-05-12,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2025-05-31,81897.83,2,Escalated - Legal
+COL-001053,INS-0006280,2025-06-12,In-Person Visit,Rana Naguib,Reached - Dispute,,,3,Promise to Pay Pending
+COL-001054,INS-0006280,2025-06-26,Legal Escalation Notice,Rana Naguib,Wrong Contact Info,,,3,Recovered
+COL-001055,INS-0006281,2025-06-13,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-001056,INS-0006281,2025-07-16,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Partially Recovered
+COL-001057,INS-0006281,2025-08-08,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2025-08-28,48173.93,2,Open
+COL-001058,INS-0006281,2025-09-11,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Open
+COL-001059,INS-0006281,2025-09-23,Legal Escalation Notice,Layla Anwar,No Answer,,,3,Partially Recovered
+COL-001060,INS-0006283,2025-12-12,Reminder Call,Layla Anwar,No Answer,,,1,Partially Recovered
+COL-001061,INS-0006283,2025-12-31,Reminder WhatsApp,Karim Fathy,Reached - No Commitment,,,1,Open
+COL-001062,INS-0006285,2026-06-18,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Open
+COL-001063,INS-0006290,2025-11-28,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Partially Recovered
+COL-001064,INS-0006290,2026-01-01,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-01-05,114514.06,1,Promise to Pay Pending
+COL-001065,INS-0006290,2026-01-21,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2026-02-05,91516.74,2,Open
+COL-001066,INS-0006339,2025-06-26,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Escalated - Legal
+COL-001067,INS-0006339,2025-07-19,Reminder WhatsApp,Karim Fathy,No Answer,,,1,Partially Recovered
+COL-001068,INS-0006339,2025-08-25,Formal Notice Email,Karim Fathy,No Answer,,,2,Open
+COL-001069,INS-0006339,2025-09-04,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Partially Recovered
+COL-001070,INS-0006339,2025-10-17,Legal Escalation Notice,Nourhan Sabry,Reached - Dispute,,,3,Open
+COL-001071,INS-0006350,2026-05-14,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Written Off
+COL-001072,INS-0006350,2026-06-09,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Recovered
+COL-001073,INS-0006350,2026-06-27,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2026-06-30,28092.49,2,Recovered
+COL-001074,INS-0006423,2025-11-13,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Escalated - Legal
+COL-001075,INS-0006423,2025-12-09,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-001076,INS-0006423,2026-01-06,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Recovered
+COL-001077,INS-0006430,2026-04-11,Reminder Call,Nourhan Sabry,No Answer,,,1,Open
+COL-001078,INS-0006430,2026-04-29,Reminder WhatsApp,Karim Fathy,No Answer,,,1,Recovered
+COL-001079,INS-0006430,2026-06-16,Formal Notice Email,Nourhan Sabry,No Answer,,,2,Open
+COL-001080,INS-0006430,2026-06-29,In-Person Visit,Rana Naguib,No Answer,,,3,Recovered
+COL-001081,INS-0006436,2025-05-05,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Open
+COL-001082,INS-0006446,2025-10-01,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-001083,INS-0006446,2025-10-21,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2025-10-31,43085.74,1,Promise to Pay Pending
+COL-001084,INS-0006446,2025-11-19,Formal Notice Email,Layla Anwar,No Answer,,,2,Partially Recovered
+COL-001085,INS-0006447,2025-12-27,Reminder Call,Mostafa Reda,No Answer,,,1,Recovered
+COL-001086,INS-0006447,2026-01-25,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Recovered
+COL-001087,INS-0006448,2026-03-24,Reminder Call,Nourhan Sabry,No Answer,,,1,Promise to Pay Pending
+COL-001088,INS-0006462,2025-08-14,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Partially Recovered
+COL-001089,INS-0006462,2025-09-17,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2025-10-01,25650.54,1,Open
+COL-001090,INS-0006462,2025-10-12,Formal Notice Email,Rana Naguib,Wrong Contact Info,,,2,Open
+COL-001091,INS-0006502,2026-03-23,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Partially Recovered
+COL-001092,INS-0006502,2026-04-13,Reminder WhatsApp,Karim Fathy,No Answer,,,1,Open
+COL-001093,INS-0006502,2026-05-25,Formal Notice Email,Layla Anwar,No Answer,,,2,Open
+COL-001094,INS-0006502,2026-06-14,In-Person Visit,Mostafa Reda,No Answer,,,3,Promise to Pay Pending
+COL-001095,INS-0006538,2025-03-15,Reminder Call,Layla Anwar,Reached - Promise to Pay,2025-03-22,49581.83,1,Promise to Pay Pending
+COL-001096,INS-0006539,2025-06-17,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Escalated - Legal
+COL-001097,INS-0006558,2026-04-28,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-001098,INS-0006558,2026-05-18,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2026-05-26,77279.82,1,Partially Recovered
+COL-001099,INS-0006558,2026-06-24,Formal Notice Email,Nourhan Sabry,Reached - Dispute,,,2,Open
+COL-001100,INS-0006577,2025-12-20,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-01-09,132598.81,1,Open
+COL-001101,INS-0006577,2026-01-08,Reminder WhatsApp,Mostafa Reda,Reached - No Commitment,,,1,Open
+COL-001102,INS-0006577,2026-02-12,Formal Notice Email,Karim Fathy,No Answer,,,2,Open
+COL-001103,INS-0006621,2025-12-07,Reminder Call,Karim Fathy,No Answer,,,1,Promise to Pay Pending
+COL-001104,INS-0006621,2026-01-04,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Recovered
+COL-001105,INS-0006621,2026-02-04,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2026-02-17,97692.99,2,Open
+COL-001106,INS-0006621,2026-03-01,In-Person Visit,Mostafa Reda,Wrong Contact Info,,,3,Partially Recovered
+COL-001107,INS-0006621,2026-03-24,Legal Escalation Notice,Layla Anwar,No Answer,,,3,Recovered
+COL-001108,INS-0006644,2025-09-09,Reminder Call,Layla Anwar,Wrong Contact Info,,,1,Partially Recovered
+COL-001109,INS-0006644,2025-10-03,Reminder WhatsApp,Karim Fathy,No Answer,,,1,Open
+COL-001110,INS-0006644,2025-10-26,Formal Notice Email,Rana Naguib,No Answer,,,2,Partially Recovered
+COL-001111,INS-0006644,2025-12-08,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Escalated - Legal
+COL-001112,INS-0006670,2025-07-02,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Open
+COL-001113,INS-0006670,2025-07-31,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2025-08-15,626206.13,1,Promise to Pay Pending
+COL-001114,INS-0006670,2025-09-03,Formal Notice Email,Mostafa Reda,No Answer,,,2,Recovered
+COL-001115,INS-0006670,2025-09-15,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Open
+COL-001116,INS-0006674,2026-06-28,Reminder Call,Nourhan Sabry,No Answer,,,1,Promise to Pay Pending
+COL-001117,INS-0006748,2025-07-23,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Partially Recovered
+COL-001118,INS-0006748,2025-08-23,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Open
+COL-001119,INS-0006748,2025-09-27,Formal Notice Email,Mostafa Reda,No Answer,,,2,Open
+COL-001120,INS-0006748,2025-10-23,In-Person Visit,Mostafa Reda,Wrong Contact Info,,,3,Recovered
+COL-001121,INS-0006758,2025-10-17,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Escalated - Legal
+COL-001122,INS-0006758,2025-11-18,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2025-12-06,374046.89,1,Open
+COL-001123,INS-0006758,2025-12-02,Formal Notice Email,Nourhan Sabry,Reached - No Commitment,,,2,Escalated - Legal
+COL-001124,INS-0006758,2026-01-08,In-Person Visit,Rana Naguib,Reached - Dispute,,,3,Promise to Pay Pending
+COL-001125,INS-0006758,2026-01-16,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2026-01-25,198323.71,3,Recovered
+COL-001126,INS-0006772,2025-12-12,Reminder Call,Rana Naguib,Reached - Promise to Pay,2025-12-29,36326.04,1,Written Off
+COL-001127,INS-0006772,2025-12-23,Reminder WhatsApp,Mostafa Reda,Reached - Dispute,,,1,Written Off
+COL-001128,INS-0006784,2025-04-23,Reminder Call,Layla Anwar,Reached - Dispute,,,1,Recovered
+COL-001129,INS-0006784,2025-05-17,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Partially Recovered
+COL-001130,INS-0006784,2025-06-19,Formal Notice Email,Layla Anwar,Reached - No Commitment,,,2,Escalated - Legal
+COL-001131,INS-0006784,2025-07-16,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Partially Recovered
+COL-001132,INS-0006785,2025-07-25,Reminder Call,Nourhan Sabry,No Answer,,,1,Open
+COL-001133,INS-0006785,2025-08-19,Reminder WhatsApp,Layla Anwar,Reached - Dispute,,,1,Open
+COL-001134,INS-0006785,2025-09-23,Formal Notice Email,Mostafa Reda,Reached - No Commitment,,,2,Open
+COL-001135,INS-0006785,2025-10-15,In-Person Visit,Rana Naguib,No Answer,,,3,Recovered
+COL-001136,INS-0006785,2025-11-12,Legal Escalation Notice,Layla Anwar,Wrong Contact Info,,,3,Partially Recovered
+COL-001137,INS-0006795,2025-03-21,Reminder Call,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-001138,INS-0006795,2025-05-01,Reminder WhatsApp,Layla Anwar,Reached - No Commitment,,,1,Recovered
+COL-001139,INS-0006834,2024-12-26,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Partially Recovered
+COL-001140,INS-0006880,2025-11-22,Reminder Call,Nourhan Sabry,No Answer,,,1,Recovered
+COL-001141,INS-0006938,2024-12-03,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Recovered
+COL-001142,INS-0006938,2025-01-06,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Partially Recovered
+COL-001143,INS-0006938,2025-02-13,Formal Notice Email,Karim Fathy,Reached - Promise to Pay,2025-02-24,134527.63,2,Promise to Pay Pending
+COL-001144,INS-0006938,2025-02-24,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Escalated - Legal
+COL-001145,INS-0006938,2025-03-13,Legal Escalation Notice,Layla Anwar,Wrong Contact Info,,,3,Escalated - Legal
+COL-001146,INS-0006940,2025-06-13,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-001147,INS-0006940,2025-06-27,Reminder WhatsApp,Rana Naguib,Reached - Promise to Pay,2025-07-05,134875.76,1,Promise to Pay Pending
+COL-001148,INS-0006940,2025-08-09,Formal Notice Email,Nourhan Sabry,Reached - Dispute,,,2,Recovered
+COL-001149,INS-0006940,2025-09-08,In-Person Visit,Layla Anwar,Wrong Contact Info,,,3,Partially Recovered
+COL-001150,INS-0006940,2025-10-02,Legal Escalation Notice,Nourhan Sabry,Reached - No Commitment,,,3,Recovered
+COL-001151,INS-0006960,2026-03-20,Reminder Call,Karim Fathy,No Answer,,,1,Promise to Pay Pending
+COL-001152,INS-0006960,2026-04-15,Reminder WhatsApp,Rana Naguib,Reached - Dispute,,,1,Recovered
+COL-001153,INS-0006975,2025-10-02,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-001154,INS-0006975,2025-10-25,Reminder WhatsApp,Nourhan Sabry,Wrong Contact Info,,,1,Recovered
+COL-001155,INS-0006975,2025-12-05,Formal Notice Email,Nourhan Sabry,Reached - Dispute,,,2,Recovered
+COL-001156,INS-0006975,2025-12-30,In-Person Visit,Karim Fathy,Wrong Contact Info,,,3,Open
+COL-001157,INS-0006975,2026-01-23,Legal Escalation Notice,Karim Fathy,Reached - Promise to Pay,2026-02-04,776427.11,3,Open
+COL-001158,INS-0006983,2026-02-17,Reminder Call,Karim Fathy,No Answer,,,1,Open
+COL-001159,INS-0006983,2026-03-11,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-03-22,1107058.73,1,Recovered
+COL-001160,INS-0006983,2026-03-29,Formal Notice Email,Mostafa Reda,Wrong Contact Info,,,2,Promise to Pay Pending
+COL-001161,INS-0006983,2026-05-02,In-Person Visit,Karim Fathy,Wrong Contact Info,,,3,Promise to Pay Pending
+COL-001162,INS-0006983,2026-06-03,Legal Escalation Notice,Layla Anwar,No Answer,,,3,Escalated - Legal
+COL-001163,INS-0007143,2025-04-30,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Escalated - Legal
+COL-001164,INS-0007196,2024-11-29,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Open
+COL-001165,INS-0007196,2024-12-21,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Escalated - Legal
+COL-001166,INS-0007196,2025-01-14,Formal Notice Email,Layla Anwar,Reached - Dispute,,,2,Open
+COL-001167,INS-0007196,2025-02-17,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2025-02-24,585935.6,3,Escalated - Legal
+COL-001168,INS-0007200,2025-11-29,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Partially Recovered
+COL-001169,INS-0007200,2025-12-20,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2026-01-04,147675.41,1,Open
+COL-001170,INS-0007200,2026-01-17,Formal Notice Email,Karim Fathy,Reached - Promise to Pay,2026-02-06,88788.29,2,Open
+COL-001171,INS-0007200,2026-02-23,In-Person Visit,Rana Naguib,No Answer,,,3,Escalated - Legal
+COL-001172,INS-0007200,2026-04-01,Legal Escalation Notice,Mostafa Reda,Reached - Promise to Pay,2026-04-13,186844.59,3,Partially Recovered
+COL-001173,INS-0007208,2025-08-29,Reminder Call,Karim Fathy,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-001174,INS-0007208,2025-09-29,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Written Off
+COL-001175,INS-0007234,2026-01-24,Reminder Call,Layla Anwar,Reached - No Commitment,,,1,Open
+COL-001176,INS-0007234,2026-02-11,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-03-02,189469.55,1,Open
+COL-001177,INS-0007234,2026-03-23,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2026-03-31,141646.24,2,Escalated - Legal
+COL-001178,INS-0007234,2026-04-26,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Recovered
+COL-001179,INS-0007234,2026-05-24,Legal Escalation Notice,Karim Fathy,Reached - Dispute,,,3,Partially Recovered
+COL-001180,INS-0007248,2024-12-02,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Recovered
+COL-001181,INS-0007248,2024-12-30,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2025-01-17,124066.81,1,Written Off
+COL-001182,INS-0007248,2025-01-21,Formal Notice Email,Mostafa Reda,Reached - Dispute,,,2,Promise to Pay Pending
+COL-001183,INS-0007248,2025-03-10,In-Person Visit,Karim Fathy,Reached - Promise to Pay,2025-03-19,219840.22,3,Open
+COL-001184,INS-0007248,2025-03-09,Legal Escalation Notice,Karim Fathy,No Answer,,,3,Promise to Pay Pending
+COL-001185,INS-0007297,2026-03-21,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Recovered
+COL-001186,INS-0007297,2026-04-18,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Written Off
+COL-001187,INS-0007304,2025-04-14,Reminder Call,Layla Anwar,No Answer,,,1,Recovered
+COL-001188,INS-0007307,2026-01-20,Reminder Call,Layla Anwar,Reached - Promise to Pay,2026-01-31,203883.5,1,Recovered
+COL-001189,INS-0007307,2026-02-21,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2026-03-13,126319.16,1,Open
+COL-001190,INS-0007307,2026-03-15,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2026-03-19,290990.92,2,Promise to Pay Pending
+COL-001191,INS-0007307,2026-04-06,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Recovered
+COL-001192,INS-0007387,2026-03-30,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Partially Recovered
+COL-001193,INS-0007387,2026-04-30,Reminder WhatsApp,Layla Anwar,No Answer,,,1,Open
+COL-001194,INS-0007387,2026-05-16,Formal Notice Email,Karim Fathy,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-001195,INS-0007387,2026-06-17,In-Person Visit,Rana Naguib,Reached - No Commitment,,,3,Written Off
+COL-001196,INS-0007424,2024-12-27,Reminder Call,Mostafa Reda,Reached - No Commitment,,,1,Open
+COL-001197,INS-0007424,2025-01-26,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-001198,INS-0007424,2025-02-16,Formal Notice Email,Rana Naguib,Reached - Promise to Pay,2025-02-19,112601.61,2,Open
+COL-001199,INS-0007426,2025-07-07,Reminder Call,Rana Naguib,Reached - Promise to Pay,2025-07-21,58938.21,1,Promise to Pay Pending
+COL-001200,INS-0007426,2025-07-25,Reminder WhatsApp,Karim Fathy,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-001201,INS-0007426,2025-09-03,Formal Notice Email,Nourhan Sabry,Wrong Contact Info,,,2,Open
+COL-001202,INS-0007426,2025-10-07,In-Person Visit,Mostafa Reda,No Answer,,,3,Open
+COL-001203,INS-0007426,2025-11-04,Legal Escalation Notice,Mostafa Reda,Reached - Dispute,,,3,Escalated - Legal
+COL-001204,INS-0007548,2026-03-16,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-001205,INS-0007548,2026-04-09,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-04-15,392636.81,1,Promise to Pay Pending
+COL-001206,INS-0007548,2026-05-05,Formal Notice Email,Rana Naguib,Wrong Contact Info,,,2,Partially Recovered
+COL-001207,INS-0007548,2026-05-25,In-Person Visit,Mostafa Reda,Wrong Contact Info,,,3,Escalated - Legal
+COL-001208,INS-0007555,2025-10-06,Reminder Call,Mostafa Reda,No Answer,,,1,Open
+COL-001209,INS-0007555,2025-10-26,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-001210,INS-0007555,2025-12-12,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Escalated - Legal
+COL-001211,INS-0007606,2026-05-31,Reminder Call,Mostafa Reda,No Answer,,,1,Promise to Pay Pending
+COL-001212,INS-0007606,2026-06-17,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-001213,INS-0007612,2026-02-07,Reminder Call,Nourhan Sabry,Reached - Promise to Pay,2026-02-27,21750.22,1,Escalated - Legal
+COL-001214,INS-0007612,2026-03-15,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Recovered
+COL-001215,INS-0007620,2025-08-01,Reminder Call,Nourhan Sabry,Wrong Contact Info,,,1,Partially Recovered
+COL-001216,INS-0007620,2025-08-26,Reminder WhatsApp,Karim Fathy,Reached - No Commitment,,,1,Recovered
+COL-001217,INS-0007620,2025-09-23,Formal Notice Email,Mostafa Reda,No Answer,,,2,Escalated - Legal
+COL-001218,INS-0007620,2025-10-24,In-Person Visit,Layla Anwar,No Answer,,,3,Open
+COL-001219,INS-0007620,2025-11-06,Legal Escalation Notice,Nourhan Sabry,Reached - Dispute,,,3,Promise to Pay Pending
+COL-001220,INS-0007631,2025-10-26,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Escalated - Legal
+COL-001221,INS-0007631,2025-11-13,Reminder WhatsApp,Mostafa Reda,Wrong Contact Info,,,1,Promise to Pay Pending
+COL-001222,INS-0007641,2026-02-28,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Partially Recovered
+COL-001223,INS-0007641,2026-03-24,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-04-04,185856.0,1,Partially Recovered
+COL-001224,INS-0007641,2026-05-08,Formal Notice Email,Nourhan Sabry,No Answer,,,2,Escalated - Legal
+COL-001225,INS-0007657,2025-12-28,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-01-11,160549.1,1,Partially Recovered
+COL-001226,INS-0007657,2026-01-21,Reminder WhatsApp,Rana Naguib,No Answer,,,1,Recovered
+COL-001227,INS-0007657,2026-02-08,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Promise to Pay Pending
+COL-001228,INS-0007657,2026-03-13,In-Person Visit,Karim Fathy,Reached - No Commitment,,,3,Partially Recovered
+COL-001229,INS-0007657,2026-04-08,Legal Escalation Notice,Layla Anwar,Reached - No Commitment,,,3,Partially Recovered
+COL-001230,INS-0007665,2024-12-27,Reminder Call,Rana Naguib,No Answer,,,1,Recovered
+COL-001231,INS-0007665,2025-01-22,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-001232,INS-0007665,2025-02-20,Formal Notice Email,Mostafa Reda,Reached - Promise to Pay,2025-03-02,479091.44,2,Open
+COL-001233,INS-0007665,2025-04-02,In-Person Visit,Layla Anwar,Reached - No Commitment,,,3,Recovered
+COL-001234,INS-0007665,2025-05-03,Legal Escalation Notice,Rana Naguib,Reached - Dispute,,,3,Recovered
+COL-001235,INS-0007676,2025-02-12,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Open
+COL-001236,INS-0007676,2025-03-23,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Partially Recovered
+COL-001237,INS-0007676,2025-04-23,Formal Notice Email,Rana Naguib,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-001238,INS-0007676,2025-04-28,In-Person Visit,Layla Anwar,Reached - Dispute,,,3,Promise to Pay Pending
+COL-001239,INS-0007676,2025-06-03,Legal Escalation Notice,Rana Naguib,Reached - No Commitment,,,3,Escalated - Legal
+COL-001240,INS-0007766,2025-12-26,Reminder Call,Rana Naguib,No Answer,,,1,Written Off
+COL-001241,INS-0007766,2026-01-25,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2026-01-31,206986.17,1,Escalated - Legal
+COL-001242,INS-0007766,2026-02-23,Formal Notice Email,Rana Naguib,No Answer,,,2,Promise to Pay Pending
+COL-001243,INS-0007798,2026-01-30,Reminder Call,Layla Anwar,No Answer,,,1,Partially Recovered
+COL-001244,INS-0007798,2026-03-07,Reminder WhatsApp,Rana Naguib,Wrong Contact Info,,,1,Partially Recovered
+COL-001245,INS-0007806,2026-03-25,Reminder Call,Mostafa Reda,Reached - Promise to Pay,2026-04-08,232542.1,1,Written Off
+COL-001246,INS-0007806,2026-05-01,Reminder WhatsApp,Nourhan Sabry,No Answer,,,1,Escalated - Legal
+COL-001247,INS-0007806,2026-06-02,Formal Notice Email,Mostafa Reda,Reached - Promise to Pay,2026-06-12,297204.92,2,Escalated - Legal
+COL-001248,INS-0007806,2026-06-30,In-Person Visit,Rana Naguib,No Answer,,,3,Promise to Pay Pending
+COL-001249,INS-0007853,2026-05-24,Reminder Call,Nourhan Sabry,Reached - Dispute,,,1,Partially Recovered
+COL-001250,INS-0007853,2026-06-26,Reminder WhatsApp,Nourhan Sabry,Reached - Dispute,,,1,Escalated - Legal
+COL-001251,INS-0007883,2025-04-15,Reminder Call,Mostafa Reda,Reached - Dispute,,,1,Promise to Pay Pending
+COL-001252,INS-0007883,2025-05-23,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2025-06-04,208211.79,1,Recovered
+COL-001253,INS-0007883,2025-06-08,Formal Notice Email,Karim Fathy,No Answer,,,2,Promise to Pay Pending
+COL-001254,INS-0007883,2025-07-13,In-Person Visit,Nourhan Sabry,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-001255,INS-0007883,2025-07-23,Legal Escalation Notice,Nourhan Sabry,Reached - Promise to Pay,2025-07-29,308348.02,3,Partially Recovered
+COL-001256,INS-0007971,2025-10-06,Reminder Call,Rana Naguib,Wrong Contact Info,,,1,Open
+COL-001257,INS-0007971,2025-10-29,Reminder WhatsApp,Karim Fathy,Reached - Dispute,,,1,Written Off
+COL-001258,INS-0007971,2025-12-09,Formal Notice Email,Nourhan Sabry,Reached - Dispute,,,2,Recovered
+COL-001259,INS-0007971,2026-01-12,In-Person Visit,Mostafa Reda,Reached - Dispute,,,3,Recovered
+COL-001260,INS-0007971,2026-01-23,Legal Escalation Notice,Mostafa Reda,Wrong Contact Info,,,3,Partially Recovered
+COL-001261,INS-0008005,2025-08-24,Reminder Call,Rana Naguib,Reached - Promise to Pay,2025-09-01,870761.81,1,Open
+COL-001262,INS-0008005,2025-09-24,Reminder WhatsApp,Mostafa Reda,No Answer,,,1,Promise to Pay Pending
+COL-001263,INS-0008005,2025-10-16,Formal Notice Email,Rana Naguib,Reached - Dispute,,,2,Partially Recovered
+COL-001264,INS-0008005,2025-10-31,In-Person Visit,Rana Naguib,Reached - Promise to Pay,2025-11-05,1265264.26,3,Partially Recovered
+COL-001265,INS-0008005,2025-12-20,Legal Escalation Notice,Rana Naguib,Reached - Dispute,,,3,Open
+COL-001266,INS-0008032,2025-11-22,Reminder Call,Nourhan Sabry,Reached - No Commitment,,,1,Recovered
+COL-001267,INS-0008032,2025-12-12,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Written Off
+COL-001268,INS-0008032,2026-01-25,Formal Notice Email,Nourhan Sabry,Reached - Promise to Pay,2026-01-31,148659.31,2,Partially Recovered
+COL-001269,INS-0008051,2026-04-18,Reminder Call,Karim Fathy,Reached - Dispute,,,1,Escalated - Legal
+COL-001270,INS-0008051,2026-05-16,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2026-06-05,80002.57,1,Promise to Pay Pending
+COL-001271,INS-0008051,2026-06-13,Formal Notice Email,Nourhan Sabry,Reached - No Commitment,,,2,Escalated - Legal
+COL-001272,INS-0008067,2026-04-23,Reminder Call,Karim Fathy,No Answer,,,1,Recovered
+COL-001273,INS-0008067,2026-05-19,Reminder WhatsApp,Mostafa Reda,Reached - Promise to Pay,2026-05-31,69955.18,1,Promise to Pay Pending
+COL-001274,INS-0008078,2026-02-23,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-001275,INS-0008078,2026-03-27,Reminder WhatsApp,Layla Anwar,Wrong Contact Info,,,1,Open
+COL-001276,INS-0008078,2026-04-22,Formal Notice Email,Karim Fathy,Reached - Promise to Pay,2026-05-11,177709.06,2,Promise to Pay Pending
+COL-001277,INS-0008078,2026-05-27,In-Person Visit,Mostafa Reda,Reached - No Commitment,,,3,Promise to Pay Pending
+COL-001278,INS-0008130,2026-01-28,Reminder Call,Rana Naguib,Reached - No Commitment,,,1,Open
+COL-001279,INS-0008130,2026-02-22,Reminder WhatsApp,Rana Naguib,Reached - Dispute,,,1,Recovered
+COL-001280,INS-0008130,2026-03-24,Formal Notice Email,Nourhan Sabry,Reached - Dispute,,,2,Promise to Pay Pending
+COL-001281,INS-0008130,2026-04-28,In-Person Visit,Nourhan Sabry,Wrong Contact Info,,,3,Open
+COL-001282,INS-0008130,2026-04-29,Legal Escalation Notice,Rana Naguib,Wrong Contact Info,,,3,Open
+COL-001283,INS-0008136,2024-11-08,Reminder Call,Rana Naguib,Reached - Promise to Pay,2024-11-22,555806.68,1,Escalated - Legal
+COL-001284,INS-0008136,2024-11-29,Reminder WhatsApp,Nourhan Sabry,Reached - Promise to Pay,2024-12-19,950909.67,1,Open
+COL-001285,INS-0008136,2024-12-25,Formal Notice Email,Karim Fathy,Reached - Dispute,,,2,Promise to Pay Pending
+COL-001286,INS-0008136,2025-02-02,In-Person Visit,Karim Fathy,Reached - Dispute,,,3,Promise to Pay Pending
+COL-001287,INS-0008136,2025-02-07,Legal Escalation Notice,Karim Fathy,Reached - No Commitment,,,3,Open
+COL-001288,INS-0008148,2026-04-16,Reminder Call,Layla Anwar,Reached - Promise to Pay,2026-05-04,92256.81,1,Promise to Pay Pending
+COL-001289,INS-0008148,2026-05-10,Reminder WhatsApp,Karim Fathy,Reached - No Commitment,,,1,Recovered
+COL-001290,INS-0008148,2026-06-01,Formal Notice Email,Rana Naguib,Wrong Contact Info,,,2,Open
+COL-001291,INS-0008148,2026-06-21,In-Person Visit,Rana Naguib,Reached - Dispute,,,3,Recovered
+COL-001292,INS-0008160,2026-04-05,Reminder Call,Mostafa Reda,No Answer,,,1,Promise to Pay Pending
+COL-001293,INS-0008160,2026-05-11,Reminder WhatsApp,Layla Anwar,Reached - Promise to Pay,2026-05-18,182206.83,1,Partially Recovered
+COL-001294,INS-0008160,2026-06-15,Formal Notice Email,Layla Anwar,Reached - Promise to Pay,2026-07-05,184033.68,2,Escalated - Legal
+COL-001295,INS-0008233,2025-04-21,Reminder Call,Nourhan Sabry,No Answer,,,1,Promise to Pay Pending
+COL-001296,INS-0008259,2026-01-21,Reminder Call,Rana Naguib,Reached - Dispute,,,1,Promise to Pay Pending
+COL-001297,INS-0008259,2026-03-02,Reminder WhatsApp,Rana Naguib,Reached - No Commitment,,,1,Promise to Pay Pending
+COL-001298,INS-0008259,2026-03-20,Formal Notice Email,Layla Anwar,No Answer,,,2,Promise to Pay Pending
+COL-001299,INS-0008259,2026-04-26,In-Person Visit,Layla Anwar,Reached - Promise to Pay,2026-05-09,321297.62,3,Promise to Pay Pending
+COL-001300,INS-0008259,2026-05-02,Legal Escalation Notice,Mostafa Reda,No Answer,,,3,Open
+COL-001301,INS-0008265,2025-10-18,Reminder Call,Rana Naguib,Reached - Promise to Pay,2025-11-02,866256.01,1,Promise to Pay Pending
+COL-001302,INS-0008265,2025-11-14,Reminder WhatsApp,Nourhan Sabry,Reached - No Commitment,,,1,Escalated - Legal
+COL-001303,INS-0008265,2025-12-05,Formal Notice Email,Nourhan Sabry,No Answer,,,2,Recovered
+COL-001304,INS-0008265,2026-01-16,In-Person Visit,Rana Naguib,No Answer,,,3,Partially Recovered
+COL-001305,INS-0008265,2026-02-17,Legal Escalation Notice,Mostafa Reda,Reached - No Commitment,,,3,Partially Recovered
+COL-001306,INS-0008313,2026-04-20,Reminder Call,Karim Fathy,Reached - Promise to Pay,2026-04-25,52989.73,1,Open
+COL-001307,INS-0008313,2026-05-18,Reminder WhatsApp,Karim Fathy,Reached - Promise to Pay,2026-05-25,29835.13,1,Open
+COL-001308,INS-0008313,2026-06-10,Formal Notice Email,Nourhan Sabry,Reached - No Commitment,,,2,Promise to Pay Pending
+COL-001309,INS-0008348,2025-05-14,Reminder Call,Layla Anwar,No Answer,,,1,Escalated - Legal
