@@ -133,6 +133,25 @@ def _fmt_datetime(value: str | None) -> str:
     return f"{formatted} UTC"
 
 
+def _exposure_line_item(financial_exposure: dict[str, Any], category: str) -> dict[str, Any] | None:
+    for item in financial_exposure.get("line_items", []) or []:
+        if item.get("category") == category:
+            return item
+    return None
+
+
+def _project_cancellation_rate_pct(report: dict[str, Any], project_id: str | None) -> float | None:
+    if not project_id:
+        return None
+    by_project = (
+        report.get("domains", {}).get("cancellations", {}).get("kpis", {}).get("cuts", {}).get("by_project", [])
+    )
+    for row in by_project:
+        if row.get("project_id") == project_id:
+            return row.get("cancellation_rate_pct")
+    return None
+
+
 def _brand_lockup(platform: str | None) -> tuple[str, str]:
     words = (platform or "").split()
     if not words:
@@ -243,40 +262,83 @@ def _data_table(columns: list[tuple[str, str]], rows: list[dict[str, Any]], max_
 
 def _render_cover(report: dict[str, Any]) -> str:
     metadata = report["metadata"]
+    currency = metadata.get("currency", "EGP")
     brand, tagline = _brand_lockup(metadata.get("platform"))
     monogram = _esc(brand[:1]) if brand else ""
     tagline_html = f'<p class="cover-tagline">{_esc(tagline)}</p>' if tagline else ""
 
-    top_action = report.get("recommended_actions", [{}])[0] if report.get("recommended_actions") else None
-    top_priority_html = ""
-    if top_action:
-        top_priority_html = f"""
-  <div class="cover-row">
-    <span class="cover-tag">Top Priority</span>
-    <span class="cover-row-text">{_esc(top_action.get('title'))} &mdash; Owner: {_esc(top_action.get('owner'))} &middot; {_esc(top_action.get('horizon'))}</span>
+    financial_exposure = report.get("financial_exposure", {}) or {}
+    top_action = (report.get("recommended_actions") or [{}])[0] or {}
+    top_project = report.get("highest_risk_project")
+
+    cancellation_item = _exposure_line_item(financial_exposure, "Cancellation Exposure")
+    receivables_item = _exposure_line_item(financial_exposure, "Receivables at Risk")
+    project_cancellation_rate = _project_cancellation_rate_pct(report, top_project)
+
+    hero_amount = _fmt_currency(cancellation_item.get("amount") if cancellation_item else None, currency)
+    cancellation_label = _esc(cancellation_item.get("category")) if cancellation_item else "Cancellation Exposure"
+    receivables_label = _esc(receivables_item.get("category")) if receivables_item else "Receivables at Risk"
+    rate_label = f"{_esc(top_project)} Cancellation Rate" if top_project else "Project Cancellation Rate"
+
+    metric_cards = [
+        (hero_amount, cancellation_label),
+        (_fmt_currency(receivables_item.get("amount") if receivables_item else None, currency), receivables_label),
+        (_fmt_pct(project_cancellation_rate), rate_label),
+        (_fmt_confidence(top_action.get("confidence")), "Diagnostic Confidence"),
+    ]
+    metrics_html = "\n".join(
+        f'    <div class="cover-metric"><p class="cover-metric-label">{label}</p><p class="cover-metric-value">{value}</p></div>'
+        for value, label in metric_cards
+    )
+
+    action_html = ""
+    if top_action.get("recommended_action"):
+        action_html = f"""
+  <div class="cover-action">
+    <p class="cover-action-label">Immediate Executive Action</p>
+    <p class="cover-action-text">{_esc(top_action.get('recommended_action'))}</p>
+    <div class="cover-action-meta">
+      <div class="cover-action-item"><span class="cover-action-k">Owner</span><span class="cover-action-v">{_esc(top_action.get('owner'))}</span></div>
+      <div class="cover-action-item"><span class="cover-action-k">Timeline</span><span class="cover-action-v">{_esc(top_action.get('horizon'))}</span></div>
+    </div>
   </div>"""
+
+    alert_label = "Highest-Priority Risk" + (f" &middot; {_esc(top_project)}" if top_project else "")
 
     return f"""
 <section class="cover">
-  <div class="cover-brand">
-    <span class="cover-mark">{monogram}</span>
-    <div>
-      <p class="cover-word">{_esc(brand)}</p>
-      {tagline_html}
+  <div class="cover-topline">
+    <div class="cover-brand">
+      <span class="cover-mark">{monogram}</span>
+      <div>
+        <p class="cover-word">{_esc(brand)}</p>
+        {tagline_html}
+      </div>
+    </div>
+    <div class="cover-meta">
+      <p class="cover-report-type">{_esc(metadata.get('report_type'))}</p>
+      <p class="cover-date">{_esc(_fmt_datetime(metadata.get('generated_at')))}</p>
     </div>
   </div>
-  <h1 class="cover-title">{_esc(metadata.get('report_type'))}</h1>
-  <div class="cover-meta-row">
-    <span class="cover-date">{_esc(_fmt_datetime(metadata.get('generated_at')))}</span>
-    <span class="cover-id">Report {_esc(metadata.get('report_id'))}</span>
+
+  <div class="cover-alert">
+    <p class="cover-alert-label">{alert_label}</p>
+    <p class="cover-alert-title">{_esc(top_action.get('title'))}</p>
+    <p class="cover-figure">{hero_amount}</p>
+    <p class="cover-figure-label">At risk from cancellations</p>
+    <p class="cover-diagnosis">{_esc(report.get('why_it_matters'))}</p>
   </div>
-  <div class="cover-rule"></div>
-  <p class="cover-headline">{_esc(report.get('executive_headline'))}</p>
-  <p class="cover-body">{_esc(report.get('why_it_matters'))}</p>
-  <div class="cover-row">
-    <span class="cover-tag">If Nothing Changes</span>
-    <span class="cover-row-text">{_esc(report.get('consequence_of_inaction'))}</span>
-  </div>{top_priority_html}
+
+  <div class="cover-metrics">
+{metrics_html}
+  </div>
+{action_html}
+  <div class="cover-consequence">
+    <span class="cover-consequence-label">No action</span>
+    <span class="cover-consequence-text">{_esc(report.get('consequence_of_inaction'))}</span>
+  </div>
+
+  <p class="cover-footnote">Report {_esc(metadata.get('report_id'))}</p>
 </section>
 """.strip()
 
@@ -1108,15 +1170,25 @@ body {
 
 h1, h2, h3, h4 { margin: 0; }
 
-/* ---- Cover ---- */
+/* ---- Cover ----
+   A dedicated full A4-page executive alert, not a card floating on the
+   page: the dark panel is a flex column whose direct children (topline,
+   alert, metrics, action, consequence, footnote) are spaced with `gap`
+   on screen and stretched to fill the page with `justify-content:
+   space-between` in print (see the print override below), so the
+   panel's own content -- not an arbitrary spacer -- fills the height. */
 .cover {
   background: var(--cover-bg);
   color: var(--cover-ink);
-  border-radius: 6px;
-  padding: 32px 32px 28px;
+  border-radius: 10px;
+  padding: 44px 44px 40px;
   margin: 24px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
-.cover-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+.cover-topline { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.cover-brand { display: flex; align-items: center; gap: 10px; }
 .cover-mark {
   width: 26px; height: 26px; flex: 0 0 auto; border-radius: 4px;
   background: var(--cover-gold); color: #14120C; font-weight: 700; font-size: 8.5pt;
@@ -1124,19 +1196,45 @@ h1, h2, h3, h4 { margin: 0; }
 }
 .cover-word { margin: 0; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.16em; color: var(--cover-gold); }
 .cover-tagline { margin: 2px 0 0; font-size: 7.5pt; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted); }
-.cover-title { font-size: 27pt; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; color: var(--cover-ink); max-width: 22ch; margin-bottom: 16px; }
-.cover-meta-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
-.cover-date { font-size: 9pt; color: var(--cover-ink-muted); }
-.cover-id { font-size: 7.5pt; color: var(--cover-ink-muted); opacity: 0.85; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.cover-rule { height: 1px; background: var(--cover-line); margin-bottom: 24px; }
-.cover-headline { font-size: 14.5pt; font-weight: 600; line-height: 1.35; color: var(--cover-ink); max-width: 46ch; margin-bottom: 12px; }
-.cover-body { font-size: 10pt; line-height: 1.55; color: var(--cover-ink-muted); max-width: 60ch; margin-bottom: 4px; }
-.cover-row { display: flex; gap: 12px; padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--cover-line); font-size: 9.5pt; color: var(--cover-ink); }
-.cover-tag { flex: 0 0 auto; width: 118px; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-gold); }
-.cover-row-text { flex: 1 1 auto; }
+.cover-meta { text-align: right; }
+.cover-report-type { margin: 0; font-size: 9pt; font-weight: 600; color: var(--cover-ink); }
+.cover-date { margin: 3px 0 0; font-size: 8pt; color: var(--cover-ink-muted); }
+
+.cover-alert { border-top: 1px solid var(--cover-line); border-bottom: 1px solid var(--cover-line); padding: 26px 0; }
+.cover-alert-label { margin: 0 0 10px; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cover-gold); }
+.cover-alert-title { margin: 0 0 16px; font-size: 13pt; font-weight: 600; color: var(--cover-ink); max-width: 50ch; }
+.cover-figure { margin: 0; font-size: 62pt; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: var(--cover-ink); font-variant-numeric: tabular-nums; }
+.cover-figure-label { margin: 10px 0 18px; font-size: 11pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-gold); }
+.cover-diagnosis {
+  margin: 0; font-size: 11pt; line-height: 1.5; color: var(--cover-ink-muted); max-width: 62ch;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.cover-metrics { display: flex; }
+.cover-metric { flex: 1 1 0; padding: 0 22px; border-left: 1px solid var(--cover-line); }
+.cover-metric:first-child { padding-left: 0; border-left: none; }
+.cover-metric-label { margin: 0 0 8px; font-size: 7.5pt; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cover-ink-muted); min-height: 2.4em; }
+.cover-metric-value { margin: 0; font-size: 19pt; font-weight: 700; letter-spacing: -0.01em; color: var(--cover-ink); font-variant-numeric: tabular-nums; line-height: 1.05; }
+
+.cover-action { border: 1px solid var(--cover-gold); border-radius: 6px; padding: 20px 24px; background: rgba(201, 168, 76, 0.07); }
+.cover-action-label { margin: 0 0 10px; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-gold); }
+.cover-action-text { margin: 0 0 14px; font-size: 10.5pt; line-height: 1.5; color: var(--cover-ink); max-width: 74ch; }
+.cover-action-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+.cover-action-item { display: flex; flex-direction: column; gap: 3px; }
+.cover-action-k { font-size: 7.5pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-ink-muted); }
+.cover-action-v { font-size: 9.5pt; color: var(--cover-ink); }
+
+.cover-consequence { display: flex; gap: 12px; align-items: baseline; font-size: 9pt; }
+.cover-consequence-label { flex: 0 0 auto; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-ink-muted); }
+.cover-consequence-text {
+  flex: 1 1 auto; color: var(--cover-ink-muted);
+  display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.cover-footnote { margin: 0; font-size: 7pt; color: var(--cover-ink-muted); opacity: 0.7; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; text-align: right; }
 
 /* ---- Section rhythm ---- */
-.section { margin-bottom: 24px; }
+.section { margin-bottom: 0; padding: 24px 16px 32px; }
 .section-title {
   font-size: 16pt; font-weight: 600; letter-spacing: -0.005em; color: var(--ink);
   margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
@@ -1211,7 +1309,7 @@ h1, h2, h3, h4 { margin: 0; }
 .data-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
 .data-table th {
   text-align: left; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--ink-faint); padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap;
+  color: var(--ink-faint); padding: 6px 8px; border-bottom: 1px solid var(--line);
 }
 .data-table td { padding: 6px 8px; border-bottom: 1px solid var(--line-soft); color: var(--ink); white-space: nowrap; }
 .data-table tr:last-child td { border-bottom: none; }
@@ -1359,14 +1457,36 @@ h1, h2, h3, h4 { margin: 0; }
   h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
   p, li { orphans: 3; widows: 3; }
 
-  .cover { break-after: page; page-break-after: always; margin: 0; }
-  .section-appendix { break-before: page; page-break-before: always; }
+  /* @page content box is 297mm - 14mm top - 16mm bottom = 267mm tall;
+     stop a hair short so rounding never tips the panel onto page two. */
+  .cover {
+    break-after: page; page-break-after: always; margin: 0;
+    min-height: 262mm;
+    justify-content: space-between;
+  }
 
   .section { break-inside: auto; }
-  .kpi-card, .fact-card, .chart-card, .risk-card, .root-cause-card,
+
+  /* A heading (section title, card/chart title, intro line) must never be
+     the last thing on a page -- keep it glued to whatever comes right
+     after it, so the browser carries the heading forward with its
+     content instead of stranding it alone at the bottom. */
+  .section-title, .section-intro, .chart-title, .dept-title, .phase-title, .appendix-heading {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .card, .kpi-card, .fact-card, .chart-card, .risk-card, .root-cause-card,
   .action-card, .dept-card, .conclusion-card, table, figure {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+  /* Long free-flowing narrative cards are the exception: they're allowed
+     to break across pages (orphans/widows above keep the wrap clean)
+     rather than being dragged whole onto a fresh page. */
+  .card-prose, .appendix-card {
+    break-inside: auto;
+    page-break-inside: auto;
   }
   .summary-row { break-inside: avoid; page-break-inside: avoid; }
   .phase-head { break-after: avoid; page-break-after: avoid; }
