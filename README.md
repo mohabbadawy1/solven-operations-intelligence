@@ -215,12 +215,13 @@ playwright install --with-deps chromium
 
 # 4. Configure environment variables
 cp .env.example .env
-# then edit .env and add your Groq API key -- and double-check
-# GROQ_MODEL against https://console.groq.com/docs/models; Groq
-# regularly retires model IDs (llama-3.3-70b-versatile, this
-# platform's long-standing default, was retired from Groq's catalog
-# as of this redesign and needs to be swapped for a currently-served
-# model before `python app.py` will complete the AI narrative step)
+# then edit .env and add your Groq API key -- the default model is
+# openai/gpt-oss-120b (ai/report_generator.py's DEFAULT_MODEL,
+# overridable via GROQ_MODEL); Groq regularly retires model IDs
+# (this platform's original default, llama-3.3-70b-versatile, was
+# retired from Groq's catalog), so double-check
+# https://console.groq.com/docs/models if the AI narrative step
+# starts failing with a model_not_found error
 
 # 5. (Re)generate the synthetic datasets (already committed in data/,
 #    only needed if you want to regenerate them)

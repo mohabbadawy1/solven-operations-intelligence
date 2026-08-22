@@ -72,7 +72,7 @@ REPORT_TYPE = CONFIG["company"]["report_type"]
 COMPANY_NAME = CONFIG["company"]["name"]
 CURRENCY = CONFIG["company"]["currency"]
 
-DEFAULT_MODEL = "llama-3.3-70b-versatile"
+DEFAULT_MODEL = "openai/gpt-oss-120b"
 DEFAULT_TEMPERATURE = 0.3
 # Groq's token-per-minute rate limit counts input tokens *and*
 # max_output_tokens against the same budget for a single request (the
