@@ -299,49 +299,49 @@ def _data_table(columns: list[tuple[str, str]], rows: list[dict[str, Any]], max_
 # period, report metadata. No findings, no figures, no diagrams: every
 # risk figure and action item that used to live here now opens the
 # Executive Dashboard immediately after it (see _render_primary_risk_signal
-# below), so nothing is lost, only relocated. The empty space is the
-# design, not a placeholder for one.
+# below), so nothing is lost, only relocated.
 #
-# Three purely geometric Solven-orange elements give the panel graphic
-# identity without adding a single new fact: a full-bleed color field
-# (`.cover-orange-field`) set beside the title for tension, a registration
-# rule + square (`.cover-title-mark`) that reads as an editorial index
-# device sitting above the headline, and a small corner mark
-# (`.cover-index-mark`) echoing the same device by the confidential line.
-# All three are `aria-hidden` -- decoration, not content -- and all three
-# are flat #DF5316 with hard edges: no gradient, no shadow, no imagery.
+# Three architectural zones, stacked full-bleed: a near-black masthead
+# (logo only), a warm-cream editorial field (eyebrow, headline, portfolio
+# context, reporting period, and the orange bar graphic), and a near-black
+# base carrying only document metadata. Each zone owns its own background
+# and horizontal safe margin rather than the whole panel sharing one inset,
+# which is what lets all three bleed to the true page edge while the text
+# inside them still sits on a consistent 23mm grid (see the print overrides
+# far below and the module-level full-bleed note there).
+#
+# The bar graphic (`.cover-bars`) is the only figurative device on the
+# page: five flat #DF5316 rules of equal width, unequal height, sharing one
+# baseline pinned to the exact seam between the cream field and the black
+# base -- an editorial measurement motif, not a chart (no labels, no axis,
+# no represented data).
 def _render_cover(report: dict[str, Any]) -> str:
     metadata = report["metadata"]
 
     return f"""
 <section class="cover">
-  <div class="cover-orange-field" aria-hidden="true"></div>
-
-  <div class="cover-top">
+  <div class="cover-masthead">
     <img class="cover-logo" src="{LOGO_ON_DARK}" alt="Solven">
   </div>
 
-  <div class="cover-main">
-    <div class="cover-title-group">
-      <div class="cover-title-mark" aria-hidden="true">
-        <span class="cover-title-mark-square"></span>
-        <span class="cover-title-mark-rule"></span>
-      </div>
-      <h1 class="cover-title">Executive Intelligence<br>Report</h1>
-    </div>
+  <div class="cover-field">
+    <p class="cover-eyebrow">Solven / Operations Intelligence</p>
+    <h1 class="cover-title">Executive Intelligence<br>Report</h1>
     <p class="cover-context">Real Estate Portfolio</p>
+    <p class="cover-period">{_esc(_fmt_reporting_period(metadata.get('generated_at')))}</p>
+
+    <div class="cover-bars" aria-hidden="true">
+      <span class="cover-bar" style="height:28mm"></span>
+      <span class="cover-bar" style="height:50mm"></span>
+      <span class="cover-bar" style="height:17mm"></span>
+      <span class="cover-bar" style="height:64mm"></span>
+      <span class="cover-bar" style="height:36mm"></span>
+    </div>
   </div>
 
-  <div class="cover-bottom">
-    <div class="cover-period">
-      <div class="cover-period-rule"></div>
-      <p class="cover-period-label">{_esc(_fmt_reporting_period(metadata.get('generated_at')))}</p>
-      <p class="cover-generated">Generated / {_esc(_fmt_datetime_technical(metadata.get('generated_at')))}</p>
-    </div>
-    <div class="cover-confidential-block">
-      <div class="cover-index-mark" aria-hidden="true"></div>
-      <p class="cover-confidential">Confidential / {_esc(_short_report_id(metadata.get('report_id')))}</p>
-    </div>
+  <div class="cover-base">
+    <p class="cover-generated">Generated / {_esc(_fmt_datetime_technical(metadata.get('generated_at')))}</p>
+    <p class="cover-confidential">Confidential / {_esc(_short_report_id(metadata.get('report_id')))}</p>
   </div>
 </section>
 """.strip()
@@ -1269,94 +1269,89 @@ h1, h2, h3, h4 { margin: 0; }
 /* ---- Cover ----
    Identity only: logo, title, portfolio context, reporting period, report
    metadata. No findings, no figures, no diagrams -- see _render_cover's
-   own docstring-equivalent comment. A full-bleed near-black panel, not a
-   card floating on a page: the @media print override far below (together
-   with the `@page :first` rule) prints this section edge-to-edge on the
-   true first sheet; a 24mm safe area on all four sides keeps every
-   element well clear of the physical edge. Geometry is mm-based (rather
-   than the rest of the stylesheet's px) because it's specified against
-   the physical page: `.cover-main`'s margin-top places the title block
-   ~35-40% down the sheet, and `.cover-bottom`'s `margin-top: auto` (a
-   flex auto-margin, not a fixed offset) pins the period/confidential row
-   to the bottom of whatever vertical space is left -- the empty space
-   between them is deliberate, not unfinished. */
+   own docstring-equivalent comment. Three stacked full-bleed zones (an
+   editorial masthead/field/base grid, not a single panel): the @media
+   print override far below (together with the `@page :first` rule) prints
+   the whole section edge-to-edge on the true first sheet, and each zone
+   paints its own background across the full physical width so there is
+   no accidental cream/white strip at any edge. Geometry is mm-based
+   (rather than the rest of the stylesheet's px) because it's specified
+   against the physical page. */
 .cover {
-  background: var(--cover-bg);
-  color: var(--cover-ink);
-  border-radius: 0;
-  padding: 24mm;
   margin: 0 0 32px;
   display: flex;
   flex-direction: column;
-  min-height: 640px;
-  position: relative;
+  min-height: 760px;
 }
 
-/* The one graphic field on the cover: a flat, hard-edged Solven-orange
-   column bled to the physical right edge, set beside (never behind) the
-   title for compositional tension. Positioned in mm against `.cover`'s
-   own box (print: the full 210x297mm sheet, so `right: 0` lands exactly
-   on the physical edge) -- not a chart, not imagery, just a rectangle. */
-.cover-orange-field {
-  position: absolute;
-  top: 83mm; right: 0;
-  width: 18mm; height: 88mm;
-  background: var(--signal);
+/* Zone 1 -- masthead: solid near-black, logo only, ~16% of the page. */
+.cover-masthead {
+  flex: 0 0 48mm;
+  background: var(--cover-bg);
+  display: flex;
+  align-items: center;
+  padding: 0 23mm;
+}
+.cover-logo { display: block; width: 38mm; height: auto; }
+
+/* Zone 2 -- main editorial field: warm cream, fills whatever height the
+   masthead (fixed) and base (fixed) don't take. Content sits in reading
+   order at the top; `.cover-bars` is pushed to the very bottom of the
+   field by `margin-top: auto` so its shared baseline lands exactly on the
+   seam with `.cover-base` below -- the one place the bar graphic is
+   allowed to interact with the zone transition (see _render_cover). */
+.cover-field {
+  flex: 1 1 auto;
+  background: var(--page-bg);
+  display: flex;
+  flex-direction: column;
+  padding: 20mm 23mm 0;
 }
 
-.cover-top { display: flex; }
-.cover-logo { display: block; width: 40mm; height: auto; }
-
-/* ~35-40% down the page: 24mm top padding + this margin lands the title's
-   cap-height around 108-118mm from the physical top edge of a 297mm sheet. */
-.cover-main { display: flex; flex-direction: column; gap: 10mm; margin-top: 78mm; }
-
-.cover-title-group { display: flex; flex-direction: column; gap: 6mm; }
-
-/* Registration rule + square: an editorial indexing device sitting above
-   the headline, not a diagram -- one flat rule, one flat square, both
-   #DF5316, both hard-edged. */
-.cover-title-mark { display: flex; align-items: center; gap: 3mm; }
-.cover-title-mark-square { display: block; width: 3mm; height: 3mm; background: var(--signal); flex: 0 0 auto; }
-.cover-title-mark-rule { display: block; width: 16mm; height: 1.2px; background: var(--signal); flex: 0 0 auto; }
+.cover-eyebrow {
+  margin: 0 0 16mm; font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal);
+}
 
 .cover-title {
   margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 34pt;
-  line-height: 0.96; letter-spacing: -0.01em; text-transform: uppercase; color: var(--cover-ink);
-  white-space: nowrap;
+  line-height: 0.98; letter-spacing: -0.01em; text-transform: uppercase; color: var(--ink);
 }
 .cover-context {
-  margin: 0; font-family: var(--font-mono); font-size: 9.5pt; font-weight: 500;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--cover-ink-muted);
+  margin: 9mm 0 0; font-family: var(--font-mono); font-size: 9pt; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted);
+}
+.cover-period {
+  margin: 3mm 0 0; font-family: var(--font-mono); font-size: 9pt; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink);
 }
 
-.cover-bottom {
-  display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap;
+/* The one graphic device on the cover: five flat #DF5316 rules, equal
+   width, unequal height, one shared baseline -- an editorial measurement
+   motif (like a physical publication's printer's marks), not a chart.
+   No labels, no axis, no represented data. */
+.cover-bars {
   margin-top: auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 15mm;
 }
-.cover-period { display: flex; flex-direction: column; }
-.cover-period-rule { width: 20mm; height: 1.2px; background: var(--signal); margin-bottom: 3mm; }
-.cover-period-label {
-  margin: 0; font-family: var(--font-mono); font-size: 10.5pt; font-weight: 600;
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink);
-}
-.cover-generated {
-  margin: 4.5mm 0 0; font-family: var(--font-mono); font-size: 8pt; font-weight: 500;
-  letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-ink-muted);
-}
+.cover-bar { display: block; width: 8mm; background: var(--signal); flex: 0 0 auto; }
 
-/* Small corner mark echoing .cover-title-mark's registration-device
-   language by the confidential line -- two perpendicular flat rules,
-   not a numeral, not a claim about page count. */
-.cover-confidential-block { position: relative; }
-.cover-index-mark { position: absolute; top: -5mm; right: 0; width: 4mm; height: 4mm; }
-.cover-index-mark::before, .cover-index-mark::after { content: ""; position: absolute; background: var(--signal); }
-.cover-index-mark::before { top: 0; left: 0; width: 4mm; height: 1.2px; }
-.cover-index-mark::after { top: 0; left: 0; width: 1.2px; height: 4mm; }
-
-.cover-confidential {
-  margin: 0; font-family: var(--font-mono); font-size: 8pt; font-weight: 500;
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted); white-space: nowrap;
+/* Zone 3 -- base: solid near-black, document metadata only, ~22% of the
+   page, full width to the physical bottom edge. */
+.cover-base {
+  flex: 0 0 60mm;
+  background: var(--cover-bg);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 23mm 14mm;
+}
+.cover-generated, .cover-confidential {
+  margin: 0; font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--cover-ink-muted); white-space: nowrap;
 }
 
 /* ---- Section rhythm ---- */
@@ -1589,8 +1584,10 @@ h1, h2, h3, h4 { margin: 0; }
    ========================================================== */
 @media screen and (max-width: 560px) {
   .report { padding: 20px 16px 32px; }
+  .cover { min-height: 560px; }
+  .cover-masthead, .cover-field, .cover-base { padding-left: 16px; padding-right: 16px; }
   .cover-title { font-size: 26pt; }
-  .cover { padding: 40px 28px; min-height: 520px; }
+  .cover-bars { gap: 10mm; }
   .kpi-card, .dept-card { flex-basis: 100%; }
 }
 
@@ -1628,8 +1625,10 @@ h1, h2, h3, h4 { margin: 0; }
    content at the @page content boundary regardless of negative margin or
    explicit height on the element itself); zeroing the page's own margin
    for `:first` is the correct fix at the page-geometry level, not a
-   layered-on patch. `.cover`'s own padding (see its CSS above) re-insets
-   the panel's content to the 24mm safe area instead. */
+   layered-on patch. Each of the cover's three zones (see their CSS above)
+   re-insets its own content to a 23mm horizontal safe area instead of one
+   shared panel padding -- that's what lets all three zones' backgrounds
+   still bleed to the true page edge. */
 @page :first {
   margin: 0;
   @bottom-left { content: none; }
@@ -1646,7 +1645,7 @@ h1, h2, h3, h4 { margin: 0; }
     break-after: page; page-break-after: always;
     width: 210mm; height: 297mm;
     margin: 0;
-    padding: 24mm;
+    padding: 0;
   }
 
   .section { break-inside: auto; }
