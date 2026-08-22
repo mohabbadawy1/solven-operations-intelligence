@@ -186,9 +186,13 @@ signal that corroborates the same conclusion (up to 3), capped at
 
 ## Report Structure
 
-The rendered PDF (target ~12–18 A4 portrait pages) walks through: cover
-& executive alert, executive dashboard (9 curated KPI cards), business
-health overview, the nine domain sections in turn, cross-functional
+The rendered PDF (target ~12–18 A4 portrait pages) walks through: a
+full-bleed cover (identity only — logo, title, portfolio, reporting
+period, report metadata; no figures or findings), the executive
+dashboard (9 curated KPI cards plus a primary-risk signal card carrying
+the period's highest-priority finding, exposure, receivables at risk,
+confidence, owner, and timeline), business health overview, the nine
+domain sections in turn, cross-functional
 root causes, financial exposure, a 90-day (phased through longer-term)
 action plan, department accountability, forecast & outlook, "if no
 action is taken," executive conclusion, and an appendix (methodology,
@@ -277,24 +281,97 @@ This repository builds the email's **content** only
 architecture note above — this platform has no SMTP/provider
 credentials or send call of its own.
 
-To send from the `Solven Intelligence <hello@solvenhq.com>` identity:
+**Known failure mode:** if the delivered email doesn't match this
+repo's current design (an old gold/masthead look, a personal signature,
+a "WEEKLY REPORT" subject), n8n is almost certainly still using a
+hardcoded HTML body pasted directly into the email-send node from an
+earlier version of this project, instead of the `executive_email.html`
+this repo now generates every run. Confirm by opening the node: if its
+Subject/HTML Body fields contain literal text instead of an expression
+that reads a downloaded file, that's the bug, and it lives in the n8n
+workflow, not in this repository. (Earlier revisions of
+`.github/workflows/run-analysis.yml` also didn't upload
+`executive_email.html`/`email_meta.json` as part of the build artifact
+at all, which would make this the *only* possible outcome regardless of
+the node's configuration — confirm the workflow's `upload-artifact`
+step lists both files, as it now does.)
 
-1. In n8n's email-send node, set **From Name** / **From Address** by
-   reading `sender_name` / `sender_address` from the downloaded
-   `email_meta.json` (or hardcode them to match — they're also set in
-   `config/real_estate_demo.yml`'s `email:` block, the single source of
-   truth if you need to change them later).
-2. Set the **Subject** field from `email_meta.json`'s `subject`.
-3. Set the **HTML Body** to the contents of `executive_email.html`.
-4. Attach `executive_report.pdf` as the (only client-facing) attachment
-   — `attachment_label` in the JSON sidecar ("Executive Intelligence
-   Report / PDF") is what the email's own copy calls it; don't also
-   attach/promote the Markdown or JSON outputs to the recipient.
-5. **`hello@solvenhq.com` must be a verified sender/domain** in
-   whatever transport n8n's email node uses (SMTP account or provider
-   API key/domain) before delivery will work — this is an n8n/mail-
-   provider configuration step outside this repository; nothing here
-   can verify it for you.
+To wire n8n to the generated content and send from the
+`Solven Intelligence <hello@solvenhq.com>` identity:
+
+1. After the artifact-download step, add a "Read/Write File" (or
+   equivalent) node that reads the unzipped `executive_email.html` as
+   **text**, and a second that reads `email_meta.json` and parses it
+   (`JSON.parse($json.data)` in a Function/Code node, or an "Extract
+   from File" node set to JSON).
+2. In the email-send node:
+   - **Subject** → expression bound to the parsed meta's `subject`
+     field (e.g. `{{ $json.subject }}` in n8n's expression syntax, not
+     a literal string).
+   - **Email Type / Message format** → HTML.
+   - **HTML Body / Message** → expression bound to the *contents* of
+     the file-read node's output for `executive_email.html` (e.g.
+     `{{ $node["Read HTML"].json.data }}`), never a value typed
+     directly into the field.
+   - **Attachments** → `executive_report.pdf` only. If the node is
+     currently also attaching the `.md` output, remove that binary
+     property from the attachment field — `attachment_label` in the
+     JSON sidecar ("Executive Intelligence Report / PDF") is what the
+     email's own copy promises the recipient, so a second attachment
+     silently contradicts it. The Markdown file can still flow through
+     the workflow as an internal artifact; it just shouldn't reach this
+     node's attachment list.
+3. **From Name / From Address** — set from the parsed meta's
+   `sender_name` / `sender_address` (`Solven Intelligence` /
+   `hello@solvenhq.com`; also the single source of truth in
+   `config/real_estate_demo.yml`'s `email:` block if you need to change
+   them later). This is also the step that most often silently fails,
+   so read the next section before assuming setting the field is
+   enough.
+
+### Sender-identity reality check
+
+Setting a From Name/Address field in n8n does **not** guarantee the
+email actually arrives from that identity — the transport's own
+authentication decides that, and will silently rewrite or reject a From
+address it doesn't recognize. Three cases, depending on what n8n's
+email-send node actually is:
+
+- **Case A — Gmail node, and `hello@solvenhq.com` is a verified "Send
+  mail as" alias** on the Google Workspace account the node's OAuth2
+  credential authenticates as (Gmail Settings → Accounts → "Send mail
+  as"). If so, the Gmail node's **From** field can be set to
+  `hello@solvenhq.com` directly (Gmail's API allows sending as any
+  alias verified on that account) and delivery will show the intended
+  identity. This is the only Gmail-node case where the requested sender
+  works as-is.
+- **Case B — Gmail node, but the alias is *not* verified.** The Gmail
+  API will either reject the send or silently substitute the
+  credential's own address (typically `mohab@solvenhq.com`) as the
+  From header — which matches the symptom described if this is what's
+  happening today. The fix is entirely on the Google Workspace side,
+  not in n8n or this repo: add and verify `hello@solvenhq.com` as a
+  "Send mail as" alias on the authenticating account (Workspace admin
+  can also do this via a shared/delegated mailbox), then re-test. There
+  is no n8n-side workaround that makes Gmail honor an unverified From
+  address.
+- **Case C — an SMTP or transactional-email node** (n8n's "Send Email"
+  SMTP node, or a provider node/HTTP call to something like SendGrid/
+  Postmark/SES/Resend) instead of the Gmail node. Here the From Name/
+  From Email fields are typically honored as literal values as long as
+  the sending domain (`solvenhq.com`) has the provider's required
+  domain authentication (SPF/DKIM, and for some providers a verified
+  sender) configured — set **From Name** to `Solven Intelligence` and
+  **From Email** to `hello@solvenhq.com` on that node and confirm
+  `solvenhq.com`'s DNS carries the provider's SPF/DKIM records.
+
+This repository cannot determine which case applies or verify any
+alias/domain configuration for you — that inspection has to happen
+directly in the n8n workflow and the mail provider's own settings.
+**`hello@solvenhq.com` must be a verified sender/domain** in whatever
+transport is actually in use before delivery will work as intended; do
+not fake the From header in a way the transport will reject or
+silently override.
 
 ## API (n8n integration)
 
@@ -325,9 +402,12 @@ uvicorn api:app --reload --port 8000
 `.github/workflows/run-analysis.yml` (`workflow_dispatch`) checks out
 the repo, installs dependencies and Playwright's Chromium, runs
 `python app.py` against the committed `data/*.csv` files, verifies all
-four `outputs/executive_report.*` files were produced, and uploads
-them as a build artifact. It requires a `GROQ_API_KEY` repository
-secret.
+six output files were produced (`executive_report.{json,md,html,pdf}`,
+`executive_email.html`, `email_meta.json`), and uploads all six as a
+single build artifact (`real-estate-intelligence-report`) with fixed,
+predictable filenames — n8n's artifact-download step can locate each
+one by exact name after unzipping rather than relying on glob order.
+It requires a `GROQ_API_KEY` repository secret.
 
 ## Tests
 

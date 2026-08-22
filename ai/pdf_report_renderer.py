@@ -17,22 +17,27 @@ longer needs to fight the page geometry to make a desktop layout fit;
 it just prints a standard A4 portrait page with real margins, the way
 any consulting/enterprise PDF is produced.
 
-Page geometry is owned here, in Python:
-  - `format="A4"`, `landscape=False` set the paper size.
-  - `prefer_css_page_size=True` lets the document's own `@page { size:
-    A4 portrait }` rule (see the `@media print` block in
-    ai/html_report_renderer.py) take priority if the two ever
-    disagree, rather than silently fighting it.
-  - `margin` is a real, nonzero PDF-level margin (unlike the previous
-    zero-margin + `.page`-padding workaround this module used when it
-    printed edge-to-edge landscape) -- Chromium paints each page's
-    background right up to that margin, so a nonzero margin here is
-    just normal printable whitespace, not a rendering bug to route
-    around.
-  - `display_header_footer=True` with an empty header and a small
-    footer template adds the "Solven Real Estate Intelligence ·
-    Confidential · Page X of Y" footer Chromium renders once per page,
-    outside the page's own HTML/CSS.
+Page geometry -- paper size, margin, and the repeating "Confidential /
+Page X of Y" footer -- is owned entirely by the document's own CSS
+`@page` rules (see the `@media print` block in
+ai/html_report_renderer.py), not by Playwright/Chromium's separate
+header-footer-template mechanism:
+  - `format="A4"`, `landscape=False` set the paper size as a fallback;
+    `prefer_css_page_size=True` gives the document's own `@page { size:
+    A4 portrait }` rule priority if the two ever disagree.
+  - `display_header_footer=False` -- the footer text is printed by a
+    plain CSS `@page { @bottom-left {...} @bottom-right {...} }` margin
+    box instead. This repo used Chromium's JS-templated header/footer
+    for that footer in an earlier version, but that mechanism reserves
+    its own fixed margin band on *every* page (including the first),
+    layered independently of the page's own `@page` CSS -- which is
+    exactly why the cover page's near-black background couldn't be made
+    to reach the true page edge no matter how its own margin/height was
+    adjusted: Chromium was still carving out a footer band underneath
+    it. Moving the footer into the document's own `@page` rule puts one
+    thing in charge of page geometry, and lets the cover suppress that
+    band entirely via `@page :first { margin: 0; ... }` for a genuine
+    full-bleed first page.
 
 Loading the file via a `file://` URL (rather than serving it over
 HTTP) means no server process is needed, which keeps this working
@@ -44,26 +49,11 @@ from __future__ import annotations
 from pathlib import Path
 
 PDF_FORMAT = "A4"
-PDF_MARGIN = {"top": "14mm", "right": "14mm", "bottom": "16mm", "left": "14mm"}
-
-# Matches PDF_MARGIN's left/right so the footer's text aligns with the
-# document's own content edges rather than spanning the full paper width.
-_FOOTER_TEMPLATE = """
-<div style="width:100%; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
-            font-size:7px; color:#8A887A; padding:0 14mm; display:flex; justify-content:space-between; align-items:center;">
-  <span>Solven Real Estate Intelligence &middot; Confidential</span>
-  <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
-</div>
-""".strip()
-
-# Suppresses Chromium's default header (title + URL) -- an empty
-# template, not an absent one, is what turns the header off.
-_HEADER_TEMPLATE = '<div style="font-size:0; line-height:0;"></div>'
 
 # Desktop-width viewport so any live (pre-print) page state -- font
 # loading, general layout -- resolves the same way a normal browser
-# window would. Print layout itself is governed by PDF_FORMAT/PDF_MARGIN
-# above, not by this viewport.
+# window would. Print layout itself is governed by the document's own
+# @page CSS (see ai/html_report_renderer.py), not by this viewport.
 PDF_VIEWPORT = {"width": 900, "height": 1400}
 
 
@@ -130,10 +120,7 @@ def render_pdf(html_path: str | Path, pdf_path: str | Path) -> Path:
                     landscape=False,
                     print_background=True,
                     prefer_css_page_size=True,
-                    margin=PDF_MARGIN,
-                    display_header_footer=True,
-                    header_template=_HEADER_TEMPLATE,
-                    footer_template=_FOOTER_TEMPLATE,
+                    display_header_footer=False,
                 )
             finally:
                 browser.close()

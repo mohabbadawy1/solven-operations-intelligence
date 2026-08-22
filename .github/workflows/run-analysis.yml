@@ -37,6 +37,8 @@ jobs:
           test -f outputs/executive_report.md
           test -f outputs/executive_report.html
           test -f outputs/executive_report.pdf
+          test -f outputs/executive_email.html
+          test -f outputs/email_meta.json
 
           echo "All report files were generated successfully."
           ls -lah outputs/
@@ -50,5 +52,7 @@ jobs:
             outputs/executive_report.md
             outputs/executive_report.html
             outputs/executive_report.pdf
+            outputs/executive_email.html
+            outputs/email_meta.json
           retention-days: 7
           if-no-files-found: error

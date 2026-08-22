@@ -40,7 +40,7 @@ from datetime import datetime
 from html import escape
 from typing import Any
 
-from ai._assets import FONT_FACES_CSS, LOGO_ON_DARK, LOGO_ASPECT_RATIO
+from ai._assets import FONT_FACES_CSS, LOGO_ON_DARK
 
 # --------------------------------------------------------------------------
 # Errors
@@ -295,148 +295,33 @@ def _data_table(columns: list[tuple[str, str]], rows: list[dict[str, Any]], max_
 # Cover
 # --------------------------------------------------------------------------
 
-# Nine thin rails, each standing for one monitored domain, converging into
-# a single resolved signal -- a restrained editorial mark, not a chart:
-# no axes, no per-line labels, no legend. Geometry is fixed; only which
-# rail is "selected" (drawn in Solven orange, the rest in low-opacity
-# cream) is computed from this report's own domain health statuses.
-_SIGNAL_VIEWBOX_H = 320
-_SIGNAL_RAIL_X0, _SIGNAL_RAIL_X1 = 118, 192
-_SIGNAL_CONVERGE = (26, 150)
-_SIGNAL_STATUS_RANK = {"Critical": 3, "At Risk": 2, "Watch": 1, "Healthy": 0}
-
-
-def _render_signal_channels(overall_business_health: dict[str, Any]) -> str:
-    domains = [d for d in DOMAIN_ORDER if d in overall_business_health]
-    if not domains:
-        return ""
-
-    def _rank(domain: str) -> tuple[int, float]:
-        block = overall_business_health[domain]
-        return (_SIGNAL_STATUS_RANK.get(block.get("status"), 0), -(block.get("score") or 100))
-
-    selected = max(domains, key=_rank)
-
-    n = len(domains)
-    spacing = (_SIGNAL_VIEWBOX_H - 20) / max(n - 1, 1)
-    rails = []
-    for index, domain in enumerate(domains):
-        y = 10 + index * spacing
-        block = overall_business_health[domain]
-        elevated = _SIGNAL_STATUS_RANK.get(block.get("status"), 0) >= 2
-        is_selected = domain == selected
-        if is_selected:
-            rail_opacity, leader_opacity, stroke = "0.95", "1", "var(--signal)"
-            leader_x1, leader_y1 = _SIGNAL_CONVERGE
-        else:
-            rail_opacity = "0.32" if elevated else "0.14"
-            leader_opacity = rail_opacity
-            stroke = "var(--cover-ink)"
-            t = 0.55
-            leader_x1 = _SIGNAL_RAIL_X0 - (_SIGNAL_RAIL_X0 - _SIGNAL_CONVERGE[0]) * t
-            leader_y1 = y - (y - _SIGNAL_CONVERGE[1]) * t
-        rails.append(
-            f'<line x1="{_SIGNAL_RAIL_X0}" y1="{y:.1f}" x2="{_SIGNAL_RAIL_X1}" y2="{y:.1f}" '
-            f'stroke="{stroke}" stroke-width="{2.4 if is_selected else 1.4}" opacity="{rail_opacity}" />'
-            f'<line x1="{_SIGNAL_RAIL_X0}" y1="{y:.1f}" x2="{leader_x1:.1f}" y2="{leader_y1:.1f}" '
-            f'stroke="{stroke}" stroke-width="{1.6 if is_selected else 1}" opacity="{leader_opacity}" />'
-        )
-    cx, cy = _SIGNAL_CONVERGE
-    resolve_line = (
-        f'<line x1="{cx}" y1="{cy}" x2="{cx}" y2="{_SIGNAL_VIEWBOX_H}" '
-        f'stroke="var(--signal)" stroke-width="2" opacity="0.9" />'
-        f'<circle cx="{cx}" cy="{cy}" r="4" fill="var(--signal)" />'
-    )
-    return f"""
-    <svg class="cover-signal-svg" viewBox="0 0 210 {_SIGNAL_VIEWBOX_H}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-      {''.join(rails)}
-      {resolve_line}
-    </svg>""".strip()
-
-
+# Page 1 is identity only -- logo, title, portfolio context, reporting
+# period, report metadata. No findings, no figures, no diagrams: every
+# risk figure and action item that used to live here now opens the
+# Executive Dashboard immediately after it (see _render_primary_risk_signal
+# below), so nothing is lost, only relocated. The empty space is the
+# design, not a placeholder for one.
 def _render_cover(report: dict[str, Any]) -> str:
     metadata = report["metadata"]
-    currency = metadata.get("currency", "EGP")
-
-    financial_exposure = report.get("financial_exposure", {}) or {}
-    top_action = (report.get("recommended_actions") or [{}])[0] or {}
-    top_project = report.get("highest_risk_project")
-    overall_business_health = report.get("overall_business_health", {}) or {}
-
-    cancellation_item = _exposure_line_item(financial_exposure, "Cancellation Exposure")
-    receivables_item = _exposure_line_item(financial_exposure, "Receivables at Risk")
-    project_cancellation_rate = _project_cancellation_rate_pct(report, top_project)
-
-    hero_amount = _fmt_currency(cancellation_item.get("amount") if cancellation_item else None, currency)
-    signal_title = _strip_project_prefix(top_action.get("title"), top_project)
-
-    stat_cards = [
-        ("RECEIVABLES AT RISK", _fmt_currency(receivables_item.get("amount") if receivables_item else None, currency)),
-        ("CANCELLATION RATE", _fmt_pct(project_cancellation_rate)),
-        ("DIAGNOSTIC CONFIDENCE", _fmt_confidence(top_action.get("confidence"))),
-    ]
-    stats_html = "\n".join(
-        f'      <div class="cover-stat"><span class="cover-stat-k">{_esc(k)}</span><span class="cover-stat-v">{_esc(v)}</span></div>'
-        for k, v in stat_cards
-    )
-
-    action_html = ""
-    if top_action.get("recommended_action"):
-        action_html = f"""
-  <div class="cover-action">
-    <div class="cover-action-rule"></div>
-    <p class="cover-action-label">Immediate Executive Action</p>
-    <p class="cover-action-text">{_esc(top_action.get('recommended_action'))}</p>
-    <div class="cover-action-meta">
-      <div class="cover-action-item"><span class="cover-action-k">Owner</span><span class="cover-action-v">{_esc(top_action.get('owner'))}</span></div>
-      <div class="cover-action-item"><span class="cover-action-k">Timeline</span><span class="cover-action-v">{_esc(top_action.get('horizon'))}</span></div>
-    </div>
-  </div>"""
-
-    signal_zone = ""
-    if top_project or signal_title:
-        signal_zone = f"""
-  <div class="cover-signal-zone">
-    {_render_signal_channels(overall_business_health)}
-    <div class="cover-signal-content">
-      <p class="cover-signal-eyebrow">01 / Primary Signal</p>
-      {f'<p class="cover-signal-code">{_esc(top_project)}</p>' if top_project else ''}
-      <p class="cover-signal-title">{_esc(signal_title)}</p>
-      <p class="cover-signal-figure">{hero_amount}</p>
-      <p class="cover-signal-figure-label">At Risk From Cancellations</p>
-      <div class="cover-signal-stats">
-{stats_html}
-      </div>
-    </div>
-  </div>"""
-
-    logo_h = 26
-    logo_w = round(logo_h * LOGO_ASPECT_RATIO)
 
     return f"""
 <section class="cover">
-  <div class="cover-row cover-row-top">
-    <img class="cover-logo" src="{LOGO_ON_DARK}" width="{logo_w}" height="{logo_h}" alt="Solven">
-    <div class="cover-meta-block">
-      <p class="cover-meta-line">Operations Intelligence</p>
-      <p class="cover-meta-line">Real Estate / Executive Report</p>
-      <p class="cover-meta-line cover-meta-id">Report / {_esc(_short_report_id(metadata.get('report_id')))}</p>
-    </div>
+  <div class="cover-top">
+    <img class="cover-logo" src="{LOGO_ON_DARK}" alt="Solven">
   </div>
 
-  <div class="cover-title-block">
-    <h1 class="cover-title">Executive<br>Intelligence<br>Report</h1>
-    <div class="cover-title-meta">
-      <p class="cover-title-meta-line">Real Estate Portfolio</p>
-      <p class="cover-title-meta-line">Reporting Period / {_esc(_fmt_reporting_period(metadata.get('generated_at')))}</p>
-      <p class="cover-title-meta-line">Generated / {_esc(_fmt_datetime_technical(metadata.get('generated_at')))}</p>
-    </div>
+  <div class="cover-main">
+    <h1 class="cover-title">Executive Intelligence<br>Report</h1>
+    <p class="cover-context">Real Estate Portfolio</p>
   </div>
-{signal_zone}
-{action_html}
-  <div class="cover-footer-row">
-    <span>Solven / Real Estate Intelligence</span>
-    <span>Confidential</span>
+
+  <div class="cover-bottom">
+    <div class="cover-period">
+      <div class="cover-period-rule"></div>
+      <p class="cover-period-label">{_esc(_fmt_reporting_period(metadata.get('generated_at')))}</p>
+      <p class="cover-generated">Generated / {_esc(_fmt_datetime_technical(metadata.get('generated_at')))}</p>
+    </div>
+    <p class="cover-confidential">Confidential / {_esc(_short_report_id(metadata.get('report_id')))}</p>
   </div>
 </section>
 """.strip()
@@ -479,6 +364,51 @@ def _render_kpi_card(card: dict[str, Any], overall_business_health: dict[str, An
     </div>""".strip()
 
 
+def _render_primary_risk_signal(report: dict[str, Any]) -> str:
+    """The single highest-priority finding, surfaced immediately on the
+    Executive Dashboard -- the report's first page of actual content now
+    that the cover carries identity only (see _render_cover). Reads the
+    same top-action / financial-exposure data the cover used to show
+    directly, so nothing that lived there is lost, only relocated."""
+    top_action = (report.get("recommended_actions") or [{}])[0] or {}
+    top_project = report.get("highest_risk_project")
+    if not top_action.get("title") and not top_project:
+        return ""
+
+    currency = report["metadata"].get("currency", "EGP")
+    financial_exposure = report.get("financial_exposure", {}) or {}
+    cancellation_item = _exposure_line_item(financial_exposure, "Cancellation Exposure")
+    receivables_item = _exposure_line_item(financial_exposure, "Receivables at Risk")
+    project_cancellation_rate = _project_cancellation_rate_pct(report, top_project)
+    signal_title = _strip_project_prefix(top_action.get("title"), top_project)
+    title_line = f"{_esc(top_project)} {_esc(signal_title)}" if top_project else _esc(top_action.get("title") or "")
+
+    action_html = (
+        f'<p class="root-cause-note">{_esc(top_action.get("recommended_action"))}</p>'
+        if top_action.get("recommended_action") else ""
+    )
+    meta = _meta_row([
+        ("Exposure", _fmt_currency(cancellation_item.get("amount") if cancellation_item else None, currency)),
+        ("Receivables at Risk", _fmt_currency(receivables_item.get("amount") if receivables_item else None, currency)),
+        ("Cancellation Rate", _fmt_pct(project_cancellation_rate)),
+        ("Diagnostic Confidence", _fmt_confidence(top_action.get("confidence"))),
+        ("Owner", top_action.get("owner")),
+        ("Timeline", top_action.get("horizon")),
+    ])
+
+    return f"""
+  <div class="card root-cause-card root-cause-card-signal">
+    <div class="root-cause-header">
+      <div class="root-cause-heading">
+        {_badge_html("Primary Risk", "badge-priority badge-priority-signal")}
+        <span class="risk-title">{title_line}</span>
+      </div>
+    </div>
+    {action_html}
+    {meta}
+  </div>""".strip()
+
+
 def _render_dashboard(report: dict[str, Any]) -> str:
     currency = report["metadata"].get("currency", "EGP")
     overall_business_health = report.get("overall_business_health", {})
@@ -504,6 +434,7 @@ def _render_dashboard(report: dict[str, Any]) -> str:
       <p class="fact-value">{_esc(report.get('highest_priority_initiative') or 'None identified this period.')}</p>
     </div>
   </div>
+  {_render_primary_risk_signal(report)}
 </section>
 """.strip()
 
@@ -1316,101 +1247,63 @@ body {
 h1, h2, h3, h4 { margin: 0; }
 
 /* ---- Cover ----
-   A full-bleed near-black dossier cover, not a card floating on a page:
-   see the @media print override far below, which negative-margins this
-   section out to the true page edges (no white border, no rounded
-   container). On screen it's simply the first flex-column block in the
-   document. Direct children space with `gap`; print additionally
-   stretches them with `justify-content: space-between` so the panel's
-   own content -- not an arbitrary spacer -- fills the page height. */
+   Identity only: logo, title, portfolio context, reporting period, report
+   metadata. No findings, no figures, no diagrams -- see _render_cover's
+   own docstring-equivalent comment. A full-bleed near-black panel, not a
+   card floating on a page: the @media print override far below (together
+   with the `@page :first` rule) prints this section edge-to-edge on the
+   true first sheet; a 24mm safe area on all four sides keeps every
+   element well clear of the physical edge. Geometry is mm-based (rather
+   than the rest of the stylesheet's px) because it's specified against
+   the physical page: `.cover-main`'s margin-top places the title block
+   ~35-40% down the sheet, and `.cover-bottom`'s `margin-top: auto` (a
+   flex auto-margin, not a fixed offset) pins the period/confidential row
+   to the bottom of whatever vertical space is left -- the empty space
+   between them is deliberate, not unfinished. */
 .cover {
   background: var(--cover-bg);
   color: var(--cover-ink);
   border-radius: 0;
-  padding: 56px 48px 40px;
+  padding: 24mm;
   margin: 0 0 32px;
   display: flex;
   flex-direction: column;
-  gap: 34px;
+  min-height: 640px;
 }
 
-.cover-row-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
-.cover-logo { display: block; height: 26px; width: auto; }
-.cover-meta-block { text-align: right; }
-.cover-meta-line {
-  margin: 0 0 5px; font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--cover-ink-muted);
-}
-.cover-meta-line:last-child { margin-bottom: 0; }
-.cover-meta-id { color: var(--cover-ink); font-weight: 600; }
+.cover-top { display: flex; }
+.cover-logo { display: block; width: 40mm; height: auto; }
 
-.cover-title-block { display: flex; flex-direction: column; gap: 20px; }
+/* ~35-40% down the page: 24mm top padding + this margin lands the title's
+   cap-height around 108-118mm from the physical top edge of a 297mm sheet. */
+.cover-main { display: flex; flex-direction: column; gap: 10mm; margin-top: 78mm; }
 .cover-title {
-  margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 50pt;
-  line-height: 0.98; letter-spacing: -0.01em; text-transform: uppercase; color: var(--cover-ink);
+  margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 34pt;
+  line-height: 0.96; letter-spacing: -0.01em; text-transform: uppercase; color: var(--cover-ink);
+  white-space: nowrap;
 }
-.cover-title-meta { display: flex; flex-direction: column; gap: 5px; }
-.cover-title-meta-line {
-  margin: 0; font-family: var(--font-mono); font-size: 8.5pt; font-weight: 500;
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted);
+.cover-context {
+  margin: 0; font-family: var(--font-mono); font-size: 9.5pt; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--cover-ink-muted);
 }
 
-/* The primary signal -- the report's single most important object.
-   `.cover-signal-svg` (see _render_signal_channels) sits as a quiet
-   compositional element, not a chart with axes or a legend. */
-.cover-signal-zone {
-  display: flex; align-items: center; gap: 28px;
-  border-top: 1px solid var(--cover-line); border-bottom: 1px solid var(--cover-line); padding: 26px 0;
+.cover-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap;
+  margin-top: auto;
 }
-.cover-signal-svg { flex: 0 0 120px; width: 120px; height: 200px; }
-.cover-signal-content { flex: 1 1 auto; min-width: 0; }
-.cover-signal-eyebrow {
-  margin: 0 0 16px; font-family: var(--font-mono); font-size: 8.5pt; font-weight: 600;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal);
+.cover-period { display: flex; flex-direction: column; }
+.cover-period-rule { width: 20mm; height: 1.2px; background: var(--signal); margin-bottom: 3mm; }
+.cover-period-label {
+  margin: 0; font-family: var(--font-mono); font-size: 10.5pt; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink);
 }
-.cover-signal-code {
-  margin: 0 0 2px; font-family: var(--font-display); font-weight: 900; font-size: 14pt;
-  letter-spacing: 0.02em; color: var(--cover-ink); opacity: 0.82;
+.cover-generated {
+  margin: 4.5mm 0 0; font-family: var(--font-mono); font-size: 8pt; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-ink-muted);
 }
-.cover-signal-title {
-  margin: 0 0 20px; font-family: var(--font-display); font-weight: 700; font-size: 14pt;
-  line-height: 1.3; letter-spacing: -0.005em; text-transform: uppercase; color: var(--cover-ink); max-width: 42ch;
-}
-.cover-signal-figure {
-  margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 54pt;
-  letter-spacing: -0.02em; line-height: 1; color: var(--cover-ink); font-variant-numeric: tabular-nums;
-}
-.cover-signal-figure-label {
-  margin: 10px 0 22px; font-family: var(--font-mono); font-size: 8.5pt; font-weight: 600;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal);
-}
-.cover-signal-stats { display: flex; gap: 30px; flex-wrap: wrap; }
-.cover-stat { display: flex; flex-direction: column; gap: 6px; }
-.cover-stat-k {
-  font-family: var(--font-mono); font-size: 7pt; font-weight: 600; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--cover-ink-muted);
-}
-.cover-stat-v { font-family: var(--font-display); font-weight: 700; font-size: 13pt; color: var(--cover-ink); font-variant-numeric: tabular-nums; }
-
-.cover-action { display: flex; flex-direction: column; gap: 10px; }
-.cover-action-rule { width: 36px; height: 2px; background: var(--signal); }
-.cover-action-label {
-  margin: 0; font-family: var(--font-mono); font-size: 8pt; font-weight: 600;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal);
-}
-.cover-action-text { margin: 0; font-family: var(--font-sans); font-size: 10.5pt; line-height: 1.5; color: var(--cover-ink); max-width: 74ch; }
-.cover-action-meta { display: flex; gap: 32px; flex-wrap: wrap; margin-top: 2px; }
-.cover-action-item { display: flex; flex-direction: column; gap: 4px; }
-.cover-action-k {
-  font-family: var(--font-mono); font-size: 7.5pt; font-weight: 600; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--cover-ink-muted);
-}
-.cover-action-v { font-family: var(--font-sans); font-size: 9.5pt; color: var(--cover-ink); }
-
-.cover-footer-row {
-  display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 7.5pt;
-  font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted);
-  padding-top: 16px; border-top: 1px solid var(--cover-line);
+.cover-confidential {
+  margin: 0; font-family: var(--font-mono); font-size: 8pt; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted); white-space: nowrap;
 }
 
 /* ---- Section rhythm ---- */
@@ -1643,16 +1536,51 @@ h1, h2, h3, h4 { margin: 0; }
    ========================================================== */
 @media screen and (max-width: 560px) {
   .report { padding: 20px 16px 32px; }
-  .cover-title { font-size: 28pt; }
-  .cover-signal-zone { flex-direction: column; align-items: flex-start; }
-  .cover-signal-svg { display: none; }
+  .cover-title { font-size: 26pt; }
+  .cover { padding: 40px 28px; min-height: 520px; }
   .kpi-card, .dept-card { flex-basis: 100%; }
 }
 
-/* ---- Print ---- */
+/* ---- Print ----
+   Page geometry -- size, margin, and the repeating "Confidential /
+   Page X of Y" footer -- is owned entirely here, in CSS `@page` rules,
+   not by Playwright/Chromium header-footer templates (see
+   ai/pdf_report_renderer.py's module docstring for why). Margin boxes
+   (`@bottom-left`/`@bottom-right`) print the footer text on every page
+   except the first. */
 @page {
   size: A4 portrait;
   margin: 14mm 14mm 16mm 14mm;
+
+  @bottom-left {
+    content: "Solven Real Estate Intelligence · Confidential";
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 7pt;
+    color: #8A887A;
+  }
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 7pt;
+    color: #8A887A;
+  }
+}
+
+/* The cover is the only full-bleed page: zeroing the page margin (and
+   the footer margin boxes with it) for the first page only is what lets
+   the near-black background reach the true page edge on all four sides
+   -- a negative-margin/negative-height panel inside the normal @page
+   margin box was tried first and reliably left a thin strip of the page
+   background showing along the bottom edge (Chromium clips painted
+   content at the @page content boundary regardless of negative margin or
+   explicit height on the element itself); zeroing the page's own margin
+   for `:first` is the correct fix at the page-geometry level, not a
+   layered-on patch. `.cover`'s own padding (see its CSS above) re-insets
+   the panel's content to the 24mm safe area instead. */
+@page :first {
+  margin: 0;
+  @bottom-left { content: none; }
+  @bottom-right { content: none; }
 }
 
 @media print {
@@ -1661,24 +1589,11 @@ h1, h2, h3, h4 { margin: 0; }
   h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
   p, li { orphans: 3; widows: 3; }
 
-  /* Full-bleed dossier cover: negative-margin the panel out past the
-     @page margin box on the top/left/right (back to the true page edge),
-     then re-inset its own content with padding -- the standard technique
-     for a full-bleed page inside an otherwise-marginned print document.
-     The bottom edge deliberately stops at the normal @page content
-     boundary rather than also bleeding -- Chromium's PDF pagination
-     hard-clips painted content at that boundary regardless of negative
-     margin/explicit height (verified empirically: top/left/right bleed
-     correctly, bottom does not), so the cover shares the same thin
-     bottom band every other page already reserves for the running
-     "Confidential / Page X of Y" footer, instead of visibly clipping.
-     Every other .section keeps the normal @page margin untouched. */
   .cover {
     break-after: page; page-break-after: always;
-    margin: -14mm -14mm 0 -14mm;
-    width: 210mm; min-height: 278mm;
-    padding: 20mm 16mm 6mm;
-    justify-content: space-between;
+    width: 210mm; height: 297mm;
+    margin: 0;
+    padding: 24mm;
   }
 
   .section { break-inside: auto; }
