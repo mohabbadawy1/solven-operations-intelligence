@@ -160,6 +160,19 @@ def _fmt_reporting_period(value: str | None) -> str:
     return f"{parsed.strftime('%B').upper()} {parsed.year}"
 
 
+def _fmt_period_compact(value: str | None) -> str:
+    """'2026.08' from an ISO timestamp -- a compact YYYY.MM document-control
+    marker used in the cover's orange index panel and footer colophon,
+    distinct from _fmt_reporting_period's prose-style 'AUGUST 2026'."""
+    if not value:
+        return "N/A"
+    try:
+        parsed = datetime.fromisoformat(str(value))
+    except ValueError:
+        return "N/A"
+    return f"{parsed.year}.{parsed.month:02d}"
+
+
 def _short_report_id(report_id: str | None) -> str:
     """First 8 hex characters of the report's UUID, uppercased -- a short,
     human-scannable identifier for the cover/appendix, not a new ID."""
@@ -295,53 +308,92 @@ def _data_table(columns: list[tuple[str, str]], rows: list[dict[str, Any]], max_
 # Cover
 # --------------------------------------------------------------------------
 
-# Page 1 is identity only -- logo, title, portfolio context, reporting
+# Page 1 is identity only -- logo, title, portfolio scope, reporting
 # period, report metadata. No findings, no figures, no diagrams: every
 # risk figure and action item that used to live here now opens the
 # Executive Dashboard immediately after it (see _render_primary_risk_signal
 # below), so nothing is lost, only relocated.
 #
 # Three architectural zones, stacked full-bleed: a near-black masthead
-# (logo only), a warm-cream editorial field (eyebrow, headline, portfolio
-# context, reporting period, and the orange bar graphic), and a near-black
-# base carrying only document metadata. Each zone owns its own background
-# and horizontal safe margin rather than the whole panel sharing one inset,
-# which is what lets all three bleed to the true page edge while the text
-# inside them still sits on a consistent 23mm grid (see the print overrides
-# far below and the module-level full-bleed note there).
+# (logo + a tiny document index), a warm-cream editorial field built on an
+# asymmetric two-column grid (a text column carrying the title, scope
+# copy, and a capability index, beside a full-height orange index panel),
+# and a near-black colophon carrying document-control metadata in a
+# three-column grid. Each zone owns its own background and horizontal
+# safe margin rather than the whole panel sharing one inset, which is
+# what lets all three bleed to the true page edge while the text inside
+# them still sits on a consistent 23mm grid (see the print overrides far
+# below and the module-level full-bleed note there).
 #
-# The bar graphic (`.cover-bars`) is the only figurative device on the
-# page: five flat #DF5316 rules of equal width, unequal height, sharing one
-# baseline pinned to the exact seam between the cream field and the black
-# base -- an editorial measurement motif, not a chart (no labels, no axis,
-# no represented data).
+# There is deliberately no chart, bar, or figure anywhere on this page:
+# the only graphic device is the solid `.cover-panel` field itself and
+# the hairline rules used as index marks -- flat #DF5316, hard-edged,
+# never representing data.
 def _render_cover(report: dict[str, Any]) -> str:
     metadata = report["metadata"]
+    generated_at = metadata.get("generated_at")
 
     return f"""
 <section class="cover">
   <div class="cover-masthead">
     <img class="cover-logo" src="{LOGO_ON_DARK}" alt="Solven">
+    <p class="cover-masthead-index">Intelligence / 01</p>
   </div>
 
   <div class="cover-field">
-    <p class="cover-eyebrow">Solven / Operations Intelligence</p>
-    <h1 class="cover-title">Executive Intelligence<br>Report</h1>
-    <p class="cover-context">Real Estate Portfolio</p>
-    <p class="cover-period">{_esc(_fmt_reporting_period(metadata.get('generated_at')))}</p>
+    <div class="cover-content">
+      <p class="cover-eyebrow">Solven / Operations Intelligence</p>
+      <h1 class="cover-title">Executive Intelligence<br>Report</h1>
 
-    <div class="cover-bars" aria-hidden="true">
-      <span class="cover-bar" style="height:28mm"></span>
-      <span class="cover-bar" style="height:50mm"></span>
-      <span class="cover-bar" style="height:17mm"></span>
-      <span class="cover-bar" style="height:64mm"></span>
-      <span class="cover-bar" style="height:36mm"></span>
+      <div class="cover-meta-group">
+        <p class="cover-context">Real Estate Portfolio</p>
+        <p class="cover-period">{_esc(_fmt_reporting_period(generated_at))}</p>
+      </div>
+
+      <p class="cover-deck">A consolidated view of commercial performance, collections, construction, customer experience and financial exposure.</p>
+
+      <ul class="cover-index-list">
+        <li>09 Operational Domains</li>
+        <li>Cross-Functional Analysis</li>
+        <li>Executive Decision Support</li>
+      </ul>
+    </div>
+
+    <div class="cover-panel">
+      <div class="cover-panel-brand">
+        <p class="cover-panel-brand-name">Solven</p>
+        <p class="cover-panel-brand-sub">Operations<br>Intelligence</p>
+      </div>
+      <p class="cover-panel-index">01</p>
+      <div class="cover-panel-meta">
+        <p>Real Estate</p>
+        <p>{_esc(_fmt_period_compact(generated_at))}</p>
+      </div>
     </div>
   </div>
 
-  <div class="cover-base">
-    <p class="cover-generated">Generated / {_esc(_fmt_datetime_technical(metadata.get('generated_at')))}</p>
-    <p class="cover-confidential">Confidential / {_esc(_short_report_id(metadata.get('report_id')))}</p>
+  <div class="cover-footer">
+    <div class="cover-footer-rule"></div>
+
+    <div class="cover-footer-grid">
+      <div class="cover-footer-col">
+        <p class="cover-footer-label">Document</p>
+        <p class="cover-footer-value">Executive Intelligence<br>Real Estate / {_esc(_fmt_period_compact(generated_at))}</p>
+      </div>
+      <div class="cover-footer-col">
+        <p class="cover-footer-label">Classification</p>
+        <p class="cover-footer-value">Confidential<br>Executive Distribution</p>
+      </div>
+      <div class="cover-footer-col">
+        <p class="cover-footer-label">Report</p>
+        <p class="cover-footer-value">{_esc(_short_report_id(metadata.get('report_id')))}<br>Generated {_esc(_fmt_datetime_technical(generated_at))}</p>
+      </div>
+    </div>
+
+    <div class="cover-colophon">
+      <span>Solven</span>
+      <span>Operations Intelligence / Cairo</span>
+    </div>
   </div>
 </section>
 """.strip()
@@ -1267,91 +1319,165 @@ body {
 h1, h2, h3, h4 { margin: 0; }
 
 /* ---- Cover ----
-   Identity only: logo, title, portfolio context, reporting period, report
+   Identity only: logo, title, portfolio scope, reporting period, report
    metadata. No findings, no figures, no diagrams -- see _render_cover's
    own docstring-equivalent comment. Three stacked full-bleed zones (an
-   editorial masthead/field/base grid, not a single panel): the @media
-   print override far below (together with the `@page :first` rule) prints
-   the whole section edge-to-edge on the true first sheet, and each zone
-   paints its own background across the full physical width so there is
-   no accidental cream/white strip at any edge. Geometry is mm-based
-   (rather than the rest of the stylesheet's px) because it's specified
-   against the physical page. */
+   editorial masthead/field/colophon grid, not a single panel): the
+   @media print override far below (together with the `@page :first`
+   rule) prints the whole section edge-to-edge on the true first sheet,
+   and each zone paints its own background across the full physical
+   width so there is no accidental cream/white strip at any edge.
+   Geometry is mm-based (rather than the rest of the stylesheet's px)
+   because it's specified against the physical page. */
 .cover {
   margin: 0 0 32px;
   display: flex;
   flex-direction: column;
-  min-height: 760px;
+  min-height: 900px;
 }
 
-/* Zone 1 -- masthead: solid near-black, logo only, ~16% of the page. */
+/* Zone 1 -- masthead: solid near-black, ~16% of the page. Logo left,
+   a tiny document index right -- both centered on the same row so the
+   logo reads as deliberately placed rather than floating in the band. */
 .cover-masthead {
   flex: 0 0 48mm;
   background: var(--cover-bg);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 23mm;
 }
 .cover-logo { display: block; width: 38mm; height: auto; }
+.cover-masthead-index {
+  margin: 0; font-family: var(--font-mono); font-size: 7pt; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--cover-ink-muted);
+}
 
 /* Zone 2 -- main editorial field: warm cream, fills whatever height the
-   masthead (fixed) and base (fixed) don't take. Content sits in reading
-   order at the top; `.cover-bars` is pushed to the very bottom of the
-   field by `margin-top: auto` so its shared baseline lands exactly on the
-   seam with `.cover-base` below -- the one place the bar graphic is
-   allowed to interact with the zone transition (see _render_cover). */
+   masthead and footer (both fixed) don't take. An asymmetric two-column
+   grid: `.cover-content` (title, scope copy, capability index) beside
+   `.cover-panel`, a full-height solid-orange index field bled to the
+   physical right edge -- a structural grid column, not a decoration laid
+   on top (see _render_cover's comment). */
 .cover-field {
   flex: 1 1 auto;
   background: var(--page-bg);
   display: flex;
+}
+
+.cover-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
   flex-direction: column;
-  padding: 20mm 23mm 0;
+  padding: 20mm 14mm 16mm 23mm;
 }
 
 .cover-eyebrow {
-  margin: 0 0 16mm; font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500;
+  margin: 0 0 13mm; font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal);
 }
 
 .cover-title {
-  margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 34pt;
-  line-height: 0.98; letter-spacing: -0.01em; text-transform: uppercase; color: var(--ink);
+  margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 30pt;
+  line-height: 1.02; letter-spacing: -0.01em; text-transform: uppercase; color: var(--ink);
 }
-.cover-context {
-  margin: 9mm 0 0; font-family: var(--font-mono); font-size: 9pt; font-weight: 500;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted);
+
+/* Portfolio + reporting period read as one publication-metadata unit --
+   same weight and tracking, tied together by a hairline rule -- rather
+   than two disconnected labels. */
+.cover-meta-group {
+  margin: 9mm 0 0; padding-top: 4mm; border-top: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 1.8mm;
 }
-.cover-period {
-  margin: 3mm 0 0; font-family: var(--font-mono); font-size: 9pt; font-weight: 600;
+.cover-context, .cover-period {
+  margin: 0; font-family: var(--font-mono); font-size: 8.5pt; font-weight: 500;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-muted);
+}
+
+/* Supporting copy, not a second headline -- sets the report's scope in
+   prose, capped narrow so it wraps into a short, deliberate paragraph. */
+.cover-deck {
+  margin: 9mm 0 0; max-width: 100mm; font-family: var(--font-sans); font-size: 12pt;
+  font-weight: 500; line-height: 1.5; color: var(--ink-muted);
+}
+
+/* Capability index: three plain-text lines, each marked by a short
+   #DF5316 rule -- an editorial index device, never a card or pill. */
+.cover-index-list {
+  margin: 11mm 0 0; padding: 0; list-style: none;
+  display: flex; flex-direction: column; gap: 4mm;
+}
+.cover-index-list li {
+  display: flex; align-items: center; gap: 4mm;
+  font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint);
+}
+.cover-index-list li::before { content: ""; display: block; width: 5mm; height: 1.2px; background: var(--signal); flex: 0 0 auto; }
+
+/* The panel is the page's one graphic object: solid #DF5316, full height
+   of the field zone, bled to the physical right edge -- publication
+   indexing (brand mark, folio numeral, scope/period), not marketing
+   copy, and deliberately not filled to capacity. */
+.cover-panel {
+  flex: 0 0 52mm;
+  background: var(--signal);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14mm 9mm;
+}
+.cover-panel-brand-name {
+  margin: 0; font-family: var(--font-mono); font-size: 8.5pt; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink);
 }
-
-/* The one graphic device on the cover: five flat #DF5316 rules, equal
-   width, unequal height, one shared baseline -- an editorial measurement
-   motif (like a physical publication's printer's marks), not a chart.
-   No labels, no axis, no represented data. */
-.cover-bars {
-  margin-top: auto;
-  display: flex;
-  align-items: flex-end;
-  gap: 15mm;
+.cover-panel-brand-sub {
+  margin: 2mm 0 0; font-family: var(--font-mono); font-size: 7pt; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.5; color: rgba(11, 11, 10, 0.6);
 }
-.cover-bar { display: block; width: 8mm; background: var(--signal); flex: 0 0 auto; }
+.cover-panel-index {
+  margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 60pt;
+  line-height: 1; letter-spacing: -0.01em; color: var(--ink);
+}
+.cover-panel-meta p {
+  margin: 0; font-family: var(--font-mono); font-size: 7pt; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: rgba(11, 11, 10, 0.6);
+}
+.cover-panel-meta p + p { margin-top: 1.8mm; }
 
-/* Zone 3 -- base: solid near-black, document metadata only, ~22% of the
-   page, full width to the physical bottom edge. */
-.cover-base {
-  flex: 0 0 60mm;
+/* Zone 3 -- footer: solid near-black, ~19% of the page, full width to the
+   physical bottom edge -- a document-control colophon, not empty space
+   with two isolated strings. A hairline #DF5316 rule opens it; a strict
+   three-column grid (document / classification / report) carries the
+   metadata; a final muted line at the very bottom closes it out. */
+.cover-footer {
+  flex: 0 0 58mm;
   background: var(--cover-bg);
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 0 23mm 14mm;
+  flex-direction: column;
+  padding: 12mm 23mm 10mm;
 }
-.cover-generated, .cover-confidential {
-  margin: 0; font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500;
-  letter-spacing: 0.07em; text-transform: uppercase; color: var(--cover-ink-muted); white-space: nowrap;
+.cover-footer-rule { width: 38mm; height: 1.5px; background: var(--signal); }
+
+.cover-footer-grid {
+  margin-top: 9mm;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10mm;
+}
+.cover-footer-label {
+  margin: 0 0 2.5mm; font-family: var(--font-mono); font-size: 6.5pt; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--cover-ink-muted);
+}
+.cover-footer-value {
+  margin: 0; font-family: var(--font-mono); font-size: 8.5pt; font-weight: 500;
+  letter-spacing: 0.03em; line-height: 1.55; text-transform: uppercase; color: var(--cover-ink);
+}
+
+.cover-colophon { margin-top: auto; padding-top: 8mm; display: flex; justify-content: space-between; }
+.cover-colophon span {
+  font-family: var(--font-mono); font-size: 6.5pt; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted);
 }
 
 /* ---- Section rhythm ---- */
@@ -1584,10 +1710,15 @@ h1, h2, h3, h4 { margin: 0; }
    ========================================================== */
 @media screen and (max-width: 560px) {
   .report { padding: 20px 16px 32px; }
-  .cover { min-height: 560px; }
-  .cover-masthead, .cover-field, .cover-base { padding-left: 16px; padding-right: 16px; }
-  .cover-title { font-size: 26pt; }
-  .cover-bars { gap: 10mm; }
+  .cover { min-height: 700px; }
+  .cover-masthead, .cover-content, .cover-footer { padding-left: 16px; padding-right: 16px; }
+  .cover-title { font-size: 24pt; }
+  /* The two-column field only works at the A4 measure the panel's mm
+     width assumes -- stack it on narrow screens instead of squeezing
+     the text column against a fixed-width panel. */
+  .cover-field { flex-direction: column; }
+  .cover-panel { flex-basis: auto; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; }
+  .cover-panel-index { font-size: 32pt; }
   .kpi-card, .dept-card { flex-basis: 100%; }
 }
 
