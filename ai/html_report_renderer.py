@@ -301,17 +301,34 @@ def _data_table(columns: list[tuple[str, str]], rows: list[dict[str, Any]], max_
 # Executive Dashboard immediately after it (see _render_primary_risk_signal
 # below), so nothing is lost, only relocated. The empty space is the
 # design, not a placeholder for one.
+#
+# Three purely geometric Solven-orange elements give the panel graphic
+# identity without adding a single new fact: a full-bleed color field
+# (`.cover-orange-field`) set beside the title for tension, a registration
+# rule + square (`.cover-title-mark`) that reads as an editorial index
+# device sitting above the headline, and a small corner mark
+# (`.cover-index-mark`) echoing the same device by the confidential line.
+# All three are `aria-hidden` -- decoration, not content -- and all three
+# are flat #DF5316 with hard edges: no gradient, no shadow, no imagery.
 def _render_cover(report: dict[str, Any]) -> str:
     metadata = report["metadata"]
 
     return f"""
 <section class="cover">
+  <div class="cover-orange-field" aria-hidden="true"></div>
+
   <div class="cover-top">
     <img class="cover-logo" src="{LOGO_ON_DARK}" alt="Solven">
   </div>
 
   <div class="cover-main">
-    <h1 class="cover-title">Executive Intelligence<br>Report</h1>
+    <div class="cover-title-group">
+      <div class="cover-title-mark" aria-hidden="true">
+        <span class="cover-title-mark-square"></span>
+        <span class="cover-title-mark-rule"></span>
+      </div>
+      <h1 class="cover-title">Executive Intelligence<br>Report</h1>
+    </div>
     <p class="cover-context">Real Estate Portfolio</p>
   </div>
 
@@ -321,7 +338,10 @@ def _render_cover(report: dict[str, Any]) -> str:
       <p class="cover-period-label">{_esc(_fmt_reporting_period(metadata.get('generated_at')))}</p>
       <p class="cover-generated">Generated / {_esc(_fmt_datetime_technical(metadata.get('generated_at')))}</p>
     </div>
-    <p class="cover-confidential">Confidential / {_esc(_short_report_id(metadata.get('report_id')))}</p>
+    <div class="cover-confidential-block">
+      <div class="cover-index-mark" aria-hidden="true"></div>
+      <p class="cover-confidential">Confidential / {_esc(_short_report_id(metadata.get('report_id')))}</p>
+    </div>
   </div>
 </section>
 """.strip()
@@ -1269,6 +1289,19 @@ h1, h2, h3, h4 { margin: 0; }
   display: flex;
   flex-direction: column;
   min-height: 640px;
+  position: relative;
+}
+
+/* The one graphic field on the cover: a flat, hard-edged Solven-orange
+   column bled to the physical right edge, set beside (never behind) the
+   title for compositional tension. Positioned in mm against `.cover`'s
+   own box (print: the full 210x297mm sheet, so `right: 0` lands exactly
+   on the physical edge) -- not a chart, not imagery, just a rectangle. */
+.cover-orange-field {
+  position: absolute;
+  top: 83mm; right: 0;
+  width: 18mm; height: 88mm;
+  background: var(--signal);
 }
 
 .cover-top { display: flex; }
@@ -1277,6 +1310,16 @@ h1, h2, h3, h4 { margin: 0; }
 /* ~35-40% down the page: 24mm top padding + this margin lands the title's
    cap-height around 108-118mm from the physical top edge of a 297mm sheet. */
 .cover-main { display: flex; flex-direction: column; gap: 10mm; margin-top: 78mm; }
+
+.cover-title-group { display: flex; flex-direction: column; gap: 6mm; }
+
+/* Registration rule + square: an editorial indexing device sitting above
+   the headline, not a diagram -- one flat rule, one flat square, both
+   #DF5316, both hard-edged. */
+.cover-title-mark { display: flex; align-items: center; gap: 3mm; }
+.cover-title-mark-square { display: block; width: 3mm; height: 3mm; background: var(--signal); flex: 0 0 auto; }
+.cover-title-mark-rule { display: block; width: 16mm; height: 1.2px; background: var(--signal); flex: 0 0 auto; }
+
 .cover-title {
   margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 34pt;
   line-height: 0.96; letter-spacing: -0.01em; text-transform: uppercase; color: var(--cover-ink);
@@ -1301,6 +1344,16 @@ h1, h2, h3, h4 { margin: 0; }
   margin: 4.5mm 0 0; font-family: var(--font-mono); font-size: 8pt; font-weight: 500;
   letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-ink-muted);
 }
+
+/* Small corner mark echoing .cover-title-mark's registration-device
+   language by the confidential line -- two perpendicular flat rules,
+   not a numeral, not a claim about page count. */
+.cover-confidential-block { position: relative; }
+.cover-index-mark { position: absolute; top: -5mm; right: 0; width: 4mm; height: 4mm; }
+.cover-index-mark::before, .cover-index-mark::after { content: ""; position: absolute; background: var(--signal); }
+.cover-index-mark::before { top: 0; left: 0; width: 4mm; height: 1.2px; }
+.cover-index-mark::after { top: 0; left: 0; width: 1.2px; height: 4mm; }
+
 .cover-confidential {
   margin: 0; font-family: var(--font-mono); font-size: 8pt; font-weight: 500;
   letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted); white-space: nowrap;
