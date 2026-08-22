@@ -64,10 +64,13 @@ of the detection logic references a specific entity name.
                     ▼
    ai/html_report_renderer.py + ai/pdf_report_renderer.py
    — deterministic rendering to HTML and a print-quality
-   A4 portrait PDF
+   A4 portrait PDF, plus ai/email_renderer.py for the
+   delivery email's HTML/subject (same report dict, no
+   AI call, no analytics)
                     │
                     ▼
-   outputs/executive_report.{json,md,html,pdf}
+   outputs/executive_report.{json,md,html,pdf},
+   outputs/executive_email.html, outputs/email_meta.json
 ```
 
 Each layer depends only on the layer below it. **Python calculates.
@@ -212,7 +215,12 @@ playwright install --with-deps chromium
 
 # 4. Configure environment variables
 cp .env.example .env
-# then edit .env and add your Groq API key
+# then edit .env and add your Groq API key -- and double-check
+# GROQ_MODEL against https://console.groq.com/docs/models; Groq
+# regularly retires model IDs (llama-3.3-70b-versatile, this
+# platform's long-standing default, was retired from Groq's catalog
+# as of this redesign and needs to be swapped for a currently-served
+# model before `python app.py` will complete the AI narrative step)
 
 # 5. (Re)generate the synthetic datasets (already committed in data/,
 #    only needed if you want to regenerate them)
@@ -224,27 +232,68 @@ python app.py
 
 ## Generated Reports
 
-Each run writes the same executive report in four formats to
-`outputs/`, all built from one report dict (the Markdown, HTML, and
-PDF renderers are pure, deterministic functions over that dict — no
+Each run writes the same executive report in six files to `outputs/`,
+all built from one report dict (the Markdown, HTML, PDF, and email
+renderers are pure, deterministic functions over that dict — no
 analytics or AI reasoning happens during rendering):
 
 - **`outputs/executive_report.json`** — the structured report: every
   score, ranking, root cause, confidence value, financial-exposure
-  figure, and narrative field. The source of truth for the other three
+  figure, and narrative field. The source of truth for the other
   formats.
 - **`outputs/executive_report.md`** — a plain-text Markdown rendering.
 - **`outputs/executive_report.html`** — a self-contained, print-first
-  HTML document (dark cover, light editorial body, no external fonts/
-  scripts/CDN dependencies).
+  HTML document (near-black dossier cover, warm-cream editorial body,
+  Solven's brand colors/typography, no external fonts/scripts/CDN
+  dependencies — see `ai/_assets.py`, which embeds the logo and
+  webfonts as `data:` URIs).
 - **`outputs/executive_report.pdf`** — the primary client-facing
   artifact: an A4 portrait PDF rendered from the HTML via headless
   Chromium (Playwright), with real print margins and a repeating
   "Confidential · Page X of Y" footer.
+- **`outputs/executive_email.html`** — the executive delivery email's
+  body (`ai/email_renderer.py`): a concise, table-based, inline-styled
+  HTML document (Gmail/Apple Mail/Outlook-safe) carrying a snapshot of
+  the same report (overall health, primary risk, exposure, confidence)
+  and pointing to the attached PDF. No custom webfonts (system font
+  stacks only — unreliable in email clients).
+- **`outputs/email_meta.json`** — `{subject, sender_name,
+  sender_address, attachment_label}` for the email above. n8n's
+  email-send node should bind its subject/from-name/from-address
+  fields to these instead of hardcoding them — see "Email delivery
+  (n8n)" below.
 
 ```bash
 open outputs/executive_report.pdf
+open outputs/executive_email.html
 ```
+
+## Email delivery (n8n)
+
+This repository builds the email's **content** only
+(`ai/email_renderer.py` → `outputs/executive_email.html` +
+`outputs/email_meta.json`); actual sending stays owned by n8n, per the
+architecture note above — this platform has no SMTP/provider
+credentials or send call of its own.
+
+To send from the `Solven Intelligence <hello@solvenhq.com>` identity:
+
+1. In n8n's email-send node, set **From Name** / **From Address** by
+   reading `sender_name` / `sender_address` from the downloaded
+   `email_meta.json` (or hardcode them to match — they're also set in
+   `config/real_estate_demo.yml`'s `email:` block, the single source of
+   truth if you need to change them later).
+2. Set the **Subject** field from `email_meta.json`'s `subject`.
+3. Set the **HTML Body** to the contents of `executive_email.html`.
+4. Attach `executive_report.pdf` as the (only client-facing) attachment
+   — `attachment_label` in the JSON sidecar ("Executive Intelligence
+   Report / PDF") is what the email's own copy calls it; don't also
+   attach/promote the Markdown or JSON outputs to the recipient.
+5. **`hello@solvenhq.com` must be a verified sender/domain** in
+   whatever transport n8n's email node uses (SMTP account or provider
+   API key/domain) before delivery will work — this is an n8n/mail-
+   provider configuration step outside this repository; nothing here
+   can verify it for you.
 
 ## API (n8n integration)
 
@@ -258,16 +307,17 @@ uvicorn api:app --reload --port 8000
 
 - **`GET /health`** — liveness check.
 - **`POST /run-analysis`** — runs the full pipeline synchronously
-  (blocks until all four output files are written) and returns
-  `report_id`, `generated_at`, the four `outputs` paths, and a summary
-  (overall business health score, highest-risk project, highest-
-  priority initiative). A failed run returns `500` with a clean
-  message, never a raw stack trace. Only one run is allowed at a time;
-  an overlapping call gets `409` immediately. n8n is expected to own
-  scheduling this endpoint, downloading `outputs/executive_report.pdf`
-  once it succeeds, emailing it, and handling retry/failure alerts —
-  this endpoint has no authentication yet and is not intended to be
-  deployed publicly as-is.
+  (blocks until every output file is written) and returns `report_id`,
+  `generated_at`, the `outputs` paths (json/markdown/html/pdf plus
+  email_html/email_meta), and a summary (overall business health
+  score, highest-risk project, highest-priority initiative). A failed
+  run returns `500` with a clean message, never a raw stack trace.
+  Only one run is allowed at a time; an overlapping call gets `409`
+  immediately. n8n is expected to own scheduling this endpoint,
+  downloading `outputs/executive_report.pdf` and the two email outputs
+  once it succeeds, sending the email (see "Email delivery (n8n)"
+  above), and handling retry/failure alerts — this endpoint has no
+  authentication yet and is not intended to be deployed publicly as-is.
 
 ## GitHub Actions
 

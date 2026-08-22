@@ -23,6 +23,20 @@ company:
   region: "Egypt / MENA"
   reporting_period_months: 24
 
+# The identity the executive delivery email should be sent from. This
+# platform builds the email's HTML/subject only (ai/email_renderer.py);
+# actual sending stays owned by n8n (see README's "n8n owns orchestration
+# only"), which cannot read this YAML file directly -- run_pipeline()
+# writes these two values into outputs/email_meta.json alongside the PDF
+# on every run precisely so n8n's email-send node can bind its "from
+# name" / "from address" fields to them instead of hardcoding a person's
+# inbox. hello@solvenhq.com must be a verified sender/domain in whatever
+# transport n8n's email node uses (e.g. SMTP account or provider API key)
+# before this takes effect -- see README's email delivery section.
+email:
+  sender_name: "Solven Intelligence"
+  sender_email: "hello@solvenhq.com"
+
 # Sales targets used for target-attainment KPIs. A real engagement
 # would source these from the client's own budget; the demo sets
 # plausible annual figures for a multi-project developer of Horizon's

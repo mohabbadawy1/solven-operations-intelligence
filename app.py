@@ -35,6 +35,7 @@ from analysis.lead_funnel import analyze_lead_funnel
 from analysis.marketing_efficiency import analyze_marketing_efficiency
 from analysis.sales_performance import analyze_sales_performance
 from analysis.sales_team_broker_performance import analyze_sales_team_broker_performance
+from ai.email_renderer import render_email
 from ai.pdf_report_renderer import PDFRenderError, render_pdf
 from ai.report_generator import ConfigurationError, ReportGenerationError, generate_executive_report
 
@@ -206,7 +207,31 @@ def run_pipeline() -> dict[str, Any]:
     report["metadata"]["saved_pdf_path"] = str(pdf_path)
     print(f"  Saved: {pdf_path}")
 
+    print("\nRendering executive delivery email...")
+    email_path, email_meta_path = _save_email(render_email(report), html_path.parent)
+    report["metadata"]["saved_email_html_path"] = str(email_path)
+    report["metadata"]["saved_email_meta_path"] = str(email_meta_path)
+    print(f"  Saved: {email_path}")
+    print(f"  Saved: {email_meta_path}")
+
     return report
+
+
+def _save_email(email: dict[str, Any], output_dir: Path) -> tuple[Path, Path]:
+    """Write the rendered email HTML plus a small JSON sidecar (subject,
+    sender name/address, attachment label) n8n's email-send node reads
+    instead of hardcoding a subject line or a person's inbox as the
+    sender -- see ai/email_renderer.py's module docstring."""
+    import json
+
+    email_path = output_dir / "executive_email.html"
+    email_path.write_text(email["html"], encoding="utf-8")
+
+    meta_path = output_dir / "email_meta.json"
+    meta = {k: v for k, v in email.items() if k != "html"}
+    meta_path.write_text(json.dumps(meta, indent=2), encoding="utf-8")
+
+    return email_path, meta_path
 
 
 def main() -> None:

@@ -40,6 +40,8 @@ from datetime import datetime
 from html import escape
 from typing import Any
 
+from ai._assets import FONT_FACES_CSS, LOGO_ON_DARK, LOGO_ASPECT_RATIO
+
 # --------------------------------------------------------------------------
 # Errors
 # --------------------------------------------------------------------------
@@ -133,6 +135,50 @@ def _fmt_datetime(value: str | None) -> str:
     return f"{formatted} UTC"
 
 
+def _fmt_datetime_technical(value: str | None) -> str:
+    """Cover/header technical timestamp: '17 AUG 2026 · 07:19 UTC' (uppercase
+    month, dot separator) -- the same instant as _fmt_datetime, styled for
+    the IBM Plex Mono metadata rows rather than editorial prose."""
+    if not value:
+        return ""
+    try:
+        parsed = datetime.fromisoformat(str(value))
+    except ValueError:
+        return str(value)
+    return f"{parsed.day} {parsed.strftime('%b').upper()} {parsed.year} · {parsed.strftime('%H:%M')} UTC"
+
+
+def _fmt_reporting_period(value: str | None) -> str:
+    """'AUGUST 2026' from an ISO timestamp -- the calendar month this report
+    was generated in, used as the cover's reporting-period label."""
+    if not value:
+        return "N/A"
+    try:
+        parsed = datetime.fromisoformat(str(value))
+    except ValueError:
+        return "N/A"
+    return f"{parsed.strftime('%B').upper()} {parsed.year}"
+
+
+def _short_report_id(report_id: str | None) -> str:
+    """First 8 hex characters of the report's UUID, uppercased -- a short,
+    human-scannable identifier for the cover/appendix, not a new ID."""
+    if not report_id:
+        return "N/A"
+    return str(report_id).replace("-", "")[:8].upper()
+
+
+def _strip_project_prefix(title: str | None, project_code: str | None) -> str:
+    """'HVW Affordability-Driven Collections & Cancellation Risk' -> 'AFFORDABILITY
+    -DRIVEN COLLECTIONS & CANCELLATION RISK' when the title leads with the
+    project's own code -- the cover already states the code once on its own
+    line, so repeating it in the title line under it would be redundant."""
+    title = title or ""
+    if project_code and title.upper().startswith(project_code.upper() + " "):
+        return title[len(project_code) + 1:]
+    return title
+
+
 def _exposure_line_item(financial_exposure: dict[str, Any], category: str) -> dict[str, Any] | None:
     for item in financial_exposure.get("line_items", []) or []:
         if item.get("category") == category:
@@ -150,16 +196,6 @@ def _project_cancellation_rate_pct(report: dict[str, Any], project_id: str | Non
         if row.get("project_id") == project_id:
             return row.get("cancellation_rate_pct")
     return None
-
-
-def _brand_lockup(platform: str | None) -> tuple[str, str]:
-    words = (platform or "").split()
-    if not words:
-        return "", ""
-    if len(words) == 1:
-        return words[0].upper(), ""
-    tagline_words = words[1:-1] if len(words) > 2 else words[1:]
-    return words[0].upper(), " ".join(tagline_words)
 
 
 def _paragraphs_html(text: str, css_class: str = "") -> str:
@@ -259,42 +295,96 @@ def _data_table(columns: list[tuple[str, str]], rows: list[dict[str, Any]], max_
 # Cover
 # --------------------------------------------------------------------------
 
+# Nine thin rails, each standing for one monitored domain, converging into
+# a single resolved signal -- a restrained editorial mark, not a chart:
+# no axes, no per-line labels, no legend. Geometry is fixed; only which
+# rail is "selected" (drawn in Solven orange, the rest in low-opacity
+# cream) is computed from this report's own domain health statuses.
+_SIGNAL_VIEWBOX_H = 320
+_SIGNAL_RAIL_X0, _SIGNAL_RAIL_X1 = 118, 192
+_SIGNAL_CONVERGE = (26, 150)
+_SIGNAL_STATUS_RANK = {"Critical": 3, "At Risk": 2, "Watch": 1, "Healthy": 0}
+
+
+def _render_signal_channels(overall_business_health: dict[str, Any]) -> str:
+    domains = [d for d in DOMAIN_ORDER if d in overall_business_health]
+    if not domains:
+        return ""
+
+    def _rank(domain: str) -> tuple[int, float]:
+        block = overall_business_health[domain]
+        return (_SIGNAL_STATUS_RANK.get(block.get("status"), 0), -(block.get("score") or 100))
+
+    selected = max(domains, key=_rank)
+
+    n = len(domains)
+    spacing = (_SIGNAL_VIEWBOX_H - 20) / max(n - 1, 1)
+    rails = []
+    for index, domain in enumerate(domains):
+        y = 10 + index * spacing
+        block = overall_business_health[domain]
+        elevated = _SIGNAL_STATUS_RANK.get(block.get("status"), 0) >= 2
+        is_selected = domain == selected
+        if is_selected:
+            rail_opacity, leader_opacity, stroke = "0.95", "1", "var(--signal)"
+            leader_x1, leader_y1 = _SIGNAL_CONVERGE
+        else:
+            rail_opacity = "0.32" if elevated else "0.14"
+            leader_opacity = rail_opacity
+            stroke = "var(--cover-ink)"
+            t = 0.55
+            leader_x1 = _SIGNAL_RAIL_X0 - (_SIGNAL_RAIL_X0 - _SIGNAL_CONVERGE[0]) * t
+            leader_y1 = y - (y - _SIGNAL_CONVERGE[1]) * t
+        rails.append(
+            f'<line x1="{_SIGNAL_RAIL_X0}" y1="{y:.1f}" x2="{_SIGNAL_RAIL_X1}" y2="{y:.1f}" '
+            f'stroke="{stroke}" stroke-width="{2.4 if is_selected else 1.4}" opacity="{rail_opacity}" />'
+            f'<line x1="{_SIGNAL_RAIL_X0}" y1="{y:.1f}" x2="{leader_x1:.1f}" y2="{leader_y1:.1f}" '
+            f'stroke="{stroke}" stroke-width="{1.6 if is_selected else 1}" opacity="{leader_opacity}" />'
+        )
+    cx, cy = _SIGNAL_CONVERGE
+    resolve_line = (
+        f'<line x1="{cx}" y1="{cy}" x2="{cx}" y2="{_SIGNAL_VIEWBOX_H}" '
+        f'stroke="var(--signal)" stroke-width="2" opacity="0.9" />'
+        f'<circle cx="{cx}" cy="{cy}" r="4" fill="var(--signal)" />'
+    )
+    return f"""
+    <svg class="cover-signal-svg" viewBox="0 0 210 {_SIGNAL_VIEWBOX_H}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      {''.join(rails)}
+      {resolve_line}
+    </svg>""".strip()
+
 
 def _render_cover(report: dict[str, Any]) -> str:
     metadata = report["metadata"]
     currency = metadata.get("currency", "EGP")
-    brand, tagline = _brand_lockup(metadata.get("platform"))
-    monogram = _esc(brand[:1]) if brand else ""
-    tagline_html = f'<p class="cover-tagline">{_esc(tagline)}</p>' if tagline else ""
 
     financial_exposure = report.get("financial_exposure", {}) or {}
     top_action = (report.get("recommended_actions") or [{}])[0] or {}
     top_project = report.get("highest_risk_project")
+    overall_business_health = report.get("overall_business_health", {}) or {}
 
     cancellation_item = _exposure_line_item(financial_exposure, "Cancellation Exposure")
     receivables_item = _exposure_line_item(financial_exposure, "Receivables at Risk")
     project_cancellation_rate = _project_cancellation_rate_pct(report, top_project)
 
     hero_amount = _fmt_currency(cancellation_item.get("amount") if cancellation_item else None, currency)
-    cancellation_label = _esc(cancellation_item.get("category")) if cancellation_item else "Cancellation Exposure"
-    receivables_label = _esc(receivables_item.get("category")) if receivables_item else "Receivables at Risk"
-    rate_label = f"{_esc(top_project)} Cancellation Rate" if top_project else "Project Cancellation Rate"
+    signal_title = _strip_project_prefix(top_action.get("title"), top_project)
 
-    metric_cards = [
-        (hero_amount, cancellation_label),
-        (_fmt_currency(receivables_item.get("amount") if receivables_item else None, currency), receivables_label),
-        (_fmt_pct(project_cancellation_rate), rate_label),
-        (_fmt_confidence(top_action.get("confidence")), "Diagnostic Confidence"),
+    stat_cards = [
+        ("RECEIVABLES AT RISK", _fmt_currency(receivables_item.get("amount") if receivables_item else None, currency)),
+        ("CANCELLATION RATE", _fmt_pct(project_cancellation_rate)),
+        ("DIAGNOSTIC CONFIDENCE", _fmt_confidence(top_action.get("confidence"))),
     ]
-    metrics_html = "\n".join(
-        f'    <div class="cover-metric"><p class="cover-metric-label">{label}</p><p class="cover-metric-value">{value}</p></div>'
-        for value, label in metric_cards
+    stats_html = "\n".join(
+        f'      <div class="cover-stat"><span class="cover-stat-k">{_esc(k)}</span><span class="cover-stat-v">{_esc(v)}</span></div>'
+        for k, v in stat_cards
     )
 
     action_html = ""
     if top_action.get("recommended_action"):
         action_html = f"""
   <div class="cover-action">
+    <div class="cover-action-rule"></div>
     <p class="cover-action-label">Immediate Executive Action</p>
     <p class="cover-action-text">{_esc(top_action.get('recommended_action'))}</p>
     <div class="cover-action-meta">
@@ -303,42 +393,51 @@ def _render_cover(report: dict[str, Any]) -> str:
     </div>
   </div>"""
 
-    alert_label = "Highest-Priority Risk" + (f" &middot; {_esc(top_project)}" if top_project else "")
+    signal_zone = ""
+    if top_project or signal_title:
+        signal_zone = f"""
+  <div class="cover-signal-zone">
+    {_render_signal_channels(overall_business_health)}
+    <div class="cover-signal-content">
+      <p class="cover-signal-eyebrow">01 / Primary Signal</p>
+      {f'<p class="cover-signal-code">{_esc(top_project)}</p>' if top_project else ''}
+      <p class="cover-signal-title">{_esc(signal_title)}</p>
+      <p class="cover-signal-figure">{hero_amount}</p>
+      <p class="cover-signal-figure-label">At Risk From Cancellations</p>
+      <div class="cover-signal-stats">
+{stats_html}
+      </div>
+    </div>
+  </div>"""
+
+    logo_h = 26
+    logo_w = round(logo_h * LOGO_ASPECT_RATIO)
 
     return f"""
 <section class="cover">
-  <div class="cover-topline">
-    <div class="cover-brand">
-      <span class="cover-mark">{monogram}</span>
-      <div>
-        <p class="cover-word">{_esc(brand)}</p>
-        {tagline_html}
-      </div>
-    </div>
-    <div class="cover-meta">
-      <p class="cover-report-type">{_esc(metadata.get('report_type'))}</p>
-      <p class="cover-date">{_esc(_fmt_datetime(metadata.get('generated_at')))}</p>
+  <div class="cover-row cover-row-top">
+    <img class="cover-logo" src="{LOGO_ON_DARK}" width="{logo_w}" height="{logo_h}" alt="Solven">
+    <div class="cover-meta-block">
+      <p class="cover-meta-line">Operations Intelligence</p>
+      <p class="cover-meta-line">Real Estate / Executive Report</p>
+      <p class="cover-meta-line cover-meta-id">Report / {_esc(_short_report_id(metadata.get('report_id')))}</p>
     </div>
   </div>
 
-  <div class="cover-alert">
-    <p class="cover-alert-label">{alert_label}</p>
-    <p class="cover-alert-title">{_esc(top_action.get('title'))}</p>
-    <p class="cover-figure">{hero_amount}</p>
-    <p class="cover-figure-label">At risk from cancellations</p>
-    <p class="cover-diagnosis">{_esc(report.get('why_it_matters'))}</p>
+  <div class="cover-title-block">
+    <h1 class="cover-title">Executive<br>Intelligence<br>Report</h1>
+    <div class="cover-title-meta">
+      <p class="cover-title-meta-line">Real Estate Portfolio</p>
+      <p class="cover-title-meta-line">Reporting Period / {_esc(_fmt_reporting_period(metadata.get('generated_at')))}</p>
+      <p class="cover-title-meta-line">Generated / {_esc(_fmt_datetime_technical(metadata.get('generated_at')))}</p>
+    </div>
   </div>
-
-  <div class="cover-metrics">
-{metrics_html}
-  </div>
+{signal_zone}
 {action_html}
-  <div class="cover-consequence">
-    <span class="cover-consequence-label">No action</span>
-    <span class="cover-consequence-text">{_esc(report.get('consequence_of_inaction'))}</span>
+  <div class="cover-footer-row">
+    <span>Solven / Real Estate Intelligence</span>
+    <span>Confidential</span>
   </div>
-
-  <p class="cover-footnote">Report {_esc(metadata.get('report_id'))}</p>
 </section>
 """.strip()
 
@@ -737,15 +836,19 @@ def _render_root_causes(root_causes: list[dict[str, Any]]) -> str:
             )
             note_html = f'<p class="root-cause-note">{_esc(rc.get("executive_note"))}</p>' if rc.get("executive_note") else ""
             meta = _meta_row([("Owner", rc.get("owner")), ("Horizon", rc.get("horizon")), ("Confidence", _fmt_confidence(rc.get("confidence")))])
+            is_primary = index == 1
+            badge_class = "badge-priority badge-priority-signal" if is_primary else "badge-priority"
+            confidence_class = "hbar-confidence-signal" if is_primary else "hbar-confidence"
+            card_class = "card root-cause-card root-cause-card-signal" if is_primary else "card root-cause-card"
             cards.append(f"""
-    <div class="card root-cause-card">
+    <div class="{card_class}">
       <div class="root-cause-header">
         <div class="root-cause-heading">
-          {_badge_html(f"P{index}", "badge-priority")}
+          {_badge_html(f"P{index}", badge_class)}
           <span class="risk-title">{_esc(rc.get('title'))}</span>
         </div>
       </div>
-      <div class="hbar-track confidence-track"><div class="hbar-fill hbar-confidence" style="width:{_percent((rc.get('confidence') or 0) * 100)}%"></div></div>
+      <div class="hbar-track confidence-track"><div class="hbar-fill {confidence_class}" style="width:{_percent((rc.get('confidence') or 0) * 100)}%"></div></div>
       {note_html}
       {evidence_html}
       {meta}
@@ -802,10 +905,13 @@ def _render_action_card(action: dict[str, Any], currency: str) -> str:
         ("Owner", action.get("owner")), ("Difficulty", action.get("difficulty")),
         ("Timeline", action.get("estimated_timeframe")), ("Confidence", _fmt_confidence(action.get("confidence"))),
     ])
+    is_primary = action.get("priority") == 1
+    badge_class = "badge-priority badge-priority-signal" if is_primary else "badge-priority"
+    card_class = "card action-card action-card-signal" if is_primary else "card action-card"
     return f"""
-      <div class="card action-card">
+      <div class="{card_class}">
         <div class="action-card-head">
-          {_badge_html(f"P{action.get('priority')}", "badge-priority")}
+          {_badge_html(f"P{action.get('priority')}", badge_class)}
           <p class="action-title">{_esc(action.get('title'))}</p>
         </div>
         {meta_html}
@@ -1027,15 +1133,33 @@ def _render_appendix(report: dict[str, Any]) -> str:
     <h3 class="appendix-heading">Data Limitations</h3>
     <ul class="limitations-list">{limitations_html}</ul>
     <p class="appendix-footnote">Generated by {_esc(appendix.get('generated_by'))}</p>
+    <p class="appendix-model-note">Narrative text generation &mdash; {_esc(report.get('metadata', {}).get('ai_model'))}. Every number, ranking, and confidence score above is Python-computed, never AI-generated.</p>
   </div>
 </section>
 """.strip()
 
 
-def _render_footer(metadata: dict[str, Any]) -> str:
+def _render_footer(report: dict[str, Any]) -> str:
+    """The report's closing system signature (Part 3 of the design system):
+    reads as an institutional artifact signing itself off, not a personal
+    sign-off. The narrative model name is deliberately not part of this
+    block -- see _render_appendix's own quiet, small-print technical
+    attribution line for that (internal auditability, not a client-facing
+    product identity)."""
+    metadata = report["metadata"]
+    dq_score = report.get("appendix", {}).get("data_quality_summary", {}).get("score")
     return f"""
 <footer class="report-footer">
-  <p>{_esc(metadata.get('platform'))} for {_esc(metadata.get('company_name'))} &middot; AI model: {_esc(metadata.get('ai_model'))}</p>
+  <div class="signature-block">
+    <p class="signature-brand">Solven</p>
+    <p class="signature-subline">Operations Intelligence</p>
+    <div class="signature-meta">
+      <div class="signature-meta-item"><span class="signature-k">Status</span><span class="signature-v">Analysis Complete</span></div>
+      <div class="signature-meta-item"><span class="signature-k">Data Quality</span><span class="signature-v">{_esc(dq_score)} / 100</span></div>
+      <div class="signature-meta-item"><span class="signature-k">Report ID</span><span class="signature-v">{_esc(_short_report_id(metadata.get('report_id')))}</span></div>
+      <div class="signature-meta-item"><span class="signature-k">Generated</span><span class="signature-v">{_esc(_fmt_datetime_technical(metadata.get('generated_at')))}</span></div>
+    </div>
+  </div>
   <p class="confidential">Confidential &mdash; prepared for internal executive distribution. All data is synthetic demonstration data.</p>
 </footer>
 """.strip()
@@ -1076,7 +1200,7 @@ def render_html(report: dict[str, Any]) -> str:
             _render_no_action(report),
             _render_conclusion(report),
             _render_appendix(report),
-            _render_footer(metadata),
+            _render_footer(report),
         ])
     except (KeyError, TypeError, AttributeError) as exc:
         raise HTMLRenderError(f"Report dict is missing a field the HTML renderer requires: {exc}") from exc
@@ -1089,6 +1213,7 @@ def render_html(report: dict[str, Any]) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <style>
+{FONT_FACES_CSS}
 {_CSS}
 </style>
 </head>
@@ -1119,21 +1244,31 @@ def render_html(report: dict[str, Any]) -> str:
 
 _CSS = """
 :root {
-  --cover-bg: #0C0C0C;
-  --cover-ink: #F5F3EC;
-  --cover-ink-muted: #A6A398;
-  --cover-gold: #C9A84C;
-  --cover-line: rgba(201, 168, 76, 0.22);
+  /* Cover -- deep near-black, cream ink, orange used only as the resolved
+     signal (see ai/_assets.py's font-face block and the Solven brand
+     system note above _render_cover). */
+  --cover-bg: #0B0B0A;
+  --cover-ink: #F4F1EA;
+  --cover-ink-muted: rgba(244, 241, 234, 0.56);
+  --cover-line: rgba(244, 241, 234, 0.16);
 
-  --page-bg: #FAF9F5;
+  /* Internal pages -- warm cream, never cold pure white. */
+  --page-bg: #F4F1EA;
   --card-bg: #FFFFFF;
-  --ink: #17171B;
-  --ink-muted: #5B5A54;
-  --ink-faint: #85837A;
-  --gold: #9C7A24;
-  --gold-soft: rgba(156, 122, 36, 0.12);
-  --line: #E7E4DA;
-  --line-soft: #EFEDE4;
+  --ink: #0B0B0A;
+  --ink-muted: #5B584E;
+  --ink-faint: #8A8676;
+  --line: #E3DFD1;
+  --line-soft: #EBE7D9;
+
+  /* The one signal color -- an event, an exception, a selected finding.
+     Never a decorative fill; see every .badge-priority-signal /
+     .*-signal usage below for the only places it appears. */
+  --signal: #DF5316;
+  --signal-soft: rgba(223, 83, 22, 0.10);
+
+  /* Status semantics -- unchanged in meaning from this platform's
+     original design; restrained enough not to compete with --signal. */
   --red: #9B3A34;
   --red-soft: rgba(155, 58, 52, 0.10);
   --green: #2F6B3F;
@@ -1142,8 +1277,18 @@ _CSS = """
   --amber-soft: rgba(147, 101, 15, 0.12);
   --blue: #2F5C8A;
   --blue-soft: rgba(47, 92, 138, 0.10);
-  --radius: 4px;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  --radius: 3px;
+
+  /* Headline / display: heavy grotesque for the cover, section titles,
+     and the report's most important figures -- Helvetica Neue Black's
+     nearest open, embeddable equivalent (no Helvetica Neue asset was
+     supplied for this platform; see ai/_assets.py). */
+  --font-display: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* Technical / metadata: report IDs, dates, owners, timelines, labels. */
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Body. */
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -1171,72 +1316,107 @@ body {
 h1, h2, h3, h4 { margin: 0; }
 
 /* ---- Cover ----
-   A dedicated full A4-page executive alert, not a card floating on the
-   page: the dark panel is a flex column whose direct children (topline,
-   alert, metrics, action, consequence, footnote) are spaced with `gap`
-   on screen and stretched to fill the page with `justify-content:
-   space-between` in print (see the print override below), so the
-   panel's own content -- not an arbitrary spacer -- fills the height. */
+   A full-bleed near-black dossier cover, not a card floating on a page:
+   see the @media print override far below, which negative-margins this
+   section out to the true page edges (no white border, no rounded
+   container). On screen it's simply the first flex-column block in the
+   document. Direct children space with `gap`; print additionally
+   stretches them with `justify-content: space-between` so the panel's
+   own content -- not an arbitrary spacer -- fills the page height. */
 .cover {
   background: var(--cover-bg);
   color: var(--cover-ink);
-  border-radius: 10px;
-  padding: 44px 44px 40px;
-  margin: 24px 0 32px;
+  border-radius: 0;
+  padding: 56px 48px 40px;
+  margin: 0 0 32px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
-}
-.cover-topline { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
-.cover-brand { display: flex; align-items: center; gap: 10px; }
-.cover-mark {
-  width: 26px; height: 26px; flex: 0 0 auto; border-radius: 4px;
-  background: var(--cover-gold); color: #14120C; font-weight: 700; font-size: 8.5pt;
-  display: inline-flex; align-items: center; justify-content: center;
-}
-.cover-word { margin: 0; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.16em; color: var(--cover-gold); }
-.cover-tagline { margin: 2px 0 0; font-size: 7.5pt; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted); }
-.cover-meta { text-align: right; }
-.cover-report-type { margin: 0; font-size: 9pt; font-weight: 600; color: var(--cover-ink); }
-.cover-date { margin: 3px 0 0; font-size: 8pt; color: var(--cover-ink-muted); }
-
-.cover-alert { border-top: 1px solid var(--cover-line); border-bottom: 1px solid var(--cover-line); padding: 26px 0; }
-.cover-alert-label { margin: 0 0 10px; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cover-gold); }
-.cover-alert-title { margin: 0 0 16px; font-size: 13pt; font-weight: 600; color: var(--cover-ink); max-width: 50ch; }
-.cover-figure { margin: 0; font-size: 62pt; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: var(--cover-ink); font-variant-numeric: tabular-nums; }
-.cover-figure-label { margin: 10px 0 18px; font-size: 11pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-gold); }
-.cover-diagnosis {
-  margin: 0; font-size: 11pt; line-height: 1.5; color: var(--cover-ink-muted); max-width: 62ch;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  gap: 34px;
 }
 
-.cover-metrics { display: flex; }
-.cover-metric { flex: 1 1 0; padding: 0 22px; border-left: 1px solid var(--cover-line); }
-.cover-metric:first-child { padding-left: 0; border-left: none; }
-.cover-metric-label { margin: 0 0 8px; font-size: 7.5pt; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cover-ink-muted); min-height: 2.4em; }
-.cover-metric-value { margin: 0; font-size: 19pt; font-weight: 700; letter-spacing: -0.01em; color: var(--cover-ink); font-variant-numeric: tabular-nums; line-height: 1.05; }
+.cover-row-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.cover-logo { display: block; height: 26px; width: auto; }
+.cover-meta-block { text-align: right; }
+.cover-meta-line {
+  margin: 0 0 5px; font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--cover-ink-muted);
+}
+.cover-meta-line:last-child { margin-bottom: 0; }
+.cover-meta-id { color: var(--cover-ink); font-weight: 600; }
 
-.cover-action { border: 1px solid var(--cover-gold); border-radius: 6px; padding: 20px 24px; background: rgba(201, 168, 76, 0.07); }
-.cover-action-label { margin: 0 0 10px; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-gold); }
-.cover-action-text { margin: 0 0 14px; font-size: 10.5pt; line-height: 1.5; color: var(--cover-ink); max-width: 74ch; }
-.cover-action-meta { display: flex; gap: 32px; flex-wrap: wrap; }
-.cover-action-item { display: flex; flex-direction: column; gap: 3px; }
-.cover-action-k { font-size: 7.5pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-ink-muted); }
-.cover-action-v { font-size: 9.5pt; color: var(--cover-ink); }
-
-.cover-consequence { display: flex; gap: 12px; align-items: baseline; font-size: 9pt; }
-.cover-consequence-label { flex: 0 0 auto; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cover-ink-muted); }
-.cover-consequence-text {
-  flex: 1 1 auto; color: var(--cover-ink-muted);
-  display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+.cover-title-block { display: flex; flex-direction: column; gap: 20px; }
+.cover-title {
+  margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 50pt;
+  line-height: 0.98; letter-spacing: -0.01em; text-transform: uppercase; color: var(--cover-ink);
+}
+.cover-title-meta { display: flex; flex-direction: column; gap: 5px; }
+.cover-title-meta-line {
+  margin: 0; font-family: var(--font-mono); font-size: 8.5pt; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted);
 }
 
-.cover-footnote { margin: 0; font-size: 7pt; color: var(--cover-ink-muted); opacity: 0.7; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; text-align: right; }
+/* The primary signal -- the report's single most important object.
+   `.cover-signal-svg` (see _render_signal_channels) sits as a quiet
+   compositional element, not a chart with axes or a legend. */
+.cover-signal-zone {
+  display: flex; align-items: center; gap: 28px;
+  border-top: 1px solid var(--cover-line); border-bottom: 1px solid var(--cover-line); padding: 26px 0;
+}
+.cover-signal-svg { flex: 0 0 120px; width: 120px; height: 200px; }
+.cover-signal-content { flex: 1 1 auto; min-width: 0; }
+.cover-signal-eyebrow {
+  margin: 0 0 16px; font-family: var(--font-mono); font-size: 8.5pt; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal);
+}
+.cover-signal-code {
+  margin: 0 0 2px; font-family: var(--font-display); font-weight: 900; font-size: 14pt;
+  letter-spacing: 0.02em; color: var(--cover-ink); opacity: 0.82;
+}
+.cover-signal-title {
+  margin: 0 0 20px; font-family: var(--font-display); font-weight: 700; font-size: 14pt;
+  line-height: 1.3; letter-spacing: -0.005em; text-transform: uppercase; color: var(--cover-ink); max-width: 42ch;
+}
+.cover-signal-figure {
+  margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 54pt;
+  letter-spacing: -0.02em; line-height: 1; color: var(--cover-ink); font-variant-numeric: tabular-nums;
+}
+.cover-signal-figure-label {
+  margin: 10px 0 22px; font-family: var(--font-mono); font-size: 8.5pt; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal);
+}
+.cover-signal-stats { display: flex; gap: 30px; flex-wrap: wrap; }
+.cover-stat { display: flex; flex-direction: column; gap: 6px; }
+.cover-stat-k {
+  font-family: var(--font-mono); font-size: 7pt; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--cover-ink-muted);
+}
+.cover-stat-v { font-family: var(--font-display); font-weight: 700; font-size: 13pt; color: var(--cover-ink); font-variant-numeric: tabular-nums; }
+
+.cover-action { display: flex; flex-direction: column; gap: 10px; }
+.cover-action-rule { width: 36px; height: 2px; background: var(--signal); }
+.cover-action-label {
+  margin: 0; font-family: var(--font-mono); font-size: 8pt; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal);
+}
+.cover-action-text { margin: 0; font-family: var(--font-sans); font-size: 10.5pt; line-height: 1.5; color: var(--cover-ink); max-width: 74ch; }
+.cover-action-meta { display: flex; gap: 32px; flex-wrap: wrap; margin-top: 2px; }
+.cover-action-item { display: flex; flex-direction: column; gap: 4px; }
+.cover-action-k {
+  font-family: var(--font-mono); font-size: 7.5pt; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--cover-ink-muted);
+}
+.cover-action-v { font-family: var(--font-sans); font-size: 9.5pt; color: var(--cover-ink); }
+
+.cover-footer-row {
+  display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 7.5pt;
+  font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cover-ink-muted);
+  padding-top: 16px; border-top: 1px solid var(--cover-line);
+}
 
 /* ---- Section rhythm ---- */
 .section { margin-bottom: 0; padding: 24px 16px 32px; }
 .section-title {
-  font-size: 16pt; font-weight: 600; letter-spacing: -0.005em; color: var(--ink);
+  font-family: var(--font-display); font-size: 17pt; font-weight: 800; letter-spacing: -0.005em; color: var(--ink);
   margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
 }
 .section-intro { font-size: 9.5pt; color: var(--ink-muted); margin: 0 0 12px; max-width: 72ch; }
@@ -1254,9 +1434,9 @@ h1, h2, h3, h4 { margin: 0; }
 /* ---- KPI dashboard ---- */
 .kpi-grid { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
 .kpi-card { flex: 1 1 calc(50% - 8px); }
-.kpi-label { font-size: 8pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; }
-.kpi-score { font-size: 22pt; font-weight: 600; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: 4px; line-height: 1.1; }
-.kpi-target { font-size: 8.5pt; color: var(--ink-faint); margin-bottom: 8px; }
+.kpi-label { font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; }
+.kpi-score { font-family: var(--font-display); font-size: 23pt; font-weight: 800; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: 4px; line-height: 1.1; }
+.kpi-target { font-family: var(--font-mono); font-size: 8pt; color: var(--ink-faint); margin-bottom: 8px; }
 .kpi-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 
 .hbar-track { height: 5px; background: var(--line-soft); border-radius: 2px; overflow: hidden; }
@@ -1269,26 +1449,27 @@ h1, h2, h3, h4 { margin: 0; }
 .hbar-fill.severity-high { background: var(--red); }
 .hbar-fill.severity-medium { background: var(--amber); }
 .hbar-fill.severity-low { background: var(--ink-muted); }
-.hbar-fill.hbar-confidence, .hbar-fill.hbar-neutral { background: var(--gold); }
+.hbar-fill.hbar-confidence, .hbar-fill.hbar-neutral { background: var(--ink-muted); }
+.hbar-fill.hbar-confidence-signal { background: var(--signal); }
 .hbar-fill.hbar-flag { background: var(--red); }
 
 .confidence-track { margin: 8px 0 12px; }
 
 .fact-grid { display: flex; flex-direction: column; gap: 8px; }
 .fact-card { margin-bottom: 0; }
-.fact-label { font-size: 8pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
+.fact-label { font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
 .fact-value { font-size: 12pt; font-weight: 600; line-height: 1.4; color: var(--ink); margin-bottom: 0; }
 
 /* ---- Charts ---- */
 .chart-card { margin-bottom: 0; padding: 12px; }
 .chart-card-full { margin-bottom: 8px; }
-.chart-title { font-size: 12pt; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+.chart-title { font-size: 12pt; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
 
 .hbar-row { margin-bottom: 8px; }
 .hbar-row:last-child { margin-bottom: 0; }
 .hbar-row-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; font-size: 9pt; }
 .hbar-label { color: var(--ink); font-weight: 500; }
-.hbar-value { color: var(--ink-muted); font-variant-numeric: tabular-nums; font-size: 8.5pt; }
+.hbar-value { font-family: var(--font-mono); color: var(--ink-muted); font-variant-numeric: tabular-nums; font-size: 8pt; }
 .hbar-meta { margin-top: 4px; font-size: 7.5pt; }
 .hbar-flag-label { color: var(--red); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
 
@@ -1296,8 +1477,8 @@ h1, h2, h3, h4 { margin: 0; }
 .donut { position: relative; width: 100px; height: 100px; border-radius: 50%; flex: 0 0 auto; }
 .donut::after { content: ""; position: absolute; inset: 14px; border-radius: 50%; background: var(--card-bg); }
 .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
-.donut-value { font-size: 15pt; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
-.donut-caption { font-size: 7.5pt; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); }
+.donut-value { font-family: var(--font-display); font-size: 15pt; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+.donut-caption { font-family: var(--font-mono); font-size: 7pt; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); }
 .donut-legend { display: flex; flex-direction: column; gap: 8px; font-size: 9pt; color: var(--ink-muted); }
 .legend-item { display: flex; align-items: center; gap: 8px; }
 .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
@@ -1308,16 +1489,16 @@ h1, h2, h3, h4 { margin: 0; }
 .table-wrap { overflow-x: auto; }
 .data-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
 .data-table th {
-  text-align: left; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  font-family: var(--font-mono); text-align: left; font-size: 7pt; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--ink-faint); padding: 6px 8px; border-bottom: 1px solid var(--line);
 }
-.data-table td { padding: 6px 8px; border-bottom: 1px solid var(--line-soft); color: var(--ink); white-space: nowrap; }
+.data-table td { font-family: var(--font-mono); font-variant-numeric: tabular-nums; padding: 6px 8px; border-bottom: 1px solid var(--line-soft); color: var(--ink); white-space: nowrap; }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table td:first-child, .data-table th:first-child { padding-left: 0; }
 
 /* ---- Badges ---- */
 .badge {
-  display: inline-block; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  display: inline-block; font-family: var(--font-mono); font-size: 7.5pt; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   padding: 3px 7px; border-radius: var(--radius); background: var(--line-soft); color: var(--ink-muted);
 }
 .badge.status-healthy { background: var(--green-soft); color: var(--green); }
@@ -1328,10 +1509,17 @@ h1, h2, h3, h4 { margin: 0; }
 .badge.severity-medium { background: var(--amber-soft); color: var(--amber); }
 .badge.severity-low { background: var(--line-soft); color: var(--ink-muted); }
 .badge-outline { background: transparent; border: 1px solid var(--line); color: var(--ink-muted); }
-.badge-priority { background: var(--gold-soft); color: var(--gold); }
+/* The default priority badge is deliberately neutral -- only the single
+   highest-priority item (P1) is marked in Solven orange, via the
+   additional .badge-priority-signal class layered on top (see
+   _render_root_causes / _render_action_card). Every other priority
+   stays structurally clear (still a badge) without competing for the
+   same visual weight as the one selected signal. */
+.badge-priority { background: transparent; border: 1px solid var(--line); color: var(--ink-muted); }
+.badge-priority.badge-priority-signal { background: var(--signal); border-color: var(--signal); color: var(--cover-ink); }
 
 /* ---- Trend indicators ---- */
-.trend { font-size: 8pt; font-weight: 600; }
+.trend { font-family: var(--font-mono); font-size: 8pt; font-weight: 600; }
 .trend-up { color: var(--green); }
 .trend-down { color: var(--red); }
 .trend-flat { color: var(--ink-muted); }
@@ -1340,13 +1528,13 @@ h1, h2, h3, h4 { margin: 0; }
 /* ---- Label/value rows (meta chips + info rows) ---- */
 .meta-row { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0; }
 .meta-item { display: flex; flex-direction: column; gap: 2px; }
-.meta-k { font-size: 7.5pt; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); }
+.meta-k { font-family: var(--font-mono); font-size: 7pt; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); }
 .meta-v { font-size: 9pt; color: var(--ink); }
 
 .info-stack { margin-top: 8px; }
 .info-row { display: flex; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line-soft); font-size: 9.5pt; }
 .info-stack .info-row:first-child { border-top: none; padding-top: 0; }
-.info-label { flex: 0 0 auto; width: 96px; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); }
+.info-label { flex: 0 0 auto; width: 96px; font-family: var(--font-mono); font-size: 7pt; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); }
 .info-value { flex: 1 1 auto; color: var(--ink-muted); }
 
 /* ---- Executive summary ---- */
@@ -1358,7 +1546,7 @@ h1, h2, h3, h4 { margin: 0; }
   font-size: 9.5pt; color: var(--ink-muted); vertical-align: top;
 }
 .summary-row:last-child .summary-domain, .summary-row:last-child .summary-text { border-bottom: none; }
-.summary-domain { width: 170px; padding-right: 16px; color: var(--gold); font-weight: 600; font-size: 8pt; text-transform: uppercase; letter-spacing: 0.05em; }
+.summary-domain { width: 170px; padding-right: 16px; font-family: var(--font-mono); color: var(--ink); font-weight: 600; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.05em; }
 
 /* ---- Risks / root causes ---- */
 .risk-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
@@ -1366,7 +1554,7 @@ h1, h2, h3, h4 { margin: 0; }
   flex: 0 0 auto; width: 22px; height: 22px; border-radius: var(--radius); background: var(--ink);
   color: var(--card-bg); font-size: 9pt; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
 }
-.risk-title { font-size: 11.5pt; font-weight: 600; letter-spacing: -0.005em; flex: 1 1 auto; }
+.risk-title { font-size: 11.5pt; font-weight: 700; letter-spacing: -0.005em; flex: 1 1 auto; }
 .risk-badges { display: flex; gap: 6px; flex: 0 0 auto; }
 
 .root-cause-header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
@@ -1374,6 +1562,9 @@ h1, h2, h3, h4 { margin: 0; }
 .root-cause-note { font-size: 9.5pt; color: var(--ink-muted); }
 .evidence-list { margin: 0 0 8px; padding-left: 16px; font-size: 9.5pt; color: var(--ink-muted); }
 .evidence-list li { margin-bottom: 4px; }
+/* The single highest-confidence root cause reads as distinctly selected --
+   a thin signal-orange rule, nothing heavier (no fill, no oversized card). */
+.root-cause-card-signal { border-left: 2px solid var(--signal); padding-left: 14px; }
 
 /* ---- If No Action ---- */
 .no-action-card { border-left: 2px solid var(--red); }
@@ -1382,17 +1573,18 @@ h1, h2, h3, h4 { margin: 0; }
 .phase-stack { display: flex; flex-direction: column; gap: 20px; }
 .phase-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
 .phase-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; background: var(--ink-muted); }
-.phase-immediate .phase-dot { background: var(--red); }
+.phase-immediate .phase-dot { background: var(--signal); }
 .phase-near-term .phase-dot { background: var(--amber); }
 .phase-strategic .phase-dot { background: var(--blue); }
-.phase-longer-term .phase-dot { background: var(--gold); }
-.phase-title { font-size: 12pt; font-weight: 600; color: var(--ink); margin: 0; }
+.phase-longer-term .phase-dot { background: var(--ink-faint); }
+.phase-title { font-size: 12pt; font-weight: 700; color: var(--ink); margin: 0; }
 .phase-cards { display: flex; flex-direction: column; gap: 12px; }
 .action-card { margin-bottom: 0; }
 .action-card-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
-.action-title { font-size: 11pt; font-weight: 600; margin: 0; }
+.action-title { font-size: 11pt; font-weight: 700; margin: 0; }
 .action-reason { font-size: 9.5pt; }
 .action-rationale { font-size: 9.5pt; color: var(--ink-muted); }
+.action-card-signal { border-left: 2px solid var(--signal); padding-left: 14px; }
 
 /* ---- Financial exposure / expected impact ---- */
 .impact-list { list-style: none; margin: 0; padding: 0; }
@@ -1405,35 +1597,45 @@ h1, h2, h3, h4 { margin: 0; }
 .dept-grid { display: flex; flex-wrap: wrap; gap: 16px; }
 .dept-card { flex: 1 1 calc(50% - 8px); margin-bottom: 0; position: relative; }
 .dept-grid .dept-card:last-child:nth-child(odd) { flex-basis: 100%; }
-.dept-index { position: absolute; top: 16px; right: 16px; font-size: 8pt; font-weight: 700; color: var(--line); font-variant-numeric: tabular-nums; }
-.dept-title { font-size: 11.5pt; font-weight: 600; margin-bottom: 8px; padding-right: 28px; }
+.dept-index { position: absolute; top: 16px; right: 16px; font-family: var(--font-mono); font-size: 8pt; font-weight: 600; color: var(--line); font-variant-numeric: tabular-nums; }
+.dept-title { font-size: 11.5pt; font-weight: 700; margin-bottom: 8px; padding-right: 28px; }
 .dept-text { font-size: 9.5pt; color: var(--ink-muted); }
 
 /* ---- Appendix ---- */
-.appendix-heading { font-size: 12pt; font-weight: 600; margin: 16px 0 6px; }
+.appendix-heading { font-size: 12pt; font-weight: 700; margin: 16px 0 6px; }
 .appendix-heading:first-child { margin-top: 0; }
 .appendix-card p { font-size: 9.5pt; color: var(--ink-muted); }
 .limitations-list { margin: 0; padding-left: 16px; font-size: 9pt; color: var(--ink-muted); }
 .limitations-list li { margin-bottom: 4px; }
 .appendix-footnote { font-size: 8pt; color: var(--ink-faint); margin-top: 16px; }
+/* Deliberately the quietest text on the page -- see the design-system note
+   above _render_footer: internal model/provider metadata for auditability,
+   not a client-facing product identity. */
+.appendix-model-note { font-family: var(--font-mono); font-size: 6.5pt; color: var(--ink-faint); opacity: 0.75; margin-top: 6px; }
 
 .empty-state { color: var(--ink-faint); font-style: italic; font-size: 9.5pt; }
 
 /* ---- Executive Conclusion ---- */
-.conclusion-card { border-left: 2px solid var(--gold); }
-.conclusion-headline { font-size: 12pt; font-weight: 600; color: var(--ink); margin-bottom: 16px; }
+.conclusion-card { border-left: 2px solid var(--ink); }
+.conclusion-headline { font-size: 12pt; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
 .conclusion-block { margin-bottom: 12px; }
 .conclusion-block:last-of-type { margin-bottom: 0; }
-.conclusion-label { font-size: 8pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.conclusion-label { font-family: var(--font-mono); font-size: 7.5pt; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
 .conclusion-list { margin: 0; padding-left: 16px; font-size: 9.5pt; color: var(--ink-muted); }
 .conclusion-list li { margin-bottom: 4px; }
 .conclusion-list li:last-child { margin-bottom: 0; }
 .conclusion-outlook { font-size: 9.5pt; color: var(--ink); padding-top: 12px; margin-top: 4px; border-top: 1px solid var(--line-soft); }
 
-/* ---- Closing footer ---- */
-.report-footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 8pt; color: var(--ink-faint); }
-.report-footer p { margin: 0 0 4px; }
-.confidential { letter-spacing: 0.04em; text-transform: uppercase; font-size: 7.5pt; }
+/* ---- Closing system signature (Part 3) ---- */
+.report-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); }
+.signature-block { margin-bottom: 14px; }
+.signature-brand { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 13pt; letter-spacing: -0.005em; color: var(--ink); }
+.signature-subline { margin: 2px 0 14px; font-family: var(--font-mono); font-size: 7.5pt; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+.signature-meta { display: flex; flex-wrap: wrap; gap: 6px 28px; }
+.signature-meta-item { display: flex; flex-direction: column; gap: 3px; }
+.signature-k { font-family: var(--font-mono); font-size: 6.5pt; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+.signature-v { font-family: var(--font-mono); font-size: 8pt; color: var(--ink); }
+.confidential { letter-spacing: 0.04em; text-transform: uppercase; font-size: 7.5pt; color: var(--ink-faint); }
 
 /* ==========================================================
    Responsive -- single-column, print-first already; only
@@ -1441,7 +1643,9 @@ h1, h2, h3, h4 { margin: 0; }
    ========================================================== */
 @media screen and (max-width: 560px) {
   .report { padding: 20px 16px 32px; }
-  .cover-title { font-size: 22pt; }
+  .cover-title { font-size: 28pt; }
+  .cover-signal-zone { flex-direction: column; align-items: flex-start; }
+  .cover-signal-svg { display: none; }
   .kpi-card, .dept-card { flex-basis: 100%; }
 }
 
@@ -1457,11 +1661,23 @@ h1, h2, h3, h4 { margin: 0; }
   h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
   p, li { orphans: 3; widows: 3; }
 
-  /* @page content box is 297mm - 14mm top - 16mm bottom = 267mm tall;
-     stop a hair short so rounding never tips the panel onto page two. */
+  /* Full-bleed dossier cover: negative-margin the panel out past the
+     @page margin box on the top/left/right (back to the true page edge),
+     then re-inset its own content with padding -- the standard technique
+     for a full-bleed page inside an otherwise-marginned print document.
+     The bottom edge deliberately stops at the normal @page content
+     boundary rather than also bleeding -- Chromium's PDF pagination
+     hard-clips painted content at that boundary regardless of negative
+     margin/explicit height (verified empirically: top/left/right bleed
+     correctly, bottom does not), so the cover shares the same thin
+     bottom band every other page already reserves for the running
+     "Confidential / Page X of Y" footer, instead of visibly clipping.
+     Every other .section keeps the normal @page margin untouched. */
   .cover {
-    break-after: page; page-break-after: always; margin: 0;
-    min-height: 262mm;
+    break-after: page; page-break-after: always;
+    margin: -14mm -14mm 0 -14mm;
+    width: 210mm; min-height: 278mm;
+    padding: 20mm 16mm 6mm;
     justify-content: space-between;
   }
 

@@ -134,6 +134,8 @@ def _success_payload(report: dict[str, Any]) -> dict[str, Any]:
             "markdown": metadata.get("saved_markdown_path"),
             "html": metadata.get("saved_html_path"),
             "pdf": metadata.get("saved_pdf_path"),
+            "email_html": metadata.get("saved_email_html_path"),
+            "email_meta": metadata.get("saved_email_meta_path"),
         },
         "summary": {
             "overall_business_health_score": overall.get("score"),
