@@ -45,6 +45,7 @@ keeps the AI's surface area small and auditable.
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 import time
@@ -74,17 +75,70 @@ CURRENCY = CONFIG["company"]["currency"]
 
 DEFAULT_MODEL = "openai/gpt-oss-120b"
 DEFAULT_TEMPERATURE = 0.3
-# Groq's token-per-minute rate limit counts input tokens *and*
+# Groq's token-per-minute rate limit counts input (prompt) tokens *and*
 # max_output_tokens against the same budget for a single request (the
-# API reserves max_output_tokens up front) -- this platform's free/
-# on-demand tier caps at 12,000 TPM, so this is sized to leave
-# comfortable headroom next to the curated (not dumped) AI context
-# this module sends, which runs several thousand tokens on its own
-# given nine analytics domains.
-DEFAULT_MAX_OUTPUT_TOKENS = 4000
+# API reserves max_output_tokens up front, whether or not the response
+# actually uses all of it) -- openai/gpt-oss-120b is capped at 8,000 TPM
+# on this platform's current Groq tier. A real prior generation's full
+# narrative response (every field REQUIRED_NARRATIVE_KEYS asks for,
+# compact JSON) measured ~2,700-3,000 tokens by this same estimate, so
+# 3,200 leaves a real margin above observed usage without reserving
+# tokens the narrative never needs -- see PROMPT_SAFETY_CEILING_TOKENS
+# below for how this combines with the curated (not dumped) prompt to
+# stay safely under the 8,000 TPM ceiling, close to this platform's own
+# ~6,500-token target for the combined request.
+DEFAULT_MAX_OUTPUT_TOKENS = 3200
+# openai/gpt-oss-120b is a reasoning model: before writing its visible
+# JSON answer it spends completion_tokens on an internal chain of
+# thought that Groq bills as "reasoning_tokens" -- counted against
+# max_output_tokens (and therefore the same TPM budget) exactly like
+# the visible answer, but never appearing in the response content.
+# Measured directly against this platform's real prompt: the default
+# reasoning effort burned ~3,365 of a 4,800-token completion budget on
+# reasoning alone and still got cut off mid-JSON (missing keys) before
+# finishing; "low" dropped that to ~280-300 reasoning tokens and
+# produced the full, complete, equally coherent narrative in ~2,100-
+# 2,150 total completion tokens. This is the real fix for the 413 this
+# platform hit in CI -- shrinking the prompt alone could not have
+# closed a gap this large, since the reasoning overhead scaled with
+# max_output_tokens, not with prompt size.
+DEFAULT_REASONING_EFFORT = "low"
 DEFAULT_TIMEOUT_SECONDS = 75.0
 DEFAULT_MAX_RETRIES = 2
 RETRY_BACKOFF_SECONDS = 1.0
+
+# --------------------------------------------------------------------------
+# Prompt size budget
+# --------------------------------------------------------------------------
+#
+# _estimate_tokens is a dependency-free approximation (no tokenizer
+# package is installed, and this platform avoids adding one purely for
+# a pre-flight size check) calibrated against a real failure: a prompt
+# that Groq's own error message reported as 10,576 total TPM tokens
+# measured 25,518 characters here, and this platform's max_output_tokens
+# was 4,000 at the time, so the prompt itself was ~6,576 tokens for
+# 25,518 chars -- a ratio of ~3.88 chars/token. CHARS_PER_TOKEN below is
+# rounded down from that (more chars assumed per token = fewer estimated
+# tokens is the *optimistic* direction, so this is deliberately rounded
+# to the conservative/pessimistic side instead) to make the estimate a
+# safe upper bound rather than a best-fit average.
+CHARS_PER_TOKEN_ESTIMATE = 3.5
+# PROMPT_TARGET_TOKENS is the platform's own goal for the *prompt* half
+# of the budget ("ideally under ~6,500 tokens" of total TPM usage,
+# minus a realistic max_output_tokens reservation -- see
+# DEFAULT_MAX_OUTPUT_TOKENS above); exceeding it is logged but not
+# fatal. PROMPT_SAFETY_CEILING_TOKENS is the hard stop: prompt +
+# configured max_output_tokens together, checked against a margin below
+# the real 8,000 TPM ceiling so this platform fails fast with an
+# actionable error instead of spending a request on a provider-side 413.
+PROMPT_TARGET_TOKENS = 6500
+PROMPT_SAFETY_CEILING_TOKENS = 7500
+
+
+def _estimate_tokens(text: str) -> int:
+    """Conservative, dependency-free token-count approximation -- see the
+    calibration note above CHARS_PER_TOKEN_ESTIMATE."""
+    return math.ceil(len(text) / CHARS_PER_TOKEN_ESTIMATE)
 
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent.parent / "outputs"
 REPORT_JSON_FILENAME = "executive_report.json"
@@ -140,6 +194,15 @@ class AIProviderError(ReportGenerationError):
     """The AI provider failed to produce a usable response (auth, network, rate limit, timeout)."""
 
 
+class PromptTooLargeError(AIProviderError):
+    """The assembled prompt's estimated token count exceeds PROMPT_SAFETY_CEILING_TOKENS.
+
+    Raised before the network call so an oversized prompt fails fast with
+    an actionable message instead of spending a request on a provider-side
+    413/rate_limit_exceeded -- see _estimate_tokens and the check in
+    generate_executive_report for where this is computed."""
+
+
 class ResponseValidationError(ReportGenerationError):
     """The AI's response, or the assembled report, failed structural validation."""
 
@@ -156,6 +219,16 @@ class AIProvider(ABC):
     def model_name(self) -> str:
         raise NotImplementedError
 
+    @property
+    def max_output_tokens(self) -> int:
+        """How many completion tokens this provider will reserve for the
+        response. Non-abstract (defaults to DEFAULT_MAX_OUTPUT_TOKENS) so
+        this is purely additive for existing providers -- only used by
+        generate_executive_report's pre-flight prompt-size check to
+        estimate total TPM usage; GroqProvider overrides it with its own
+        configured value."""
+        return DEFAULT_MAX_OUTPUT_TOKENS
+
     @abstractmethod
     def generate_json(self, system_prompt: str, user_prompt: str) -> str:
         raise NotImplementedError
@@ -169,6 +242,7 @@ class AIConfig:
     max_retries: int
     temperature: float
     max_output_tokens: int
+    reasoning_effort: str
 
     @classmethod
     def from_env(cls) -> "AIConfig":
@@ -186,6 +260,7 @@ class AIConfig:
             max_retries=int(_float_env("GROQ_MAX_RETRIES", DEFAULT_MAX_RETRIES)),
             temperature=_float_env("GROQ_TEMPERATURE", DEFAULT_TEMPERATURE),
             max_output_tokens=int(_float_env("GROQ_MAX_OUTPUT_TOKENS", DEFAULT_MAX_OUTPUT_TOKENS)),
+            reasoning_effort=os.getenv("GROQ_REASONING_EFFORT", "").strip() or DEFAULT_REASONING_EFFORT,
         )
 
 
@@ -228,6 +303,10 @@ class GroqProvider(AIProvider):
     def model_name(self) -> str:
         return self._config.model
 
+    @property
+    def max_output_tokens(self) -> int:
+        return self._config.max_output_tokens
+
     def generate_json(self, system_prompt: str, user_prompt: str) -> str:
         def _call() -> str:
             response = self._client.chat.completions.create(
@@ -239,6 +318,7 @@ class GroqProvider(AIProvider):
                 response_format={"type": "json_object"},
                 temperature=self._config.temperature,
                 max_tokens=self._config.max_output_tokens,
+                reasoning_effort=self._config.reasoning_effort,
             )
             content = response.choices[0].message.content if response.choices else None
             if not content or not content.strip():
@@ -603,79 +683,183 @@ def _build_kpi_dashboard(
 # AI context: the curated (not dumped) data the model is allowed to see
 # --------------------------------------------------------------------------
 
+# Per-domain, hand-picked subset of each domain's `summary` dict -- the
+# same 3-5 headline facts each domain's own section already leads with
+# in ai/html_report_renderer.py's Python-templated `intro` line (see
+# e.g. _render_commercial_performance), not the full 9-17-field summary
+# dict analysis/*.py returns. A domain's raw summary carries plenty of
+# figures (average price per sqm, appointment rates, bounced-payment
+# counts, ...) that no field in NARRATIVE_JSON_SCHEMA_EXAMPLE ever asks
+# the model to discuss -- sending them anyway was pure token cost for
+# zero narrative benefit. `True` marks a field for EGP-display
+# formatting (see _curate_domain_summary), matching the same
+# raw-float-avoidance rule as every other currency value in this context.
+_DOMAIN_KEY_FACTS: dict[str, list[tuple[str, bool]]] = {
+    "commercial_performance": [
+        ("net_contracted_sales_value", True), ("units_sold_net", False),
+        ("gross_to_net_realization_pct", False), ("contract_cancellation_rate_pct", False),
+        ("average_discount_pct", False),
+    ],
+    "lead_funnel": [
+        ("total_leads", False), ("leads_converted_to_sale", False),
+        ("lead_to_reservation_conversion_pct", False), ("response_sla_attainment_pct", False),
+    ],
+    "inventory_pricing": [
+        ("available_units", False), ("available_inventory_value", True),
+        ("stale_units_pct_of_available", False),
+    ],
+    "marketing_performance": [
+        ("total_spend", True), ("total_leads", False), ("total_contracts", False),
+        ("overall_marketing_efficiency_ratio", False),
+    ],
+    "sales_team_broker": [
+        ("broker_share_of_reservations_pct", False), ("commission_as_pct_of_net_sales", False),
+    ],
+    "collections_risk": [
+        ("total_overdue_amount", True), ("overdue_amount_pct_of_due", False), ("collection_rate_pct", False),
+    ],
+    "cancellations": [
+        ("total_cancellations", False), ("contract_cancellation_rate_pct", False), ("cancelled_gross_value", True),
+    ],
+    "construction_handover": [
+        ("handovers_delayed", False), ("total_handovers_scheduled", False), ("handover_delay_rate_pct", False),
+    ],
+    "customer_experience": [
+        ("total_cases", False), ("negative_sentiment_pct", False), ("resolution_sla_attainment_pct", False),
+    ],
+}
+# Free-text fields that could run long in an unusual dataset (a client
+# with more projects/brokers than this demo's five) are capped so one
+# verbose entry can't blow the prompt budget on its own -- long enough
+# for the one full sentence these fields are, in practice.
+_FREE_TEXT_CONTEXT_CHAR_CAP = 220
+
+
+def _curate_domain_summary(summary: dict[str, Any], domain: str, currency: str) -> dict[str, Any]:
+    curated: dict[str, Any] = {}
+    for key, is_currency in _DOMAIN_KEY_FACTS.get(domain, []):
+        value = summary.get(key)
+        curated[key] = _fmt_currency(value, currency) if is_currency and value is not None else value
+    return curated
+
+
 def _build_ai_context(skeleton: dict[str, Any]) -> dict[str, Any]:
-    """Curate exactly the fields the AI needs to write narrative -- not the full raw domain dicts.
+    """Curate exactly the fields the AI needs to write narrative -- not the
+    full raw domain dicts, and not fields the rendered report already
+    carries but no narrative field ever discusses.
 
-    Two deliberate trims beyond simple curation:
+    Every field below is required by at least one instruction embedded
+    in NARRATIVE_JSON_SCHEMA_EXAMPLE's own field values; anything that
+    duplicated another field in this same context (in full or in part)
+    or was never referenced by any narrative instruction was cut.
+    Concretely, versus a naive "hand over every skeleton field":
 
-    - recommended_actions is slimmed to title/business_issue/owner/
-      horizon/confidence only: its evidence and financial_exposure
-      fields duplicate what root_causes already carries in full (every
-      action is built 1:1 from a root cause -- see
-      analysis/correlations.py::_build_priority_actions), and repeating
-      that evidence a second time was the single largest contributor to
-      this prompt exceeding the AI provider's tokens-per-minute budget.
+    - `company_name` and `kpi_dashboard` are dropped entirely: the
+      company name is already embedded in SYSTEM_PROMPT, and no
+      narrative instruction anywhere references "kpi_dashboard" -- it's
+      rendered straight from the skeleton onto the Executive Dashboard
+      page without any AI involvement.
+    - recommended_actions sends only `title` + `recommended_action` (the
+      actual prescribed action -- what "recommendation_rationale" is a
+      rationale *for*, and not sent anywhere else). `owner`, `horizon`,
+      and `confidence` are dropped: every action is built 1:1 from a
+      root cause of the same title (analysis/correlations.py::
+      _build_priority_actions) and always carries that root cause's
+      identical values -- root_causes below is the one copy, joined by
+      title. `business_issue`, `evidence`, and `financial_exposure` are
+      dropped outright: all three duplicate root_causes' own
+      `description`/evidence/`financial_exposure` for the same finding.
+    - top_business_risks sends only `title` + `severity` (a label
+      derived from confidence, not present anywhere else). Its
+      `confidence`, `project_id`, `broker_id`, and `evidence` (exactly
+      `"; ".join(root_causes[i].statistical_evidence +
+      root_causes[i].operational_evidence[:2])` for the matching root
+      cause) are all dropped: top_business_risks is root_causes
+      re-ranked and truncated to TOP_RISK_COUNT, so every one of those
+      values already appears in root_causes below, joined by title.
+    - financial_exposure drops each line item's `description` (static,
+      non-numeric boilerplate -- e.g. "Total overdue receivables
+      outstanding across all projects" -- already rendered directly
+      from the skeleton by ai/html_report_renderer.py without any AI
+      involvement, so the model doesn't need it to write anything) and
+      its `note` (methodology prose about how the total is summed, not
+      requested by any narrative field).
+    - forecast_outlook drops `methodology` (a full paragraph on the
+      run-rate projection method; the appendix's own Python-authored
+      methodology text already covers this for the reader, and no
+      narrative field is asked to explain the calculation).
+    - overall_business_health drops each domain's `trend` sub-dict
+      (only "score" and "status" are asked for by
+      "overall_business_health_narrative").
+    - domain_summaries sends each domain's curated _DOMAIN_KEY_FACTS
+      subset (see above) instead of its full summary dict.
     - Every raw currency float that could end up quoted verbatim in
       AI-authored prose (root_causes' financial_exposure/customer_impact,
-      financial_exposure's line-item amounts, kpi_dashboard's currency
-      values) is either dropped (the already-formatted evidence/
+      financial_exposure's line-item amounts, domain_summaries' currency
+      fields) is either dropped (the already-formatted evidence/
       description text already conveys it in words) or pre-formatted
-      into an "EGP 8.4M"-style display string -- the model is instructed
-      to copy figures exactly as given, so a raw float like
-      1075599619.1 in the context becomes exactly that ugly string in
-      the report if it's ever handed one.
+      into an "EGP 8.4M"-style display string --
+      the model is instructed to copy figures exactly as given, so a raw
+      float like 1075599619.1 in the context becomes exactly that ugly
+      string in the report if it's ever handed one.
     """
     domains = skeleton["domains"]
+    # owner/horizon/confidence are intentionally NOT repeated here: every
+    # priority action is built 1:1 from a root cause of the same title
+    # (analysis/correlations.py::_build_priority_actions), and always
+    # carries the identical owner/horizon/confidence as that root cause
+    # -- root_causes below is the one copy. recommended_action is the
+    # one field genuinely unique to this list (the actual prescription
+    # "recommendation_rationale" is a rationale *for*).
     slim_actions = [
-        {"title": a["title"], "business_issue": a["business_issue"][:220], "owner": a["owner"],
-         "horizon": a["horizon"], "confidence": a["confidence"]}
+        {"title": a["title"], "recommended_action": a["recommended_action"][:_FREE_TEXT_CONTEXT_CHAR_CAP]}
         for a in skeleton["recommended_actions"]
     ]
     slim_root_causes = [
         {"title": rc["title"], "category": rc["category"], "confidence": rc["confidence"],
-         "description": rc["description"], "statistical_evidence": rc.get("statistical_evidence", []),
+         "description": rc["description"][:_FREE_TEXT_CONTEXT_CHAR_CAP],
+         "statistical_evidence": rc.get("statistical_evidence", []),
          "operational_evidence": rc.get("operational_evidence", []),
          "owner": rc["owner"], "horizon": rc["horizon"]}
         for rc in skeleton["root_causes"]
     ]
+    # title+severity only: top_business_risks is root_causes re-ranked
+    # and truncated to TOP_RISK_COUNT with a derived severity label (see
+    # _build_report_skeleton) -- confidence/project_id/broker_id for the
+    # same finding are already in root_causes above, joined by title.
+    slim_top_business_risks = [
+        {"title": risk["title"], "severity": risk["severity"]}
+        for risk in skeleton["top_business_risks"]
+    ]
     formatted_financial_exposure = {
         "line_items": [
-            {"category": item["category"], "amount_display": _fmt_currency(item["amount"], CURRENCY), "description": item["description"]}
+            {"category": item["category"], "amount_display": _fmt_currency(item["amount"], CURRENCY)}
             for item in skeleton["financial_exposure"].get("line_items", [])
         ],
         "total_material_risk_exposure_display": _fmt_currency(skeleton["financial_exposure"].get("total_material_risk_exposure"), CURRENCY),
     }
-    formatted_kpi_dashboard = [
-        {**card, "value": _fmt_currency(card["value"], CURRENCY) if card["unit"] == "currency" and card["value"] is not None else card["value"]}
-        for card in skeleton["kpi_dashboard"]
-    ]
     forecast = skeleton["forecast_outlook"]
-    formatted_forecast_outlook = dict(forecast)
+    formatted_forecast_outlook = {k: v for k, v in forecast.items() if k != "methodology"}
     for money_key in ("expected_month_end_net_sales", "projected_full_year_net_sales", "expected_next_month_collections", "current_overdue_exposure"):
         if money_key in formatted_forecast_outlook:
             formatted_forecast_outlook[money_key] = _fmt_currency(formatted_forecast_outlook[money_key], CURRENCY)
+    slim_overall_business_health = {
+        domain: {"score": block["score"], "status": block["status"]}
+        for domain, block in skeleton["overall_business_health"].items()
+    }
     return {
-        "company_name": COMPANY_NAME,
-        "overall_business_health": skeleton["overall_business_health"],
-        "kpi_dashboard": formatted_kpi_dashboard,
+        "overall_business_health": slim_overall_business_health,
         "highest_risk_project": skeleton["highest_risk_project"],
         "strongest_project": skeleton["strongest_project"],
         "highest_priority_initiative": skeleton["highest_priority_initiative"],
-        "top_business_risks": skeleton["top_business_risks"],
+        "top_business_risks": slim_top_business_risks,
         "root_causes": slim_root_causes,
         "recommended_actions": slim_actions,
         "financial_exposure": formatted_financial_exposure,
         "forecast_outlook": formatted_forecast_outlook,
         "domain_summaries": {
-            "commercial_performance": domains["commercial_performance"].get("summary", {}),
-            "lead_funnel": domains["lead_funnel"].get("summary", {}),
-            "inventory_pricing": domains["inventory_pricing"].get("summary", {}),
-            "marketing_performance": domains["marketing_performance"].get("summary", {}),
-            "sales_team_broker": domains["sales_team_broker"].get("summary", {}),
-            "collections_risk": domains["collections_risk"].get("summary", {}),
-            "cancellations": domains["cancellations"].get("summary", {}),
-            "construction_handover": domains["construction_handover"].get("summary", {}),
-            "customer_experience": domains["customer_experience"].get("summary", {}),
+            domain: _curate_domain_summary(domains[domain].get("summary", {}), domain, CURRENCY)
+            for domain in _DOMAIN_KEY_FACTS
         },
         "data_quality_status": skeleton["data_quality"].get("status"),
     }
@@ -698,58 +882,60 @@ Rules you must follow without exception:
 6. Distinguish revenue risk, cash-flow risk, margin risk, execution risk, and reputational risk explicitly where the evidence supports it -- do not force-fit a category that isn't grounded in the given evidence.
 7. Return ONLY a single JSON object matching the schema you are given. No markdown code fences, no prose outside the JSON, no trailing commentary."""
 
+# Each field's constraint is stated exactly once, inline as its own
+# schema value -- earlier versions of this prompt gave every field a
+# short description here AND a fuller restatement in a separate
+# "Requirements for each field" section below; that duplication (the
+# same grounding constraint said twice, once per field) was cut for the
+# same reason every duplicated context field above was: it cost prompt
+# tokens without adding information the model didn't already have. No
+# key name or JSON shape changed -- only the never-repeated-elsewhere
+# instruction text moved to live in one place instead of two.
 NARRATIVE_JSON_SCHEMA_EXAMPLE = """{
-  "executive_headline": "string, one sentence naming the single most important business issue this period, citing its financial or operational stake",
-  "why_it_matters": "string, 1-3 sentences on the business stakes of that issue",
-  "consequence_of_inaction": "string, 1-3 sentences, qualitative and/or citing the given financial exposure figures, on what happens if it is not addressed",
-  "executive_summary": "string, 3-5 short paragraphs covering: the headline issue, overall business health across domains, the strongest-performing project, and the CCO's top recommendation",
+  "executive_headline": "1 sentence naming the #1 item in top_business_risks (or highest_priority_initiative if that list is empty), citing its financial/operational stake if given",
+  "why_it_matters": "1-3 sentences grounded in highest_risk_project and the evidence in top_business_risks/root_causes",
+  "consequence_of_inaction": "1-3 sentences, grounded only in financial_exposure already given -- no new numbers, no forecasts beyond what's provided",
+  "executive_summary": "3-5 short paragraphs: open with executive_headline's issue, cover overall_business_health across domains, name strongest_project as a positive counterpoint, state your top recommended_actions item",
   "overall_business_health_narrative": {
-    "commercial_health": "string", "sales_funnel_health": "string", "inventory_health": "string",
-    "marketing_efficiency_health": "string", "collections_health": "string", "cancellations_health": "string",
-    "construction_delivery_health": "string", "handover_readiness_health": "string", "customer_experience_health": "string"
+    "commercial_health": "1 plain-business-terms sentence using this domain's domain_summaries entry and its score/status in overall_business_health",
+    "sales_funnel_health": "same instruction, sales_funnel domain", "inventory_health": "same instruction, inventory domain",
+    "marketing_efficiency_health": "same instruction, marketing domain", "collections_health": "same instruction, collections domain",
+    "cancellations_health": "same instruction, cancellations domain", "construction_delivery_health": "same instruction, construction domain",
+    "handover_readiness_health": "same instruction, handover domain", "customer_experience_health": "same instruction, customer experience domain"
   },
   "risk_narratives": [
-    {"title": "string, must exactly match a title from top_business_risks", "business_impact": "string, executive framing of the financial/operational stake"}
+    {"title": "exact match from a top_business_risks title -- one entry per item in that list", "business_impact": "executive framing of the financial/operational stake"}
   ],
   "root_cause_notes": [
-    {"title": "string, must exactly match a title from root_causes", "executive_note": "string, 1-2 sentences distinguishing measured finding from hypothesis where relevant"}
+    {"title": "exact match from a root_causes title -- one entry per item in that list; empty list (and say so in executive_summary) if root_causes is empty", "executive_note": "1-2 sentences distinguishing measured finding from hypothesis where relevant"}
   ],
   "recommendation_rationale": [
-    {"title": "string, must exactly match a title from recommended_actions", "executive_rationale": "string, 1 sentence"}
+    {"title": "exact match from a recommended_actions title -- one entry per item in that list", "executive_rationale": "1 sentence"}
   ],
   "department_breakdown": {
-    "sales": "string", "marketing": "string", "collections": "string", "construction": "string",
-    "customer_experience": "string", "executive_leadership": "string"
+    "sales": "1 paragraph on what this audience needs from domain_summaries/root_causes/recommended_actions", "marketing": "same instruction, marketing audience",
+    "collections": "same instruction, collections audience", "construction": "same instruction, construction audience",
+    "customer_experience": "same instruction, customer experience audience", "executive_leadership": "same instruction, executive leadership audience"
   },
-  "forecast_narrative": "string, 2-3 sentences on outlook, grounded only in the forecast_outlook figures given -- label them as estimates",
-  "if_no_action_narrative": "string, 2-3 short paragraphs on the likely business consequences of leaving top_business_risks and root_causes unaddressed"
+  "forecast_narrative": "2-3 sentences grounded only in forecast_outlook, labeled as estimates -- if forecast_outlook.available is false, say plainly that insufficient history exists this period",
+  "if_no_action_narrative": "2-3 short paragraphs, grounded only in top_business_risks/root_causes/financial_exposure already given, on the consequences of leaving them unaddressed"
 }"""
 
 
 def _build_user_prompt(context: dict[str, Any]) -> str:
-    context_json = json.dumps(context, indent=2, default=str)
+    # Compact, not pretty-printed: indent=2 alone cost ~19% of this
+    # payload's characters (measured on this platform's real context)
+    # for whitespace the model doesn't need to parse a JSON object.
+    context_json = json.dumps(context, separators=(",", ":"), default=str)
     return f"""Here is this period's real estate operations intelligence, already fully computed by the analytics platform:
 
 ```json
 {context_json}
 ```
 
-Write the narrative content for this period's executive report. Return a single JSON object with exactly these keys and shapes:
+Write the narrative content for this period's executive report. Return a single JSON object with exactly these keys; each field's own value below states its content and grounding requirement -- follow it exactly:
 
-{NARRATIVE_JSON_SCHEMA_EXAMPLE}
-
-Requirements for each field:
-- "executive_headline": names the #1 ranked item in "top_business_risks" (or "highest_priority_initiative" if risks are empty) in one sentence, citing its financial/operational stake if the context provides one.
-- "why_it_matters": grounded in "highest_risk_project" and the evidence in "top_business_risks"/"root_causes".
-- "consequence_of_inaction": qualitative and/or citing "financial_exposure" figures already in the context. No new numbers, no forecasts beyond what's given.
-- "executive_summary": open with the issue in "executive_headline," cover overall business health (reference "overall_business_health"), name "strongest_project" as a positive counterpoint, and state your top recommendation from "recommended_actions".
-- "overall_business_health_narrative": one plain-business-terms sentence per domain, using that domain's summary in "domain_summaries" and its score/status in "overall_business_health".
-- "risk_narratives": exactly one entry per item in "top_business_risks," matched by "title" exactly.
-- "root_cause_notes": exactly one entry per item in "root_causes," matched by "title" exactly. If empty, return an empty list and say so in the executive summary.
-- "recommendation_rationale": exactly one entry per item in "recommended_actions," matched by "title" exactly.
-- "department_breakdown": one paragraph each for sales, marketing, collections, construction, customer_experience, and executive_leadership -- what that specific audience needs to know from "domain_summaries," "root_causes," and "recommended_actions".
-- "forecast_narrative": grounded only in "forecast_outlook" -- if forecast_outlook.available is false, say plainly that insufficient history exists for a forecast this period.
-- "if_no_action_narrative": grounded only in "top_business_risks," "root_causes," and "financial_exposure" already given."""
+{NARRATIVE_JSON_SCHEMA_EXAMPLE}"""
 
 
 # --------------------------------------------------------------------------
@@ -1111,8 +1297,29 @@ def generate_executive_report(
         provider.model_name, started_at, previous_report,
     )
     context = _build_ai_context(skeleton)
+    user_prompt = _build_user_prompt(context)
 
-    raw_response = provider.generate_json(SYSTEM_PROMPT, _build_user_prompt(context))
+    prompt_tokens = _estimate_tokens(SYSTEM_PROMPT) + _estimate_tokens(user_prompt)
+    reserved_output_tokens = provider.max_output_tokens
+    estimated_total_tokens = prompt_tokens + reserved_output_tokens
+    print(
+        f"  [ai] Estimated prompt size: ~{prompt_tokens:,} tokens "
+        f"({len(SYSTEM_PROMPT) + len(user_prompt):,} chars) + ~{reserved_output_tokens:,} reserved for the "
+        f"response = ~{estimated_total_tokens:,} total TPM tokens "
+        f"(target <={PROMPT_TARGET_TOKENS + reserved_output_tokens:,}, hard ceiling {PROMPT_SAFETY_CEILING_TOKENS:,})"
+    )
+    if estimated_total_tokens > PROMPT_SAFETY_CEILING_TOKENS:
+        raise PromptTooLargeError(
+            f"Estimated request size (~{estimated_total_tokens:,} tokens: ~{prompt_tokens:,} prompt + "
+            f"~{reserved_output_tokens:,} reserved for the response) exceeds this platform's safety ceiling of "
+            f"{PROMPT_SAFETY_CEILING_TOKENS:,} tokens, set to stay clear of the provider's tokens-per-minute "
+            "limit. This usually means an unusually large dataset (more projects/brokers/root causes than this "
+            "demo) is producing more root causes, evidence, or KPI cards than usual -- see _build_ai_context's "
+            "docstring for what's already curated, or lower GROQ_MAX_OUTPUT_TOKENS if the reservation itself is "
+            "the larger contributor above."
+        )
+
+    raw_response = provider.generate_json(SYSTEM_PROMPT, user_prompt)
     try:
         narrative = json.loads(raw_response)
     except json.JSONDecodeError as exc:
